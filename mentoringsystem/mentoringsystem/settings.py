@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'mentoring',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -67,7 +68,7 @@ ROOT_URLCONF = 'mentoringsystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR.joinpath('templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,10 +90,10 @@ WSGI_APPLICATION = 'mentoringsystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mentoringsystem',
+        'NAME': 'mentoringdb',
         'USER': 'postgres',
         'PASSWORD': 'th30h3l3y0802',
-        'HOST': 'localhost',
+        'HOST': '35.246.97.249',
         'PORT': '',
     }
 }
@@ -138,5 +139,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 
 #AUTH_USER_MODEL = 'mentoring.models.Profile'
