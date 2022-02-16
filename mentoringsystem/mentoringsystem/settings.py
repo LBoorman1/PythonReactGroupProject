@@ -89,10 +89,10 @@ WSGI_APPLICATION = 'mentoringsystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mentoringsystem',
+        'NAME': 'mentoringdb',
         'USER': 'postgres',
         'PASSWORD': 'th30h3l3y0802',
-        'HOST': 'localhost',
+        'HOST': '35.246.97.249',
         'PORT': '',
     }
 }
