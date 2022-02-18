@@ -24,4 +24,6 @@ router.register(r'meetings', views.MeetingView, 'meeting')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-]
+    path('givesystemfeedback/', views.addSystemFeedbackView),
+    path('givemeetingfeedback/', views.addSystemFeedbackView)
+    ]
