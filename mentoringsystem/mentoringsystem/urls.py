@@ -28,4 +28,4 @@ urlpatterns = [
     path('',include('users.urls')),
     path('givesystemfeedback/', views.addSystemFeedbackView),
     path('givemeetingfeedback/', views.addSystemFeedbackView)
-    ]
+]
