@@ -26,4 +26,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('',include('users.urls')),
+    path('givesystemfeedback/', views.addSystemFeedbackView),
+    path('givemeetingfeedback/', views.addSystemFeedbackView)
 ]
