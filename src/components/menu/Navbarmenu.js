@@ -51,9 +51,6 @@ const Navbarmenu = () => {
         boxClassSubMenuMentor.push('');
     }
 
-
-
-
     return (
     <header className="header__middle">
         <div className="container">
@@ -92,10 +89,9 @@ const Navbarmenu = () => {
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentee`}> My POA Mentee </NavLink> </li>
                         </ul>
                     </li>
-
                     <li onClick={toggleSubmenuMentor} className="menu-item sub__menus__arrows" > <Link to="#"> Mentor <FiChevronDown /> </Link>
                         <ul className={boxClassSubMenuMentor.join(' ')} >
-                            <li> <NavLink onClick={toggleClass} activeClassName='is-active'  to={`/DisplayMyMentee`}> Display My Mentee </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active'  to={`/DisplayMyMentee`}> Display My Mentee </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/SetFreeHours`}>Set Free Hours </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentor`}> Create POA Mentor </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentor`}> My POA Mentor </NavLink> </li>
@@ -111,7 +107,6 @@ const Navbarmenu = () => {
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> ViewFeedback </NavLink> </li>
                         </ul>
                     </li>
-
                     <li  className="logout_button menu-item " >
                     <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/Signin`}> Logout </NavLink>
                     </li>
