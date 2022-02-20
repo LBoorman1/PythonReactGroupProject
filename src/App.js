@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
+import { useLocation } from 'react-router-dom'
 import './App.css';
 
 import BookMentoringMeeting from './components/BookMentoringMeeting';
@@ -7,6 +8,7 @@ import CreatePOAMentee from './components/CreatePOAMentee';
 import DisplayMyMentor from './components/DisplayMyMentor';
 import MyPOAMentee from './components/MyPOAMentee';
 import Navbarmenu from './components/menu/Navbarmenu';
+import NavbarLogin from './components/menu/NavbarLogin';
 import DisplayMyMentee from './components/DisplayMyMentee';
 import SetFreeHours from './components/SetFreeHours';
 import CreatePOAMentor from './components/CreatePOAMentor';
@@ -23,16 +25,32 @@ import MyFeedback from './components/MyFeedback';
 import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
+import Home from './components/Home';
+
+let state = {currentPath:window.location.pathname};
 
 
 
 function App() {
+  function refreshPage() {
+    window.location.reload(false);
+  }
   return (
-    <div>
+    <div onClick={refreshPage}>
+
+
+
+
       <Router basename="/">
 
-        {/* Add Menu Component */}
-        <Navbarmenu />
+      { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
+      { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentee"
+      || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics"
+      || state.currentPath=="/SetSessionThreshold"
+      || state.currentPath=="/ViewFeedback"
+      || state.currentPath=="/MyDetails"
+      || state.currentPath=="/GiveFeedback"
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails") && <Navbarmenu />}
 
         <Switch>
           <Route path="/BookMentoringMeeting" component={BookMentoringMeeting}/>
@@ -59,7 +77,7 @@ function App() {
         </Switch>
       </Router>
 
-    </div>
+    </div >
   );
 }
 
