@@ -80,7 +80,7 @@ class showFreehoursView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = CalendarUserSerializer(queryset, many=True)
 
-class requestMeetingView(viewsets.ModelViewSet):
+class requestMeetingsView(viewsets.ModelViewSet):
     #edit db view
     ""
 
@@ -92,6 +92,11 @@ class showMeetingRequestsView(viewsets.ModelViewSet):
 class createMeetingView(viewsets.ModelViewSet):
     #edit db view
     ""
+
+class showMeetingsView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
 #cancel meeting view skipped
 
@@ -133,11 +138,50 @@ class addSystemFeedbackView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class showSystemFeedbackView(viewsets.ModelViewSet):
+class addBusinessAreaView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class businessAreaChangeRequestsView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class changeBusinessAreaView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+#remove user skipped
+
+class showMeetingFeedbackView(viewsets.ModelViewSet):
     #return view
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
-class addSystemFeedbackView(viewsets.ModelViewSet):
+class addMeetingFeedbackView(viewsets.ModelViewSet):
     #edit db view
     ""
+
+class showPOAsView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+class addPOAView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class showSkillInterestView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+class addGroupSessionView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class showGroupMeetingsView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+#cancel attendance skipped
