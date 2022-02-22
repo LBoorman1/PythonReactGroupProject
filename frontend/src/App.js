@@ -29,8 +29,8 @@ import BusinessAreaChangeRequest from './components/BusinessAreaChangeRequest';
 import BecomeMentorRequest from './components/BecomeMentorRequest';
 import Home from './components/Home';
 
-import { Provider } from 'react-redux';
-import store from './store';
+//import { Provider } from 'react-redux';
+//import store from './store';
 
 let state = {currentPath:window.location.pathname};
 
@@ -41,7 +41,7 @@ function App() {
     //window.location.reload(false);
   }
   return (
-    <Provider store={store}>
+    //<Provider store={store}>
     <div onClick={refreshPage}>
 
 
@@ -85,7 +85,7 @@ function App() {
       </Router>
 
     </div >
-    </Provider>
+    //</Provider>
   );
 }
 
