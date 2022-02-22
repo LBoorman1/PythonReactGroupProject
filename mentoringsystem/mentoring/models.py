@@ -7,7 +7,15 @@ from django.dispatch import receiver
 # first_name, last_name, email, is_active (account status), password already included
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE)
+    BUSINESS_AREA_CHOICES = [
+        ('marketing', 'Marketing'),
+        ('humanresources', 'Human Resources'),
+        ('finance', 'Finance'),
+        ('technology', 'Technology'),
+        ('strategy', 'Strategy'),
+        ('operations', 'Operations')
+        ]
+    business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE, choices=BUSINESS_AREA_CHOICES)
     is_mentee = models.BooleanField()
     is_mentor = models.BooleanField()
     is_admin = models.BooleanField()

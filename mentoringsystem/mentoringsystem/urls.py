@@ -54,8 +54,8 @@ router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMee
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('',include('users.urls')),
+    path('account/',include('users.urls')),
+    path('account/', include('django.contrib.auth.urls')),
 ]
 
-urlpatterns =+ router.urls
+urlpatterns += router.urls
