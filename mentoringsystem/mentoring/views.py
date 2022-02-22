@@ -37,26 +37,26 @@ from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
 
-class ProfileView(viewsets.ModelViewSet):
+class showProfileView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = ProfileSerializer(queryset, many=True)
 
-class MenteeSignupView(viewsets.ModelViewSet):
+class menteeSignupView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class MentorSignupView(viewsets.ModelViewSet):
+class mentorSignupView(viewsets.ModelViewSet):
     #edit db view
     ""
 
 #Verify mentor - Skipped
 
-class PotentialMentorsView(viewsets.ModelViewSet):
+class showPotentialMentorsView(viewsets.ModelViewSet):
     #return view
     queryset = Meeting.objects.all()
     serializer_class = ProfileSerializer(queryset, many=True)
 
-class RequestMentorView(viewsets.ModelViewSet):
+class requestMentorView(viewsets.ModelViewSet):
     #edit db view
     ""
 
