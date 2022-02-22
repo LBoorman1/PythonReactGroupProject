@@ -8,7 +8,7 @@ import CreatePOAMentee from './components/CreatePOAMentee';
 import DisplayMyMentor from './components/DisplayMyMentor';
 import MyPOAMentee from './components/MyPOAMentee';
 import Navbarmenu from './components/menu/Navbarmenu';
-// import NavbarLogin from './components/menu/NavbarLogin';
+import NavbarLogin from './components/menu/NavbarLogin';
 import DisplayMyMentee from './components/DisplayMyMentee';
 import SetFreeHours from './components/SetFreeHours';
 import CreatePOAMentor from './components/CreatePOAMentor';
@@ -25,12 +25,7 @@ import MyFeedback from './components/MyFeedback';
 import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
-import BusinessAreaChangeRequest from './components/BusinessAreaChangeRequest';
-import BecomeMentorRequest from './components/BecomeMentorRequest';
 import Home from './components/Home';
-
-//import { Provider } from 'react-redux';
-//import store from './store';
 
 let state = {currentPath:window.location.pathname};
 
@@ -38,10 +33,9 @@ let state = {currentPath:window.location.pathname};
 
 function App() {
   function refreshPage() {
-    //window.location.reload(false);
+    window.location.reload(false);
   }
   return (
-    //<Provider store={store}>
     <div onClick={refreshPage}>
 
 
@@ -49,14 +43,14 @@ function App() {
 
       <Router basename="/">
 
-      { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount")  }
+      { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
       { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentee"
       || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics"
       || state.currentPath=="/SetSessionThreshold"
       || state.currentPath=="/ViewFeedback"
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback"
-      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/BusinessAreaChangeRequest" || state.currentPath=="/BecomeMentorRequest") && <Navbarmenu />}
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails") && <Navbarmenu />}
 
         <Switch>
           <Route path="/BookMentoringMeeting" component={BookMentoringMeeting}/>
@@ -79,13 +73,13 @@ function App() {
           <Route path="/EditDetails" component={EditDetails}/>
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
-          <Route path="/BusinessAreaChangeRequest" component={BusinessAreaChangeRequest}/>
-          <Route path="/BecomeMentorRequest" component={BecomeMentorRequest}/>
+
+          
+
         </Switch>
       </Router>
 
     </div >
-    //</Provider>
   );
 }
 

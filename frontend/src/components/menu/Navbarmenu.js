@@ -107,11 +107,9 @@ const Navbarmenu = () => {
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> ViewFeedback </NavLink> </li>
                         </ul>
                     </li>
-                    <li  className="create_account_button menu-item " >
+                    <li  className="logout_button menu-item " >
                     <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/Signin`}> Logout </NavLink>
                     </li>
-
-
                     </ul>
 
 
