@@ -19,13 +19,43 @@ from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
-router.register(r'meetings', views.MeetingView, 'meeting')
+router.register(r'showProfile', views.showProfileView, 'showProfile')
+router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
+router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
+router.register(r'showPotentialMentors', views.showPotentialMentorsView, 'showPotentialMentors')
+router.register(r'requestMentor', views.requestMentorView, 'requestMentor')
+router.register(r'showMentoringRequests', views.showMentoringRequestsView, 'showMentoringRequests')
+router.register(r'addRelationship', views.addRelationshipView, 'addRelationship')
+router.register(r'addFreeTime', views.addFreeTimeView, 'addFreeTime')
+router.register(r'showFreehours', views.showFreehoursView, 'showFreehours')
+router.register(r'requestMeetings', views.requestMeetingsView, 'requestMeetings')
+router.register(r'showMeetingRequests', views.showMeetingRequestsView, 'showMeetingRequests')
+router.register(r'createMeeting', views.createMeetingView, 'createMeeting')
+router.register(r'showMeetings', views.showMeetingsView, 'showMeetings')
+router.register(r'showInterests', views.showInterestsView, 'showInterests')
+router.register(r'addInterest', views.addInterestView, 'addInterest')
+router.register(r'removeInterest', views.removeInterestView, 'removeInterest')
+router.register(r'showExpertise', views.showExpertiseView, 'showExpertise')
+router.register(r'addExpertise', views.addExpertiseView, 'addExpertise')
+router.register(r'removeExpertise', views.removeExpertiseView, 'removeExpertise') 
+router.register(r'showSystemFeedback', views.showSystemFeedbackView, 'showSystemFeedback')
+router.register(r'addSystemFeedback', views.addSystemFeedbackView, 'addSystemFeedback')
+router.register(r'addBusinessArea', views.addBusinessAreaView, 'addBusinessArea')
+router.register(r'businessAreaChangeRequests', views.businessAreaChangeRequestsView, 'businessAreaChangeRequests')
+router.register(r'changeBusinessArea', views.changeBusinessAreaView, 'changeBusinessArea')
+router.register(r'showMeetingFeedback', views.showMeetingFeedbackView, 'showMeetingFeedback')
+router.register(r'addMeetingFeedback', views.addMeetingFeedbackView, 'addMeetingFeedback')
+router.register(r'showPOAs', views.showPOAsView, 'showPOAs')
+router.register(r'addPOA', views.addPOAView, 'addPOA')
+router.register(r'showSkillInterest', views.showSkillInterestView, 'showSkillInterest')
+router.register(r'addGroupSession', views.addGroupSessionView, 'addGroupSession')
+router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('',include('users.urls')),
-    path('givesystemfeedback/', views.addSystemFeedbackView),
-    path('givemeetingfeedback/', views.addSystemFeedbackView)
 ]
+
+urlpatterns =+ router.urls
