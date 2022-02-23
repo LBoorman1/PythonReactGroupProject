@@ -36,13 +36,14 @@ function App() {
     window.location.reload(false);
   }
   return (
-    <div onClick={refreshPage}>
+    <div>
 
 
 
 
       <Router basename="/">
 
+      <div  onClick={refreshPage}>
       { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
       { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentee"
       || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics"
@@ -51,7 +52,8 @@ function App() {
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback"
       || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails") && <Navbarmenu />}
-
+      </div>
+        
         <Switch>
           <Route path="/BookMentoringMeeting" component={BookMentoringMeeting}/>
           <Route path="/CreatePOAMentee" component={CreatePOAMentee}/>
@@ -73,10 +75,8 @@ function App() {
           <Route path="/EditDetails" component={EditDetails}/>
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
-
-          
-
         </Switch>
+        
       </Router>
 
     </div >
