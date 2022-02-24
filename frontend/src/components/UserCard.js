@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
+import ToggleAdminButton from './ToggleAdminButton';
 
 const UserCard = props => {
     return (
@@ -32,12 +33,8 @@ const UserCard = props => {
                    <strong>Topics of Expertise</strong>: {props.topicsOfExpertise.map(topic => topic + ", ")}
                  </CardText>
                }
-               {props.type == "toggleAdmin" &&
-                 <Button color="primary">Toggle Admin</Button>
-               }
-               {props.type == "toggleInactive" &&
-                 <Button color="primary">Toggle Inactivity Status</Button>
-               }
+               <ToggleAdminButton
+                type = {props.type}/>
                {props.type == "makeMentor" &&
                  <div>
                    <br />

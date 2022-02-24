@@ -15,7 +15,6 @@ const Checkboxes = poa => {
     setChecked(updatedList);
   };
 
-  // Generate string of checked items
   const checkedItems = checked.length
     ? checked.reduce((total, item) => {
         return total + ", " + item;
