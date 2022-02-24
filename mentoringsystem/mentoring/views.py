@@ -1,3 +1,4 @@
+from django.http import request
 from django.shortcuts import render
 from rest_framework import viewsets
 
@@ -99,6 +100,7 @@ class showFreehoursView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = CalendarUserSerializer(queryset, many=True)
 
+
 class requestMeetingsView(viewsets.ModelViewSet):
     #edit db view
     ""
@@ -135,6 +137,11 @@ class removeInterestView(viewsets.ModelViewSet):
     #edit db view
     ""
 
+
+class showAllMeetingsView(viewsets.ModelViewSet):
+    serializer_class = MeetingSerializer
+    queryset = Meeting.objects.all()
+
 class showExpertiseView(viewsets.ModelViewSet):
     #return view
     queryset = Meeting.objects.all()
@@ -148,14 +155,10 @@ class removeExpertiseView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class showSystemFeedbackView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
-
-class addSystemFeedbackView(viewsets.ModelViewSet):
+class applicationFeedbackView(viewsets.ModelViewSet):
     #edit db view
-    ""
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
@@ -204,3 +207,4 @@ class showGroupMeetingsView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
 #cancel attendance skipped
+

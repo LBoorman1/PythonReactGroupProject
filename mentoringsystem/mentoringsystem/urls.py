@@ -1,5 +1,4 @@
 """mentoringsystem URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
 Examples:
@@ -40,8 +39,7 @@ router.register(r'removeInterest', views.removeInterestView, 'removeInterest')
 router.register(r'showExpertise', views.showExpertiseView, 'showExpertise')
 router.register(r'addExpertise', views.addExpertiseView, 'addExpertise')
 router.register(r'removeExpertise', views.removeExpertiseView, 'removeExpertise') 
-router.register(r'showSystemFeedback', views.showSystemFeedbackView, 'showSystemFeedback')
-router.register(r'addSystemFeedback', views.addSystemFeedbackView, 'addSystemFeedback')
+router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'systemFeedback')
 router.register(r'addBusinessArea', views.addBusinessAreaView, 'addBusinessArea')
 router.register(r'businessAreaChangeRequests', views.businessAreaChangeRequestsView, 'businessAreaChangeRequests')
 router.register(r'changeBusinessArea', views.changeBusinessAreaView, 'changeBusinessArea')
@@ -60,3 +58,4 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
+

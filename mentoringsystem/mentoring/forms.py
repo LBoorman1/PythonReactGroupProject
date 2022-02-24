@@ -1,3 +1,26 @@
+<<<<<<< HEAD
+from .models import ApplicationFeedback, MeetingFeedback
+from dataclasses import fields
+from django.contrib.auth.models import User
+from django import forms
+
+#form to handle if the user wants to give feedback on the app itself
+class appFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = ApplicationFeedback
+        fields = ["feedback", "user"]
+
+#form to handle if the user wants to give feedback on a meeting they attended
+class meetingFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = MeetingFeedback
+        fields = ["feedback", "rating", "meeting", "user"]
+=======
+<<<<<<<< HEAD:mentoringsystem/users/forms.py
+
+from cProfile import label
+========
+>>>>>>>> origin:mentoringsystem/mentoring/forms.py
 from dataclasses import fields
 from random import choice
 from turtle import textinput
@@ -23,3 +46,5 @@ class RegisterForm_profile(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     username = UsernameField(label='Email')
+
+>>>>>>> origin

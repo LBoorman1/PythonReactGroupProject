@@ -26,6 +26,7 @@ import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
 import Home from './components/Home';
+import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 
 let state = {currentPath:window.location.pathname};
 
