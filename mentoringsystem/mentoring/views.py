@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
+from django.contrib.auth.models import User
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
@@ -19,6 +20,7 @@ from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
 
+from mentoring.serializers import UserSerializer
 from mentoring.serializers import ProfileSerializer
 from mentoring.serializers import ApplicationFeedbackSerializer
 from mentoring.serializers import SkillSerializer
@@ -36,6 +38,23 @@ from mentoring.serializers import MeetingRequestSerializer
 from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
+
+from django.contrib.auth.views import LoginView
+
+from .forms import RegisterForm_profile, RegisterForm_user, LoginForm
+
+class RegisterView_User(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializerclass = UserSerializer
+    form_class = RegisterForm_user
+
+class RegisterView_Profile(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializerclass = ProfileSerializer
+    form_class = RegisterForm_profile
+
+class CustomLoginView(LoginView):
+    authentication_form = LoginForm
 
 class showProfileView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()

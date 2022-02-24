@@ -19,6 +19,8 @@ from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
+router.register(r'registerUser', views.RegisterView_User, 'registerUser')
+router.register(r'registerProfile', views.RegisterView_Profile, 'registerUser')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
 router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
@@ -54,8 +56,7 @@ router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMee
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('account/',include('users.urls')),
-    path('account/', include('django.contrib.auth.urls')),
+    path('login/', views.CustomLoginView.as_view(), "login"),
 ]
 
 urlpatterns += router.urls

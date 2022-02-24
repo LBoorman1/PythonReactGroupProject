@@ -1,4 +1,3 @@
-from cProfile import label
 from dataclasses import fields
 from random import choice
 from turtle import textinput
@@ -11,7 +10,7 @@ from django import forms
 class RegisterForm_user(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password', 'is_active']
+        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'is_active']
         labels = {'username' : 'Email'}
         help_texts= {'username':None}
         widgets = {'is_active': forms.HiddenInput()}
