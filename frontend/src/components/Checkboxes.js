@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
 
+
 const Checkboxes = poa => {
   const [checked, setChecked] = useState(poa.completed);
+  const [value, onChange] = useState(new Date());
 
   // Add/Remove checked item from list
   const handleCheck = (event) => {
@@ -39,6 +41,7 @@ const Checkboxes = poa => {
               {item}
             </div>
           ))}
+          
         </div>
       <p> Completed milestones: {checkedItems} </p>
       

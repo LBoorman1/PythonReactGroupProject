@@ -4,7 +4,7 @@ const CreateAccount = () => {
       return (
         <div className="create_account sec__one">
           <h1> Create Account </h1>
-          <form method="post" onSubmit={handleSubmit}>
+          <form method="post" >
             <table>
               <tr>
                 <td>&nbsp;</td>
