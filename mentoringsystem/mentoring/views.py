@@ -42,20 +42,20 @@ from mentoring.serializers import POATargetSerializer
 
 from django.contrib.auth.views import LoginView
 
-from .forms import RegisterForm_profile, RegisterForm_user, LoginForm
+#from .forms import RegisterForm_profile, RegisterForm_user, LoginForm
 
-class RegisterView_User(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializerclass = UserSerializer
-    form_class = RegisterForm_user
+# class RegisterView_User(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializerclass = UserSerializer
+#     form_class = RegisterForm_user
 
-class RegisterView_Profile(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializerclass = ProfileSerializer
-    form_class = RegisterForm_profile
+# class RegisterView_Profile(viewsets.ModelViewSet):
+#     queryset = Profile.objects.all()
+#     serializerclass = ProfileSerializer
+#     form_class = RegisterForm_profile
 
-class CustomLoginView(LoginView):
-    authentication_form = LoginForm
+# class CustomLoginView(LoginView):
+#     authentication_form = LoginForm
 
 class showProfileView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
@@ -128,7 +128,7 @@ class showInterestsView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
-
+#holding
 class addInterestView(viewsets.ModelViewSet):
     #edit db view
     ""
@@ -157,6 +157,7 @@ class removeExpertiseView(viewsets.ModelViewSet):
 
 class applicationFeedbackView(viewsets.ModelViewSet):
     #edit db view
+
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
 

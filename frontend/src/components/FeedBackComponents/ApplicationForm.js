@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
-
+//testing
 function ApplicationForm(props) {
   const url = "http://localhost:8000/applicationFeedbackView/";
   const [formValue, setformValue] = useState({
@@ -17,16 +17,18 @@ function ApplicationForm(props) {
 
   const handleSubmit = async() => {
     // store the states in the form data
-    const feedbackFormData = new FormData();
-    feedbackFormData.append("feedback", formValue.feedback)
-    feedbackFormData.append("user", 2)
-  
     try {
       // make axios post request
       const response = await axios({
-        method: "post",
+        method: "POST",
         url: url,
-        data: feedbackFormData,
+        data: {
+          feedback: formValue.feedback,
+          user: 1,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+      },
       });
     } catch(error) {
       console.log(error)
@@ -37,7 +39,7 @@ function ApplicationForm(props) {
     <div>
       <form>
         <FormGroup>
-          <Label for="feedback">What can we do to improve this system?</Label>
+          <Label className="text-light" for="feedback">What can we do to improve this system?</Label>
           <Input type="text" name="feedback" id="feedback" value={formValue.feedback} onChange={handleChange}/>
         </FormGroup>
         

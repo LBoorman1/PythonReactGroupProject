@@ -1,5 +1,9 @@
 import React from 'react'
 
+const handleSubmit = async() => {
+  alert("hello");
+}
+
 const CreateAccount = () => {
       return (
         <div className="create_account sec__one">

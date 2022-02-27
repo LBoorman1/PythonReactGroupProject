@@ -18,8 +18,8 @@ from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
-router.register(r'registerUser', views.RegisterView_User, 'registerUser')
-router.register(r'registerProfile', views.RegisterView_Profile, 'registerUser')
+#router.register(r'registerUser', views.RegisterView_User, 'registerUser')
+#router.register(r'registerProfile', views.RegisterView_Profile, 'registerUser')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
 router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
@@ -39,7 +39,7 @@ router.register(r'removeInterest', views.removeInterestView, 'removeInterest')
 router.register(r'showExpertise', views.showExpertiseView, 'showExpertise')
 router.register(r'addExpertise', views.addExpertiseView, 'addExpertise')
 router.register(r'removeExpertise', views.removeExpertiseView, 'removeExpertise') 
-router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'systemFeedback')
+router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'applicationFeedback')
 router.register(r'addBusinessArea', views.addBusinessAreaView, 'addBusinessArea')
 router.register(r'businessAreaChangeRequests', views.businessAreaChangeRequestsView, 'businessAreaChangeRequests')
 router.register(r'changeBusinessArea', views.changeBusinessAreaView, 'changeBusinessArea')
@@ -54,7 +54,7 @@ router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMee
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('login/', views.CustomLoginView.as_view(), "login"),
+    #path('login/', views.CustomLoginView.as_view(), "login"),
 ]
 
 urlpatterns += router.urls
