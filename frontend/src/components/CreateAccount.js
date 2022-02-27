@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import {Button} from 'reactstrap';
 
 const handleSubmit = async() => {
   alert("hello");
@@ -8,7 +9,17 @@ const CreateAccount = () => {
       return (
         <div className="create_account sec__one">
           <h1> Create Account </h1>
-          <form method="post" onSubmit={handleSubmit}>
+          <form method="post" >
+          <label>
+                <h4>First Name: </h4> 
+                <input type="text" name="name" />
+                <br></br>
+                <h4>Second Name: </h4>
+                <input type="text" name="name" />
+            </label>
+
+            <br></br>
+
             <table>
               <tr>
                 <td>&nbsp;</td>

@@ -12,7 +12,7 @@ const MyPOAMentee= () => {
                 firstName="mentor firstname"
                 lastName="mentor lastname"
                 checkList={["milestone1","milestone2","milestone3"]}
-                completed={["completedMilestone"]}
+                completed={["completed milestone 1"]}
                 />
 
             <Checkboxes 
@@ -21,7 +21,7 @@ const MyPOAMentee= () => {
                 firstName="mentor firstname"
                 lastName="mentor lastname"
                 checkList={["milestone1","milestone2","milestone3"]}
-                completed={["completedMilestone"]}
+                completed={["completed milestone 1"]}
                 />
         </div>
     )
