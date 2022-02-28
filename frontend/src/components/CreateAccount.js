@@ -1,6 +1,10 @@
 import React from 'react';
 import {Button} from 'reactstrap';
 
+const handleSubmit = async() => {
+  alert("hello");
+}
+
 const CreateAccount = () => {
       return (
         <div className="create_account sec__one">

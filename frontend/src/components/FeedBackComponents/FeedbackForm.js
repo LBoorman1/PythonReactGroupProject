@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import FormContainer from "./FormContainer";
 
@@ -8,7 +9,7 @@ function FeedbackForm(props) {
   return (
     /*Button to decide whether you want to give application feedback
         or meeting feedback*/
-    <div>
+    <Container className="pt-3">
       <Button
         active={feedbackType === "Meeting"}
         color="primary"
@@ -39,7 +40,7 @@ function FeedbackForm(props) {
       </Button>
 
       <FormContainer feedbackType={feedbackType} />
-    </div>
+    </Container>
   );
 }
 
