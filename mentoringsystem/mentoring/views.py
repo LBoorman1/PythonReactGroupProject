@@ -1,6 +1,7 @@
 from django.http import request
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from mentoring.models import Profile 
@@ -124,11 +125,24 @@ class expertiseView(viewsets.ModelViewSet):
 
 #make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
-    queryset = ApplicationFeedback.objects.all()
+    #edit db view
     serializer_class = ApplicationFeedbackSerializer
 
-#might not need function for create, remove and show
-class businessAreaView(viewsets.ModelViewSet):
+    def create(self, request, *args, **kwargs):
+        #profile = Profile.objects.get(pk = self.request.POST.get('userID'))
+        return Response({'recieved data': request.data})
+        # if profile:
+        #     #add the new object to the database
+        #     return response("Success")
+        # else:
+        #     #return an error to the frontend
+        #     return response("No profile coresponding to that userID")
+
+
+ 
+    ""
+
+class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
 #make function for create and show

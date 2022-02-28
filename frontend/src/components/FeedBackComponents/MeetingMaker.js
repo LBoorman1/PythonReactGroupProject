@@ -1,28 +1,71 @@
 import React, { useState } from "react";
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
-import {Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 function MeetingMaker({ id, title }) {
   const [openModal, setOpenModal] = useState(false);
 
+  const dummyMeetings = [
+    {
+      title: "Learning High Performance Computing",
+      date: "18.03.2021",
+      notes: "",
+    },
+    {
+      title: "Software Engineering Meeting group 29",
+      date: "23.02.2022",
+      notes: "good progress",
+    },
+    {
+      title: "Learning How To Make Cards Programatically",
+      date: "28.02.2022",
+      notes: "Notes aren't included yet lol",
+    },
+    {
+      title: "Learning How To Make Cards Programatically",
+      date: "28.02.2022",
+      notes: "Notes aren't included yet lol",
+    },
+    {
+      title: "Learning How To Make Cards Programatically",
+      date: "28.02.2022",
+      notes: "Notes aren't included yet lol",
+    },
+    {
+      title: "Learning How To Make Cards Programatically",
+      date: "28.02.2022",
+      notes: "Notes aren't included yet lol",
+    },
+    {
+      title: "Learning How To Make Cards Programatically",
+      date: "28.02.2022",
+      notes: "Notes aren't included yet lol",
+    },
+  ];
+
+  const renderCard = (card, index) => {
+    return (
+      <Col md={6}>
+        <Card className="mb-3 mt-3" key={index}>
+          <Card.Body>
+            <Card.Title>{card.title}</Card.Title>
+            <Card.Text>{card.date}</Card.Text>
+            <Button
+              onClick={() => {
+                setOpenModal(true);
+              }}
+            >
+              Feedback
+            </Button>
+          </Card.Body>
+        </Card>
+      </Col>
+    );
+  };
+
   return (
     <Container>
-      <Row>
-        <Col md={6}>
-          <Card className="mb-3 mt-3">
-            <Card.Body>
-              <Card.Title>Learning High Performance Computing</Card.Title>
-              <Card.Text>18.03.2022</Card.Text>
-              <Button
-                onClick={() => {
-                  setOpenModal(true);
-                }}
-              >
-                Feedback
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {/*This displays the cards for the meetings*/}
+      <Row>{dummyMeetings.map(renderCard)}</Row>
 
       <Modal show={openModal}>
         <Modal.Header>Meeting Feedback</Modal.Header>
@@ -55,7 +98,6 @@ function MeetingMaker({ id, title }) {
           <Button>Submit</Button>
         </Modal.Footer>
       </Modal>
-      {/* Modal To Add Feedback */}
     </Container>
   );
 }
