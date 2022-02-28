@@ -1,4 +1,5 @@
 from rest_framework import serializers 
+from django.contrib.auth.models import User 
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
@@ -16,6 +17,11 @@ from mentoring.models import MeetingRequest
 from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User 
+        fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

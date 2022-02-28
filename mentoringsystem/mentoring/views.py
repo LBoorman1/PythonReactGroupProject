@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import Response, status, viewsets, mixins 
+from django.contrib.auth.models import User 
 
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
@@ -19,6 +20,7 @@ from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
 
+from mentoring.serializers import UserSerializer
 from mentoring.serializers import ProfileSerializer
 from mentoring.serializers import ApplicationFeedbackSerializer
 from mentoring.serializers import SkillSerializer
@@ -121,6 +123,18 @@ class showExpertiseView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
+class SkillView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer(queryset, many=True)   
+
+class BusinessAreaView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin):
+    queryset = BusinessArea.objects.all()
+    serializer_class = BusinessAreaSerializer(queryset, many=True)  
+
 class addExpertiseView(viewsets.ModelViewSet):
     #edit db view
     ""
@@ -129,14 +143,50 @@ class removeExpertiseView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class showSystemFeedbackView(viewsets.ModelViewSet):
-    #return view
+# Ability to create and view system feedback
+class SystemFeedbackView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin):
     queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)      
 
-class addSystemFeedbackView(viewsets.ModelViewSet):
-    #edit db view
-    ""
+class EditUser():
+    # Toggles a user's admin status between admin and not admin
+    def toggle_admin(self, request, pk):
+        user = User.objects.get(pk=pk)
+        profile = user.profile 
+        if (profile.is_admin):
+            data = {"is_admin": False}
+        else:
+            data = {"is_admin": True}
+        serializer = ProfileSerializer(profile, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def set_mentor(self, request, pk):
+        user = User.objects.get(pk=pk)
+        profile = user.profile 
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        
+        # Add topics of expertise
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def deactivate_account(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
