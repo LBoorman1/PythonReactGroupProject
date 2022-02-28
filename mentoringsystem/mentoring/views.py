@@ -167,4 +167,3 @@ class groupMeetingsView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
 #cancel attendance skipped
-
