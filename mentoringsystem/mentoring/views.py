@@ -76,133 +76,92 @@ class showPotentialMentorsView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = ProfileSerializer(queryset, many=True)
 
+# make functions for create and show requests
 class requestMentorView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showMentoringRequestsView(viewsets.ModelViewSet):
-    #return view
     queryset = Meeting.objects.all()
     serializer_class = MentorRequestSerializer(queryset, many=True)
+
 
 class addRelationshipView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class addFreeTimeView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-# remove freeTime skipped
-
-class showFreehoursView(viewsets.ModelViewSet):
-    #return view
+#might not need function for create, remove and show
+class freeTimeView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = CalendarUserSerializer(queryset, many=True)
 
-
-class requestMeetingsView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showMeetingRequestsView(viewsets.ModelViewSet):
-    #return view
+#make function for create and show
+class meetingRequestsView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = MeetingRequestSerializer(queryset, many=True)
 
-class createMeetingView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showMeetingsView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+#make function for create and show
+class meetingView(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer(queryset, many=True)
 
 #cancel meeting view skipped
 
 #end mentoring relationship skipped
 
-class showInterestsView(viewsets.ModelViewSet):
+#might not need function for create, remove and show
+class interestsView(viewsets.ModelViewSet):
     #return view
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
-#holding
-class addInterestView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class removeInterestView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-
+#delete this, not doing as someone might need this for now:
 class showAllMeetingsView(viewsets.ModelViewSet):
     serializer_class = MeetingSerializer
     queryset = Meeting.objects.all()
 
-class showExpertiseView(viewsets.ModelViewSet):
+#might not need function for create, remove and show
+class expertiseView(viewsets.ModelViewSet):
     #return view
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
-class addExpertiseView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class removeExpertiseView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
+#make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
-    #edit db view
-
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
 
-class addBusinessAreaView(viewsets.ModelViewSet):
+#might not need function for create, remove and show
+class businessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
-
+#make function for create and show
 class businessAreaChangeRequestsView(viewsets.ModelViewSet):
     #edit db view
     ""
-
+#make function for create and show
 class changeBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
 
 #remove user skipped
 
-class showMeetingFeedbackView(viewsets.ModelViewSet):
+#make function for create and show
+class meetingFeedbackView(viewsets.ModelViewSet):
     #return view
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
-class addMeetingFeedbackView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showPOAsView(viewsets.ModelViewSet):
+#make function for create and show
+class POAsView(viewsets.ModelViewSet):
     #return view
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
-class addPOAView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
+#show interest for some skill
 class showSkillInterestView(viewsets.ModelViewSet):
     #return view
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
-class addGroupSessionView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showGroupMeetingsView(viewsets.ModelViewSet):
+#make function for create and show
+class groupMeetingsView(viewsets.ModelViewSet):
     #return view
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
