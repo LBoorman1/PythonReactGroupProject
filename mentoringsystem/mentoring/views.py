@@ -1,6 +1,7 @@
 from django.http import request
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from mentoring.models import Profile 
@@ -157,9 +158,21 @@ class removeExpertiseView(viewsets.ModelViewSet):
 
 class applicationFeedbackView(viewsets.ModelViewSet):
     #edit db view
-
-    queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
+
+    def create(self, request, *args, **kwargs):
+        #profile = Profile.objects.get(pk = self.request.POST.get('userID'))
+        return Response({'recieved data': request.data})
+        # if profile:
+        #     #add the new object to the database
+        #     return response("Success")
+        # else:
+        #     #return an error to the frontend
+        #     return response("No profile coresponding to that userID")
+
+
+ 
+    ""
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view

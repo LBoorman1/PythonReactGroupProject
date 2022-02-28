@@ -24,10 +24,10 @@ function ApplicationForm(props) {
         url: url,
         data: {
           feedback: formValue.feedback,
-          user: 1,
+          userID: 1,
         },
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
       },
       });
     } catch(error) {
