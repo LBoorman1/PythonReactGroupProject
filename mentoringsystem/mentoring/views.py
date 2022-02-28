@@ -77,7 +77,7 @@ class showPotentialMentorsView(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer(queryset, many=True)
 
 # make functions for create and show requests
-class requestMentorView(viewsets.ModelViewSet):
+class mentorRequestView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = MentorRequestSerializer(queryset, many=True)
 
@@ -136,10 +136,10 @@ class businessAreaChangeRequestsView(viewsets.ModelViewSet):
     #edit db view
     ""
 #make function for create and show
-class changeBusinessAreaView(viewsets.ModelViewSet):
+class businessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
-
+    
 #remove user skipped
 
 #make function for create and show
@@ -167,3 +167,4 @@ class groupMeetingsView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
 #cancel attendance skipped
+
