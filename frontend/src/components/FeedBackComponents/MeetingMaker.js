@@ -1,8 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import axios from 'axios';
 function MeetingMaker({ id, title }) {
   const [openModal, setOpenModal] = useState(false);
+
+  //writing request to return all meetings with userid of ?userID=${userID}
+  const url = "http://localhost:8000/meetingView?userID=4";
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const { data: response } = await axios({
+          method: "GET",
+          url: url,
+        });
+        setData(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMeetings();
+  }, [url]);
 
   const dummyMeetings = [
     {

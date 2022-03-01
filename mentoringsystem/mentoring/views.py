@@ -100,8 +100,10 @@ class meetingRequestsView(viewsets.ModelViewSet):
 
 #make function for create and show
 class meetingView(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer(queryset, many=True)
+    serializer_class = MeetingSerializer
+    def retrieve(self, request, *args, **kwargs):
+        
+        ""
 
 #cancel meeting view skipped
 
@@ -126,18 +128,15 @@ class expertiseView(viewsets.ModelViewSet):
 
 #make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
-    #edit db view
     serializer_class = ApplicationFeedbackSerializer
-
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
         feedback = request.data.get('feedback')
-        # return Response({'recieved data': request.data.get('userID')})
         if profile:
             #add the new object to the database
             newFeedback = ApplicationFeedback(feedback=feedback, user=profile)
             newFeedback.save()
-            return Response("Success")
+            return Response("Successfully added feedback to database")
         else:
             #return an error to the frontend
             return Response("No profile coresponding to that userID")
