@@ -1,0 +1,21 @@
+tr{
+    border: 1px solid #ddd;
+    padding: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    color: rgb(0, 0, 0);
+    
+  }
+
+th,td :nth-child(1){
+    background-color: rgb(165, 192, 209);
+}
+
+@media (max-width:767px) {
+    tr {font-size:4vw;}
+  }
+  
+@media (min-width:992px) {
+    tr{font-size:2vw;}
+}
