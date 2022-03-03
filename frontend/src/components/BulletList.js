@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import BulletPoints from "./BulletPoints";
-import SearchUser from "./SearchUser";
-import UserCard from "./UserCard";
+
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
 import Calendar from "react-select-date";
 
