@@ -1,8 +1,32 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
 import ToggleAdminButton from './ToggleAdminButton';
 
 const UserCard = props => {
+    const [admin, setAdmin] = useState(props.admin);
+
+    const toggleAdmin = async() => {
+        try {
+            // Make request
+            const response = await axios({
+                method: "PATCH",
+                url: "http://localhost:8000/REPLACETHIS/" + props.id.toString(),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            // Update frontend if request is successful
+            if (admin == "True") {
+                setAdmin("False");
+            } else {
+                setAdmin("True");
+            }
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="user_card sec__one">
           <Card>
@@ -21,7 +45,7 @@ const UserCard = props => {
                  &emsp; &emsp;
                  <strong>Mentor</strong>: {props.mentor}
                  &emsp; &emsp;
-                 <strong>Admin</strong>: {props.admin}
+                 <strong>Admin</strong>: {admin}
                </CardText>
                {props.mentee == "True" && 
                  <CardText>
@@ -33,8 +57,20 @@ const UserCard = props => {
                    <strong>Topics of Expertise</strong>: {props.topicsOfExpertise.map(topic => topic + ", ")}
                  </CardText>
                }
-               <ToggleAdminButton
-                type = {props.type}/>
+               {props.type == "toggleAdmin" &&
+                 <Button 
+                   color="primary"
+                   onClick={e => {
+                       e.preventDefault();
+                       toggleAdmin();
+                   }}
+                 >
+                   Toggle Admin
+                 </Button>
+               }
+               {props.type == "toggleInactive" &&
+                 <Button color="primary">Toggle Inactivity Status</Button>
+               }
                {props.type == "makeMentor" &&
                  <div>
                    <br />

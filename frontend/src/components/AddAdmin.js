@@ -8,7 +8,7 @@ const AddAdmin = () => {
             <h1> Add Admin </h1>
             <SearchUser />
             <UserCard 
-              id="12345" 
+              id="12345"
               firstName="John" 
               lastName="Smith" 
               email="johnsmith@gmail.com" 
@@ -20,6 +20,10 @@ const AddAdmin = () => {
               topicsOfInterest={["Topic 4", "Topic 2", "Topic 3"]}
               topicsOfExpertise={[]}
               type="toggleAdmin"
+              onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+              }}
             />
         </div>
     )

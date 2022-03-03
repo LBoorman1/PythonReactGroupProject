@@ -39,6 +39,70 @@ from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
 
+
+#4, 5
+class BecomeMentorView(mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin):
+    queryset = BecomeMentor.objects.all()
+    serializer_class = BecomeMentorSerializer(queryset, many=True) 
+
+#6 TEMP - REPLACE WITH ACTUAL MATCHING ALGORITHM
+class PossibleMentorsView(mixins.ListModelMixin):
+    queryset = Profile.objects.select_related(User).filter(is_mentor=True)
+    serializer_class = UserSerializer(queryset, many=True)  
+
+#7, 8
+class MentorRequestView(mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin):
+    queryset = MentorRequest.objects.all()
+    serializer_class = MentorRequestSerializer(queryset, many=True) 
+
+#8
+class RelationshipView(mixins.CreateModelMixin):
+    queryset = Relationship.objects.all()
+    serializer_class = RelationshipSerializer(queryset, many=True) 
+
+class MenteeAttendingView(mixins.CreateModelMixin):
+    queryset = MenteeAttending.objects.all()
+    serialzer_class = MenteeAttendingSerializer(queryset, many=True)
+
+#13 
+class MenteeInterestView(mixins.CreateModelMixin,
+                     mixins.DestroyModelMixin):
+    queryset = MenteeInterest.objects.all()
+    serializer_class = MenteeInterestSerializer(queryset, many=True) 
+
+#14 
+class MentorSkillView(mixins.CreateModelMixin,
+                     mixins.DestroyModelMixin):
+    queryset = MentorSkill.objects.all()
+    serializer_class = MentorSkillSerializer(queryset, many=True) 
+
+#19, 20
+class BusinessAreaChangeRequestView(mixins.CreateModelMixin,
+                                   mixins.DestroyModelMixin):
+    queryset = BusinessAreaChangeRequest.objects.all()
+    serializer_class = BusinessAreaChangeRequestSerializer(queryset, many=True) 
+
+#12 might need to change to instead select by user
+class AvailableHourView(mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin):
+    queryset = CalendarUser.objects.all()
+    serializer_class = CalendarUserSerializer(queryset, many=True) 
+
+#9
+class MeetingView(viewsets.ViewSet,
+                 mixins.CreateModelMixin):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer(queryset, many=True) 
+
+    def list(self):
+        relationship = self.kwargs['relationship']
+        queryset = Meeting.objects.filter(relationship=relationship)
+        serializer = MeetingSerializer(queryset, many=True) 
+        return Response(serializer.data)
+
+#self.kwargs[''] is what you need
 class showProfileView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = ProfileSerializer(queryset, many=True)
@@ -123,12 +187,14 @@ class showExpertiseView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
+#17
 class SkillView(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.DestroyModelMixin):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)   
 
+#18
 class BusinessAreaView(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.DestroyModelMixin):
@@ -144,14 +210,15 @@ class removeExpertiseView(viewsets.ModelViewSet):
     ""
 
 # Ability to create and view system feedback
+#15, 16
 class SystemFeedbackView(mixins.CreateModelMixin,
                      mixins.ListModelMixin):
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)      
 
-class EditUser():
+class EditUser:
     # Toggles a user's admin status between admin and not admin
-    def toggle_admin(self, request, pk):
+    def toggle_admin(self, pk):
         user = User.objects.get(pk=pk)
         profile = user.profile 
         if (profile.is_admin):
@@ -166,27 +233,67 @@ class EditUser():
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    #5
     def set_mentor(self, request, pk):
         user = User.objects.get(pk=pk)
         profile = user.profile 
-        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        serializer = ProfileSerializer(profile, data={"is_mentor": True}, partial=True)
         
         # Add topics of expertise
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def deactivate_account(self, request, pk):
-        user = User.objects.get(pk=pk)
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        for topic in request.data.topics:
+            mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+            mentor_skill.save()
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    #3
+    def set_mentee(self, request, pk):
+        user = User.objects.get(pk=pk)
+        profile = user.profile 
+        serializer = ProfileSerializer(profile, data={"is_mentee": True}, partial=True)
+        
+        # Add topics of interest
+        for topic in request.data.topics:
+            mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+            mentor_skill.save()
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    #21
+    def toggle_active(self, pk):
+        user = User.objects.get(pk=pk)
+        if (user.is_active):
+            data = {"is_active": False}
+        else:
+            data = {"is_active": True}
+        serializer = UserSerializer(user, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    #20
+    def set_business_area(self, request, pk):
+        user = User.objects.get(pk=pk)
+        profile = user.profile
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
