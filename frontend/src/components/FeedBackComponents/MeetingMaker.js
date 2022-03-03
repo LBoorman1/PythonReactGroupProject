@@ -4,19 +4,22 @@ import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from 'axios';
 function MeetingMaker({ id, title }) {
   const [openModal, setOpenModal] = useState(false);
+  const [meetingData, setMeetingData] = useState([]);
+  const [meetingId, setMeetingId] = useState();
 
   //writing request to return all meetings with userid of ?userID=${userID}
-  const url = "http://localhost:8000/meetingView?userID=4";
-  const [data, setData] = useState([]);
+  const url = "http://localhost:8000/meetingView/?userID=4";
+  
 
+  //get the meetings every time the url changes
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const { data: response } = await axios({
+        const { meetingData: response } = await axios({
           method: "GET",
           url: url,
         });
-        setData(response);
+        setMeetingData(response);
       } catch (error) {
         console.log(error);
       }
@@ -24,53 +27,17 @@ function MeetingMaker({ id, title }) {
     fetchMeetings();
   }, [url]);
 
-  const dummyMeetings = [
-    {
-      title: "Learning High Performance Computing",
-      date: "18.03.2021",
-      notes: "",
-    },
-    {
-      title: "Software Engineering Meeting group 29",
-      date: "23.02.2022",
-      notes: "good progress",
-    },
-    {
-      title: "Learning How To Make Cards Programatically",
-      date: "28.02.2022",
-      notes: "Notes aren't included yet lol",
-    },
-    {
-      title: "Learning How To Make Cards Programatically",
-      date: "28.02.2022",
-      notes: "Notes aren't included yet lol",
-    },
-    {
-      title: "Learning How To Make Cards Programatically",
-      date: "28.02.2022",
-      notes: "Notes aren't included yet lol",
-    },
-    {
-      title: "Learning How To Make Cards Programatically",
-      date: "28.02.2022",
-      notes: "Notes aren't included yet lol",
-    },
-    {
-      title: "Learning How To Make Cards Programatically",
-      date: "28.02.2022",
-      notes: "Notes aren't included yet lol",
-    },
-  ];
-
+  //function to make the cards from the meeting data
   const renderCard = (card, index) => {
     return (
-      <Col md={6}>
-        <Card className="mb-3 mt-3" key={index}>
+      <Col md={6} key={index}>
+        <Card className="mb-3 mt-3" >
           <Card.Body>
             <Card.Title>{card.title}</Card.Title>
-            <Card.Text>{card.date}</Card.Text>
+            <Card.Text>{card.date_time}</Card.Text>
             <Button
               onClick={() => {
+                setMeetingId(card.id);
                 setOpenModal(true);
               }}
             >
@@ -85,7 +52,7 @@ function MeetingMaker({ id, title }) {
   return (
     <Container>
       {/*This displays the cards for the meetings*/}
-      <Row>{dummyMeetings.map(renderCard)}</Row>
+      <Row>{meetingData.map(renderCard)}</Row>
 
       <Modal show={openModal}>
         <Modal.Header>Meeting Feedback</Modal.Header>

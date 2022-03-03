@@ -1,7 +1,10 @@
+from functools import reduce
 from django.http import request
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
+import operator
+from django.db.models import Q
 
 
 from django.contrib.auth.models import User
@@ -100,10 +103,25 @@ class meetingRequestsView(viewsets.ModelViewSet):
 
 #make function for create and show
 class meetingView(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
-    def retrieve(self, request, *args, **kwargs):
-        
-        ""
+
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
+            relationships = list(menteeAttending.values_list('relationship', flat=True))
+            
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query)
+
+            serializedData = MeetingSerializer(result, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
 
 #cancel meeting view skipped
 
