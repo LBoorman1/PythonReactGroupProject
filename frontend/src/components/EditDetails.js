@@ -12,6 +12,7 @@ const EditDetails = props => {
             <h3>Department: {props.department}</h3>
 
             <input value={item} type="checkbox"/>
+
             <input value={item} type="checkbox"/>
             <input value={item} type="checkbox"/>
 
