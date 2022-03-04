@@ -10,7 +10,7 @@ const DisplayDetails = props => {
             <table>
                 <tr>
                     <th>First name:</th>
-                    <td>{props.firstname}</td>
+                    <td>{props.firstname}</td> 
                 </tr>
                 <tr>
                      <th>Surname:</th>

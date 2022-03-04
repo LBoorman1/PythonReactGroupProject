@@ -6,6 +6,9 @@ const EditDetails = props => {
     const [item,setItem]= useState(null);
     return (
         <div className="edit_details sec__one">
+
+            <br></br>
+
             <h1> Edit and Display Details </h1>
             <h1> Edit Details </h1>
             <h3>Forename: {props.forename}</h3>

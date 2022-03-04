@@ -16,10 +16,13 @@ tr{
     background-color: rgb(165, 192, 209);
 }*/
 
+/*tr.vertical :nth-child(1){
+    background-color: rgb(165, 192, 209);
+}*/
+
 th,td :nth-child(1){
     background-color: rgb(165, 192, 209);
 }
-
 
 @media (max-width:767px) {
     tr {font-size:4vw;}
