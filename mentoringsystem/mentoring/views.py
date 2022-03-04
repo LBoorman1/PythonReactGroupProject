@@ -180,8 +180,21 @@ class businessAreaView(viewsets.ModelViewSet):
 #make function for create and show
 class meetingFeedbackView(viewsets.ModelViewSet):
     #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+    serializer_class = MeetingFeedbackSerializer
+    def create(self, request, *args, **kwargs):
+        profile = Profile.objects.get(pk = request.data.get('userID'))
+        meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
+        feedback = request.data.get('feedback')
+        rating = request.data.get('rating')
+
+        if profile and meeting:
+            #add the new object to the database
+            newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile)
+            newFeedback.save()
+            return Response("Successfully added feedback to database")
+        else:
+            #return an error to the frontend
+            return Response("No profile coresponding to that userID")
 
 #make function for create and show
 class POAsView(viewsets.ModelViewSet):
