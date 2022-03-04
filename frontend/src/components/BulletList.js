@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import BulletPoints from "./BulletPoints";
-import SearchUser from "./SearchUser";
-import UserCard from "./UserCard";
+
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
 import Calendar from "react-select-date";
 
@@ -33,8 +32,6 @@ const BulletList = () =>  {
         setTitle(e.target.value);
     }
 
-
-  
     return (
       <div className="user_card sec__one">
           <Card>
@@ -51,7 +48,6 @@ const BulletList = () =>  {
             onSelect={(d) => setDate(d)}
            />
             <br></br>
-            
 
             <Card>
             <form>
@@ -68,16 +64,9 @@ const BulletList = () =>  {
         array={items}
             />
         </Card>
-
-        
         </CardBody>
         </Card>
-
-        
       </div>
-
-    )
-  
+    ) 
 }
-
 export default BulletList;

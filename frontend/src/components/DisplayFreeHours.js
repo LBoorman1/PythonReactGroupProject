@@ -1,14 +1,16 @@
 import React from 'react'
 import { Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
 
-const UserCard = props => {
+const DisplayFreeHours = props => {
     return (
         <div className="feedback_card sec__one">
           <Card>
             <CardBody>
                <CardText>
-                 {props.feedback}
-                 <p>Rating: { props.rating ? props.rating : '-' } /5.</p>
+                <h3>Start time: {props.startTime}</h3>
+                 
+                <h3>End time: {props.endTime}</h3>
+                 
                  
                </CardText>
             </CardBody>
@@ -17,4 +19,4 @@ const UserCard = props => {
     )
 }
 
-export default UserCard;
+export default DisplayFreeHours;
