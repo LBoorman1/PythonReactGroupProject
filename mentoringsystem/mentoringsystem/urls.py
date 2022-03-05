@@ -28,7 +28,7 @@ router.register(r'mentorRequest', views.mentorRequestView, 'mentorRequest')
 router.register(r'addRelationship', views.addRelationshipView, 'addRelationship')
 router.register(r'freeTime', views.freeTimeView, 'freeTime')
 router.register(r'meetingRequests', views.meetingRequestsView, 'meetingRequests')
-router.register(r'meetingView', views.meetingView, 'meeting')
+router.register(r'meetingView', views.meetingView, 'meeting')#here for sam
 router.register(r'interests', views.interestsView, 'interests')
 router.register(r'expertise', views.expertiseView, 'expertise')
 router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'applicationFeedback')
