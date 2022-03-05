@@ -97,6 +97,7 @@ class MeetingFeedback(models.Model):
     rating = models.IntegerField()
     meeting = models.ForeignKey('Meeting', on_delete=models.CASCADE)
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    meetingtitle = models.TextField(default="Meeting Name Unavailiable")
 
 class PlanOfAction(models.Model):
     relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
