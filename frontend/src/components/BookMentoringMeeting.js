@@ -1,6 +1,6 @@
-import React from 'react';
 import SelectThisTime from './SelectThisTime';
 import {Card} from 'reactstrap';
+import React, { useState } from "react";
 
 const BookMentoringMeeting = () => {
     return (
@@ -10,7 +10,7 @@ const BookMentoringMeeting = () => {
 
             <Card>
             <br></br>
-            <h1>My Mentor's free time:</h1>
+            <h1>Select a time slot from my Mentor's free time:</h1>
             <SelectThisTime />
             <SelectThisTime />
             <SelectThisTime />
