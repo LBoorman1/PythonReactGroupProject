@@ -12,15 +12,6 @@ class Profile(models.Model):
     is_mentor = models.BooleanField()
     is_admin = models.BooleanField()
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
 class ApplicationFeedback(models.Model):
     feedback = models.TextField()
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
