@@ -8,7 +8,7 @@ function MeetingMaker() {
 
   //state for sending post request to backend
   const [meetingID, setMeetingID] = useState([]);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(1);
 
   //get the meetings every time the url changes
@@ -51,9 +51,7 @@ function MeetingMaker() {
 
   //handles when the form input box changes
   const handleFeedbackChange = (event) => {
-    setFeedback(
-      event.target.value
-    );
+    setFeedback(event.target.value);
   };
 
   const handleRatingChange = (event) => {

@@ -1,4 +1,5 @@
 from functools import reduce
+import profile
 from django.http import request
 from django.shortcuts import render
 from rest_framework import viewsets
@@ -146,6 +147,7 @@ class expertiseView(viewsets.ModelViewSet):
 
 #make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
+    queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
@@ -159,12 +161,27 @@ class applicationFeedbackView(viewsets.ModelViewSet):
             #return an error to the frontend
             return Response("No profile coresponding to that userID")
 
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            appFeedback = ApplicationFeedback.objects.filter(user=profile)
+
+            serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
+
 
  
     ""
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
+    serializer_class = MeetingSerializer
+    
     ""
 #make function for create and show
 class businessAreaChangeRequestsView(viewsets.ModelViewSet):
@@ -183,18 +200,31 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     serializer_class = MeetingFeedbackSerializer
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
+        
         meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
+        meetingTitle = Meeting.objects.get(pk = request.data.get('meetingID')).title
         feedback = request.data.get('feedback')
         rating = request.data.get('rating')
 
         if profile and meeting:
             #add the new object to the database
-            newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile)
+            newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile, meetingtitle=meetingTitle)
             newFeedback.save()
             return Response("Successfully added feedback to database")
         else:
             #return an error to the frontend
             return Response("No profile coresponding to that userID")
+    
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            meetingFeedback = MeetingFeedback.objects.filter(user=profile)
+            serializedData = MeetingFeedbackSerializer(meetingFeedback, many=True)
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
 
 #make function for create and show
 class POAsView(viewsets.ModelViewSet):
