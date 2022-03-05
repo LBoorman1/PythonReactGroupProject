@@ -9,8 +9,17 @@ import './Calendar.css';
 import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
 
-//export default class CalendarD extends React.Component {
-const CalendarD = () =>  {
+export default class CalendarD extends React.Component {
+//const CalendarD = () =>  {
+    componentDidMount() {
+      axios.get('')
+        .then(res => {
+          const meetings = res.data;
+          this.setState({ meetings })
+        })
+    }
+    
+    render() {
     return (
       <div className="schedule  sec__one">
         <h1>Calendar</h1>
@@ -37,7 +46,7 @@ const CalendarD = () =>  {
       </div>
       
     )
-  
+  }
 }
 
 function renderEventContent(eventInfo) {
@@ -49,7 +58,7 @@ function renderEventContent(eventInfo) {
   )
 }
 
-export default CalendarD;
+//export default CalendarD;
 
 //let calendar = new Calendar(calendarEl, {
 //    plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
