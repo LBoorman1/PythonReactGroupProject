@@ -25,6 +25,7 @@ import MyFeedback from './components/MyFeedback';
 import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
+import CalendarD from './components/CalendarD';
 import Home from './components/Home';
 import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 
@@ -52,7 +53,7 @@ function App() {
       || state.currentPath=="/ViewFeedback"
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback"
-      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails") && <Navbarmenu />}
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/CalendarD" || state.currentPath=="/EditDetails") && <Navbarmenu />}
       </div>
         
         <Switch>
@@ -76,6 +77,7 @@ function App() {
           <Route path="/EditDetails" component={EditDetails}/>
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
+          <Route path="/CalendarD" component={CalendarD}/>
         </Switch>
         
       </Router>

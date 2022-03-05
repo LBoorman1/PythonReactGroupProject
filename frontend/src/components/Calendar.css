@@ -1,0 +1,41 @@
+th,td{
+    border: blue
+
+}
+p {
+    color: black;
+    font-size: 12pt;
+}
+a:hover{
+
+}
+tr{
+    border: 1px solid rgb(206, 192, 192);
+
+    padding: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    color: rgb(0, 0, 0);
+    
+  }
+
+/*tr.vertical :nth-child(1){
+    background-color: rgb(165, 192, 209);
+}*/
+
+/*tr.vertical :nth-child(1){
+    background-color: rgb(165, 192, 209);
+}*/
+
+th,td :nth-child(1){
+    background-color: white;
+}
+
+@media (max-width:767px) {
+    tr {font-size:4vw;}
+  }
+  
+@media (min-width:992px) {
+    tr{font-size:2vw;}
+}

@@ -71,6 +71,9 @@ const Navbarmenu = () => {
                     <li  className="menu-item" >
                         <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyDetails`}> My Details</NavLink>
                     </li>
+                    <li  className="menu-item" >
+                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/CalendarD`}> Calendar</NavLink>
+                    </li>
 
                     <li  className="menu-item" >
                     <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/GiveFeedback`}> Give Feedback </NavLink>
