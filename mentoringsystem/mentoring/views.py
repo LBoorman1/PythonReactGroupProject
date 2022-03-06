@@ -1,8 +1,13 @@
-from functools import reduce
+import re
 from django.http import request
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, permissions
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import login, logout
+from functools import reduce
+import profile
 import operator
 from django.db.models import Q
 
@@ -28,6 +33,9 @@ from mentoring.models import POATarget
 
 from mentoring.serializers import UserSerializer
 from mentoring.serializers import ProfileSerializer
+from mentoring.serializers import RegisterUserSerializer
+from mentoring.serializers import RegisterProfileSerializer
+from mentoring.serializers import LoginSerializer
 from mentoring.serializers import ApplicationFeedbackSerializer
 from mentoring.serializers import SkillSerializer
 from mentoring.serializers import MentorSkillSerializer
@@ -45,22 +53,39 @@ from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
 
-from django.contrib.auth.views import LoginView
+class RegisterView(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = RegisterProfileSerializer
+    permission_classes = (permissions.AllowAny,)
 
-#from .forms import RegisterForm_profile, RegisterForm_user, LoginForm
+    def create(self, request):
+        serializer = self.get_serializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        user_profile=serializer.save()
+        return Response({
+            "user" : ProfileSerializer(user_profile).data,
+            "token" : Token.objects.create(user=user_profile.user).key
+        })
 
-# class RegisterView_User(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializerclass = UserSerializer
-#     form_class = RegisterForm_user
+class LoginView(generics.GenericAPIView):
+        serializer_class = LoginSerializer
 
-# class RegisterView_Profile(viewsets.ModelViewSet):
-#     queryset = Profile.objects.all()
-#     serializerclass = ProfileSerializer
-#     form_class = RegisterForm_profile
-
-# class CustomLoginView(LoginView):
-#     authentication_form = LoginForm
+        def post(self, request, *args, **kwargs):
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.validated_data
+            login(request, user)
+            return Response({
+                "user": ProfileSerializer(Profile.objects.get(user=user)).data,
+                "token": Token.objects.create(user=user).key
+            })
+            
+class LogoutView(APIView):
+    
+    def post(self, request, *args, **kwargs):
+        Token.objects.filter(user=request.data["user"]["id"]).delete()
+        logout(request)
+        return Response({"message":"Logout Successful"})
 
 class showProfileView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
@@ -146,6 +171,7 @@ class expertiseView(viewsets.ModelViewSet):
 
 #make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
+    queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
@@ -159,19 +185,33 @@ class applicationFeedbackView(viewsets.ModelViewSet):
             #return an error to the frontend
             return Response("No profile coresponding to that userID")
 
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            appFeedback = ApplicationFeedback.objects.filter(user=profile)
+
+            serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
+
 
  
     ""
 
-class addBusinessAreaView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-#make function for create and show
-class businessAreaChangeRequestsView(viewsets.ModelViewSet):
-    #edit db view
-    ""
 #make function for create and show
 class businessAreaView(viewsets.ModelViewSet):
+    query_set = BusinessArea
+    serializer_class = BusinessAreaSerializer
+
+    def get_queryset(self):
+        return BusinessArea.objects.all()
+        
+#make function for create and show
+class businessAreaChangeRequestsView(viewsets.ModelViewSet):
     #edit db view
     ""
     
@@ -183,18 +223,31 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     serializer_class = MeetingFeedbackSerializer
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
+        
         meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
+        meetingTitle = Meeting.objects.get(pk = request.data.get('meetingID')).title
         feedback = request.data.get('feedback')
         rating = request.data.get('rating')
 
         if profile and meeting:
             #add the new object to the database
-            newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile)
+            newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile, meetingtitle=meetingTitle)
             newFeedback.save()
             return Response("Successfully added feedback to database")
         else:
             #return an error to the frontend
             return Response("No profile coresponding to that userID")
+    
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            meetingFeedback = MeetingFeedback.objects.filter(user=profile)
+            serializedData = MeetingFeedbackSerializer(meetingFeedback, many=True)
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
 
 #make function for create and show
 class POAsView(viewsets.ModelViewSet):

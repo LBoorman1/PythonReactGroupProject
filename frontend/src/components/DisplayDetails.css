@@ -18,6 +18,14 @@ tr{
 }*/
 
 /*tr.vertical :nth-child(1){
+
+    background-color: rgb(165, 192, 209);
+}
+
+th,td :nth-child(1){
+    background-color: rgb(165, 192, 209);
+}
+
     background-color: rgb(165, 192, 209);
 }*/
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
@@ -21,12 +22,41 @@ from mentoring.models import POATarget
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'is_active']
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('user', 'business_area', 'is_mentee','is_mentor','is_admin')
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
+
+class RegisterProfileSerializer(serializers.ModelSerializer):
+    user = RegisterUserSerializer(many=False, read_only=False)
+    class Meta:
+        model = Profile
+        fields = ('user', 'business_area', 'is_mentee','is_mentor','is_admin')
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_instance=User.objects.create_user(is_active=True, **user_data)
+        profile_data = Profile.objects.create(user = user_instance, **validated_data)
+        return profile_data
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect details")
+
 
 class ApplicationFeedbackSerializer(serializers.ModelSerializer):
     class Meta:

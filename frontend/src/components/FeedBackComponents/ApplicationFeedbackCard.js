@@ -1,15 +1,13 @@
 import React from 'react'
 import { Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
 
-const UserCard = props => {
+const ApplicationFeedbackCard = props => {
     return (
         <div className="feedback_card sec__one">
           <Card>
             <CardBody>
                <CardText>
-                 {props.feedback}
-                 <p>Rating: { props.rating ? props.rating : '-' } /5.</p>
-                 
+                 {props.feedback}                 
                </CardText>
             </CardBody>
           </Card>
@@ -17,4 +15,4 @@ const UserCard = props => {
     )
 }
 
-export default UserCard;
+export default ApplicationFeedbackCard;

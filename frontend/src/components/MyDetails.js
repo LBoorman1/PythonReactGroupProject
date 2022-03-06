@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { Redirect } from 'react-router-dom';
 import DisplayDetails from './DisplayDetails';
 import DisplayDeatils from './DisplayDetails';
 

@@ -12,15 +12,6 @@ class Profile(models.Model):
     is_mentor = models.BooleanField()
     is_admin = models.BooleanField()
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
 class ApplicationFeedback(models.Model):
     feedback = models.TextField()
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
@@ -97,6 +88,7 @@ class MeetingFeedback(models.Model):
     rating = models.IntegerField()
     meeting = models.ForeignKey('Meeting', on_delete=models.CASCADE)
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    meetingtitle = models.TextField(default="Meeting Name Unavailiable")
 
 class PlanOfAction(models.Model):
     relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
