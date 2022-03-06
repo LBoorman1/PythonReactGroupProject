@@ -148,6 +148,15 @@ class meetingView(viewsets.ModelViewSet):
         else:
             return Response("no check")
 
+    class meetingView2(viewsets.ModelViewSet):
+        template_name = 'calendarView.html'
+        serializer_class = MeetingSerializer
+
+        def get_context_data(self,**kwargs):
+            context = super(meetingView,self).get_context_data(**kwargs)
+            context['eventList'] = Event.objects.all()
+            return context
+
 #cancel meeting view skipped
 
 #end mentoring relationship skipped
