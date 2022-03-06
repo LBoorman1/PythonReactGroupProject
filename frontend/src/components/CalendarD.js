@@ -13,6 +13,8 @@ import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 export default class CalendarD extends React.Component {
 //const CalendarD = () =>  {
     //one = {title:"Meeting with phil",date_time: 0}
+    
+
     state = {
       meetings:[]
     }
@@ -23,29 +25,35 @@ export default class CalendarD extends React.Component {
           this.setState({ meetings })
         })
     }
-    
+    //eventsArr = this.state.meetings.map((meeting)=> <li>meeting.title</li>);
+
+    //event1 = {
+    //  title:'',
+    //  : ''
+    //}
 
     render() {
     return (
       <div className="schedule  sec__one">
         <h1>Calendar</h1>
+        
         <ul>
-          {
-            this.state.meetings
-            .map(meeting =>
-              <li>{meeting.title} {meeting.date_time}</li>)
-          }
+          { this.state.meetings.map(meeting =>
+            <li>{meeting.title} {meeting.date_time}</li>)}
         </ul>
+      
       <FullCalendar
+        
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
         //weekends = {false}
         firstDay = '1'
-        events={[
+          //.map(meeting => ({ title: this.meeting.title},{start:this.meeting.date_time})
+        events = {[
           { title: 'Meeting with John', start:  '2022-03-04 11:30:00' },
-          { title: 'Meeting with Phil', start:  '2022-03-04 12:30:00' },
-          { title: 'event 2', date: '2022-03-02',time: '14:00:00' }
+          { title: 'Meeting with Phil', start:  '2022-03-04 12:30:00' }
         ]}
+        ////2020-03-24T00:00:00Z
         height = '100%'
         contentHeight = 'auto'
         displayEventTime = 'true'
@@ -71,6 +79,14 @@ function renderEventContent(eventInfo) {
     </>
   )
 }
+
+//function eventToFormat(title1,date_time1){
+//  return (
+//    title: title1,
+//    date_time:datetime
+//  )
+//}
+
 
 //export default CalendarD;
 
