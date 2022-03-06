@@ -56,7 +56,6 @@ export default class CalendarD extends React.Component {
           events = {[
             {title:'My meeting',start:'2022-03-05T00:00:00Z'}
           ]}
-          
           height = '100%'
           contentHeight = 'auto'
           displayEventTime = 'true'
