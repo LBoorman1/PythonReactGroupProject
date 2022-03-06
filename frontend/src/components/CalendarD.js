@@ -29,16 +29,19 @@ export default class CalendarD extends React.Component {
     //];
     
     //const { events } = this.state
-    arr = Array.prototype.map
-      
+
+    //function buildingEvents = $.map(data,function(item{
+     // return {
+   //     title:item.title,
+   //     start:item.date_time
+    //  };
+    //}));
+  
     render() {
       return (
         <div className="schedule  sec__one">
           <title>Calendar</title>
           <h1>Calendar</h1>
-        
-
-          
 
           { this.state.meetings.map(meeting =>
             <p>title:{meeting.title}, meeting:{meeting.date_time}</p>)}
@@ -53,6 +56,7 @@ export default class CalendarD extends React.Component {
           events = {[
             {title:'My meeting',start:'2022-03-05T00:00:00Z'}
           ]}
+          
           height = '100%'
           contentHeight = 'auto'
           displayEventTime = 'true'
