@@ -35,12 +35,7 @@ export default class CalendarD extends React.Component {
         initialView="dayGridMonth"
         //weekends = {false}
         firstDay = '1'
-        eventSources = { this.state.meetings  
-          .map(meeting =>    {
-            title: { meeting.title },
-            start: { meeting.date_time }
-          }
-        }
+        
         
         height = '100%'
         contentHeight = 'auto'
