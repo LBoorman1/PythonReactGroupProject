@@ -8,21 +8,34 @@ import listPlugin from '@fullcalendar/list';
 import './Calendar.css';
 import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
+import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
 //const CalendarD = () =>  {
+    //one = {title:"Meeting with phil",date_time: 0}
+    state = {
+      meetings:[]
+    }
     componentDidMount() {
-      axios.get('')
+      axios.get('http://localhost:8000/meetingView/?userID=5')
         .then(res => {
           const meetings = res.data;
           this.setState({ meetings })
         })
     }
     
+
     render() {
     return (
       <div className="schedule  sec__one">
         <h1>Calendar</h1>
+        <ul>
+          {
+            this.state.meetings
+            .map(meeting =>
+              <li>{meeting.title} {meeting.date_time}</li>)
+          }
+        </ul>
       <FullCalendar
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
@@ -42,6 +55,7 @@ export default class CalendarD extends React.Component {
         bold = 'true'
         eventDisplay = 'block'
         eventContent={renderEventContent}
+        nowIndicator ='true'
       />
       </div>
       
