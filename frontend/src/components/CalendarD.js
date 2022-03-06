@@ -24,28 +24,24 @@ export default class CalendarD extends React.Component {
         })
     }
     
+    
 
     render() {
     return (
       <div className="schedule  sec__one">
         <h1>Calendar</h1>
-        <ul>
-          {
-            this.state.meetings
-            .map(meeting =>
-              <li>{meeting.title} {meeting.date_time}</li>)
-          }
-        </ul>
       <FullCalendar
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
         //weekends = {false}
         firstDay = '1'
-        events={[
-          { title: 'Meeting with John', start:  '2022-03-04 11:30:00' },
-          { title: 'Meeting with Phil', start:  '2022-03-04 12:30:00' },
-          { title: 'event 2', date: '2022-03-02',time: '14:00:00' }
-        ]}
+        eventSources = { this.state.meetings  
+          .map(meeting =>    {
+            title: { meeting.title },
+            start: { meeting.date_time }
+          }
+        }
+        
         height = '100%'
         contentHeight = 'auto'
         displayEventTime = 'true'
@@ -71,6 +67,14 @@ function renderEventContent(eventInfo) {
     </>
   )
 }
+
+//{  this.state.meetings  .map(meeting =>    <li>{meeting.title} {meeting.date_time}</li>)} </ul>
+
+//events={[
+//  { title: 'Meeting with John', start:  '2022-03-04 11:30:00' },
+//  { title: 'Meeting with Phil', start:  '2022-03-04 12:30:00' },
+//  { title: 'event 2', date: '2022-03-02',time: '14:00:00' }
+//]}
 
 //export default CalendarD;
 
