@@ -14,7 +14,7 @@ class Profile(models.Model):
         ('technology', 'Technology'),
         ('strategy', 'Strategy'),
         ('operations', 'Operations')
-        ]
+    ]
     business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE, choices=BUSINESS_AREA_CHOICES)
     is_mentee = models.BooleanField()
     is_mentor = models.BooleanField()
@@ -71,7 +71,8 @@ class BusinessArea(models.Model):
 
 class BusinessAreaChangeRequest(models.Model):
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    request_status = models.CharField(max_length=10)
+    #request_status = models.CharField(max_length=10)
+    checked = models.BooleanField()
     new_business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE)
 
 class CalendarUser(models.Model):

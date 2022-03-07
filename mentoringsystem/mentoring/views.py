@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from rest_framework import Response, status, viewsets, mixins 
+from rest_framework import Response, status, viewsets, mixins
+from rest_framework.views import APIView
 from django.contrib.auth.models import User 
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
@@ -38,7 +41,9 @@ from mentoring.serializers import MeetingRequestSerializer
 from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
-
+from mentoring.serializers import BusinessAreaChangeRequestProfileSerializer
+from mentoring.serializers import BecomeMentorProfileSerializer
+from mentoring.serializers import UserProfileSerializer
 
 #4, 5
 class BecomeMentorView(mixins.CreateModelMixin,
@@ -209,14 +214,25 @@ class removeExpertiseView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-# Ability to create and view system feedback
+# Ability to create and view application feedback
 #15, 16
-class SystemFeedbackView(mixins.CreateModelMixin,
+class ApplicationFeedbackView(mixins.CreateModelMixin,
                      mixins.ListModelMixin):
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)      
 
-class EditUser:
+class SearchUserView:
+    def get_queryset(self):
+        name = self.request.query_params.get('name')
+        serializer = UserProfileSerializer
+        # Concatenate first name and last name together and filter results that contain search parameter
+        queryset = User.objects.annotate(search_name=Concat('first_name', Value(' '), 'last_name')) 
+        results = queryset.filter(search_name__contains=name)
+
+        serializer = UserProfileSerializer(results, many=True)
+        return Response(serializer.data)
+
+class EditUserView:
     # Toggles a user's admin status between admin and not admin
     def toggle_admin(self, pk):
         user = User.objects.get(pk=pk)
@@ -294,14 +310,53 @@ class EditUser:
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Get user objects along with business area change requests
+class BusinessAreaChangeRequestUserView(APIView):
+    def get(self):
+        business_area_requests = BusinessAreaChangeRequest.objects.filter(checked=False)
+        serializer = BusinessAreaChangeRequestProfileSerializer(business_area_requests, many=True)
+        return Response(serializer.data)
+
+# Separate view for checking off requests
+class BusinessAreaChangeRequestView:
+    def check(self, pk):
+        business_area_request = BusinessAreaChangeRequest.objects.get(pk=pk)
+        data = {"checked": True}
+        serializer = BusinessAreaChangeRequestSerializer(business_area_request, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Get user objects along with become mentor requests
+class BecomeMentorUserView(APIView):
+    def get(self):
+        become_mentor_requests = BecomeMentor.objects.filter(checked=False)
+        serializer = BecomeMentorProfileSerializer(become_mentor_requests, many=True)
+        return Response(serializer.data)
+
+# Separate view for checking off requests
+class BecomeMentorView:
+    def check(self, pk):
+        become_mentor_request = BecomeMentor.objects.get(pk=pk)
+        data = {"checked": True}
+        serializer = BecomeMentorSerializer(become_mentor_request, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-class businessAreaChangeRequestsView(viewsets.ModelViewSet):
+#class businessAreaChangeRequestsView(viewsets.ModelViewSet):
     #edit db view
-    ""
+    #""
 
 class changeBusinessAreaView(viewsets.ModelViewSet):
     #edit db view

@@ -7,7 +7,7 @@ const UserCard = props => {
           <Card>
             <CardBody>
                <CardText>
-                 {props.feedback}
+                 {props.text}
                </CardText>
             </CardBody>
           </Card>
