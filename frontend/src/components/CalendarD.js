@@ -54,7 +54,11 @@ export default class CalendarD extends React.Component {
           firstDay = '1'
           
           events = {[
-            {title:'My meeting',start:'2022-03-05T00:00:00Z'}
+            {title:'Meeting with Matt',start:'2022-03-03T13:00:00Z'},
+            {title:'Meeting with Michael',start:'2022-03-04T13:00:00Z'},
+            {title:'Meeting with James',start:'2022-03-04T15:00:00Z'},
+            {title:'Meeting with Matt',start:'2022-03-07T12:00:00Z'},
+            {title:'Meeting with Matt',start:'2022-03-08T11:00:00Z'}
           ]}
           height = '100%'
           contentHeight = 'auto'
