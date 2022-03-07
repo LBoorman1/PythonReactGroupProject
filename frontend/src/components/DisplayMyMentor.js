@@ -1,5 +1,7 @@
-import React from 'react';
+import {React} from 'react';
 import UserCard from './UserCard';
+import Card from 'reactstrap';
+import SelectMentor from './RequestMentor';
 
 const DisplayMyMentor = () => {
     return (
@@ -19,6 +21,9 @@ const DisplayMyMentor = () => {
               topicsOfExpertise={[]}
               type=""
             />
+
+            <SelectMentor array={["user 1", "user 2"]}/>
+
         </div>
     )
 }
