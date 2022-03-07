@@ -6,6 +6,7 @@ const AddAdmin = () => {
     const [userData, setUserData] = useState([]);
     
     const generateResults = responseData => {
+        console.log(responseData);
         setUserData(responseData);
     }
 

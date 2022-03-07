@@ -6,16 +6,18 @@ const SearchUser = props => {
     
     const performSearch = async (e) => {
       e.preventDefault();
+      console.log(e.target.search.value);
       try {
         const response = await axios({
             method: "GET",
-            url: "http://localhost:8000/SearchUserView?name=" + e.target.name.value,
+            url: "http://localhost:8000/searchuser?name=" + e.target.search.value,
             headers: {
                 "Content-Type": "application/json"
             }
         })
         // Updates frontend
-        props.handleUpdate(response);
+        console.log(response.data);
+        props.handleUpdate(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -27,7 +29,7 @@ const SearchUser = props => {
           <br />
           <Card>
             <CardBody> 
-              <Form onSubmit="performSearch">
+              <Form onSubmit={performSearch}>
                 <FormGroup>
                   <Label for="userSearch">Enter user name</Label>
                   <br />

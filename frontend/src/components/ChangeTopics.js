@@ -68,7 +68,7 @@ const ChangeTopics = () => {
     try {
       const response = await axios({
         method: "POST",
-        url: "http://localhost:8000/SkillView",
+        url: "http://localhost:8000/skills/",
         data: {
           name: e.target.topic.value
         },
@@ -76,7 +76,7 @@ const ChangeTopics = () => {
           "Content-Type": "application/json"
         }
       });
-      setTopicData([...topicData, response]);
+      setTopicData([...topicData, response.data]);
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +145,7 @@ const ChangeTopics = () => {
           <CardTitle tag="h5">
             Add Topic
           </CardTitle>
-          <Form onSubmit="addTopic">
+          <Form onSubmit={addTopic}>
             <FormGroup>
               <Label for="topicAdd">Enter topic to add</Label>
               <br />
