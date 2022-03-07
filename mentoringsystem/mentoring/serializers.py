@@ -13,7 +13,7 @@ from mentoring.models import BusinessArea
 from mentoring.models import BusinessAreaChangeRequest
 from mentoring.models import CalendarUser
 from mentoring.models import Meeting
-from mentoring.models import MeetingRequest
+#from mentoring.models import MeetingRequest
 from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
@@ -88,10 +88,10 @@ class MeetingSerializer(serializers.ModelSerializer):
         model = Meeting 
         fields = '__all__'
 
-class MeetingRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MeetingRequest 
-        fields = '__all__'
+#class MeetingRequestSerializer(serializers.ModelSerializer):
+    #class Meta:
+        #model = MeetingRequest 
+        #fields = '__all__'
 
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -111,7 +111,7 @@ class POATargetSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = ['name']
+        fields = '__all__'
 
 class SkillNameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -162,12 +162,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class ProfileUserSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=True)
     business_area = BusinessAreaSerializer(required=True)
-    topics_of_expertise = MentorSkillNameSerializer(many=True, required=True)
+    topics_of_expertise = MentorSkillNameSerializer(many=True)
     topics_of_interest = MenteeInterestNameSerializer(many=True, required=True)
 
     class Meta:
         model = Profile 
-        fields = ['id', 'is_mentee', 'is_mentor', 'is_admin', 'business_area', 'topics_of_expertise', 'topics_of_interest', 'user']
+        fields = ['id', 'is_mentee', 'is_mentor', 'is_admin', 'business_area', 'user', 'topics_of_expertise', 'topics_of_interest']
 
 # Used for selecting user details for a given business area change request
 class BusinessAreaChangeRequestProfileSerializer(serializers.ModelSerializer):
@@ -176,6 +176,7 @@ class BusinessAreaChangeRequestProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = BusinessAreaChangeRequest
+        #fields = ['id', 'new_business_area']
         fields = ['id', 'profile', 'new_business_area']
 
 # Used for selecting user details for a given become mentor request
@@ -183,5 +184,5 @@ class BecomeMentorProfileSerializer(serializers.ModelSerializer):
     profile = ProfileUserSerializer(required=True)
     
     class Meta:
-        model = BusinessAreaChangeRequest
+        model = BecomeMentor
         fields = ['id', 'profile']

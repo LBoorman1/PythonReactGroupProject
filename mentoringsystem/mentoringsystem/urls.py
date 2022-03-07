@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import re_path, path, include
 from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
+router.register(r'changerequests', views.BusinessAreaChangeRequestUserView, 'changerequest')
+router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
 router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
@@ -28,8 +30,8 @@ router.register(r'showMentoringRequests', views.showMentoringRequestsView, 'show
 router.register(r'addRelationship', views.addRelationshipView, 'addRelationship')
 router.register(r'addFreeTime', views.addFreeTimeView, 'addFreeTime')
 router.register(r'showFreehours', views.showFreehoursView, 'showFreehours')
-router.register(r'requestMeetings', views.requestMeetingsView, 'requestMeetings')
-router.register(r'showMeetingRequests', views.showMeetingRequestsView, 'showMeetingRequests')
+#router.register(r'requestMeetings', views.requestMeetingsView, 'requestMeetings')
+#router.register(r'showMeetingRequests', views.showMeetingRequestsView, 'showMeetingRequests')
 router.register(r'createMeeting', views.createMeetingView, 'createMeeting')
 router.register(r'showMeetings', views.showMeetingsView, 'showMeetings')
 router.register(r'showInterests', views.showInterestsView, 'showInterests')
@@ -50,10 +52,17 @@ router.register(r'addPOA', views.addPOAView, 'addPOA')
 router.register(r'showSkillInterest', views.showSkillInterestView, 'showSkillInterest')
 router.register(r'addGroupSession', views.addGroupSessionView, 'addGroupSession')
 router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
+router.register(r'applicationfeedback', views.ApplicationFeedbackView, 'applicationfeedback')
+router.register(r'skills', views.SkillView, 'skills')
+router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
+#router.register(r'searchuser', views.SearchUserView, 'searchuser')
+#router.register(r'toggleadmin/(?P<pk>\d+)/$', views.toggle_admin, 'toggleadmin')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('toggleadmin/<int:pk>/', views.toggle_admin),
+    re_path('searchuser/', views.search_user),
     path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),
 ]
