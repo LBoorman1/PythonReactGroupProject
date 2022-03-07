@@ -1,18 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Card, CardBody, CardText, CardTitle, Form, FormGroup, Input, Label } from "reactstrap";
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas";
 
 const ChangeTopics = () => {
-  const [businessAreaData, setBusinessAreaData] = useState(fetchBusinessAreas);
-  const [topicData, setTopicData] = useState(fetchTopics);
+  const [businessAreaData, setBusinessAreaData] = useState([]);
+  const [topicData, setTopicData] = useState([]);
+
+  useEffect(() => {
+    const fetchBusinessAreas = async () => {
+      try {
+        const response = await axios({
+          method: "GET",
+          url: "http://localhost:8000/businessareas",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        setBusinessAreaData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchBusinessAreas();
+  }, []);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await axios({
+          method: "GET",
+          url: "http://localhost:8000/skills",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        setTopicData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTopics();
+  }, []);
 
   const addBusinessArea = async (e) => {
     e.preventDefault();
     try {
       const response = await axios({
         method: "POST",
-        url: "http://localhost:8000/BusinessAreaView",
+        url: "http://localhost:8000/businessareas/",
         data: {
           name: e.target.businessArea.value
         },
@@ -20,8 +56,9 @@ const ChangeTopics = () => {
           "Content-Type": "application/json"
         }
       });
-      setBusinessAreaData([...businessAreaData, response]);
-    } catch {
+      console.log(response.data);
+      setBusinessAreaData([...businessAreaData, response.data]);
+    } catch (error) {
       console.log(error);
     }
   }
@@ -39,8 +76,8 @@ const ChangeTopics = () => {
           "Content-Type": "application/json"
         }
       });
-      setBusinessAreaData([...topicData, response]);
-    } catch {
+      setTopicData([...topicData, response]);
+    } catch (error) {
       console.log(error);
     }
   }
@@ -66,7 +103,7 @@ const ChangeTopics = () => {
           <CardTitle tag="h5">
             Add Business Area
           </CardTitle>
-          <Form onSubmit="addBusinessArea">
+          <Form onSubmit={addBusinessArea}>
             <FormGroup>
               <Label for="businessAreaAdd">Enter business area to add</Label>
               <br />
@@ -135,4 +172,4 @@ const ChangeTopics = () => {
     </div>
   )
 }
-export default ChangeTopics
+export default ChangeTopics;

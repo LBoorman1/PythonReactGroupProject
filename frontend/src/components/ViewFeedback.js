@@ -8,11 +8,14 @@ const ViewFeedback = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const { feedbackData: response } = await axios({
+        const response = await axios({
           method: "GET",
-          url: "http://localhost:8000/ApplicationFeedbackView"
+          url: "http://localhost:8000/applicationfeedback/",
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
-        setFeedbackData(response);
+        setFeedbackData(response.data);
       } catch(error) {
         console.log(error);
       }
@@ -26,7 +29,6 @@ const ViewFeedback = () => {
       {feedbackData.map(feedback => (
         <FeedbackCard text={feedback.feedback} />
       ))}
-      <FeedbackCard text="This app is amazing!" />
     </div>
   )
 }

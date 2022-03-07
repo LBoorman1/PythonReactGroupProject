@@ -50,20 +50,9 @@ from mentoring.serializers import UserProfileSerializer
 
 #4, 5
 class BecomeMentorView(mixins.CreateModelMixin,
-                       mixins.DestroyModelMixin):
+                      viewsets.GenericViewSet):
     queryset = BecomeMentor.objects.all()
     serializer_class = BecomeMentorSerializer(queryset, many=True) 
-
-    def check(self, pk):
-        become_mentor_request = BecomeMentor.objects.get(pk=pk)
-        data = {"checked": True}
-        serializer = BecomeMentorSerializer(become_mentor_request, data=data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #6 TEMP - REPLACE WITH ACTUAL MATCHING ALGORITHM
 class PossibleMentorsView(mixins.ListModelMixin):
@@ -100,21 +89,9 @@ class MentorSkillView(mixins.CreateModelMixin,
 
 #19, 20
 class BusinessAreaChangeRequestView(mixins.CreateModelMixin,
-                                   mixins.DestroyModelMixin,
                                    viewsets.GenericViewSet):
     queryset = BusinessAreaChangeRequest.objects.all()
     serializer_class = BusinessAreaChangeRequestSerializer(queryset, many=True) 
-
-    def check(self, pk):
-        business_area_request = BusinessAreaChangeRequest.objects.get(pk=pk)
-        data = {"checked": True}
-        serializer = BusinessAreaChangeRequestSerializer(business_area_request, data=data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #12 might need to change to instead select by user
 class AvailableHourView(mixins.CreateModelMixin,
@@ -252,19 +229,6 @@ class ApplicationFeedbackView(mixins.CreateModelMixin,
     serializer_class = ApplicationFeedbackSerializer
     #serializer_class = ApplicationFeedbackSerializer(queryset, many=True)      
 
-class SearchUser(generics.ListAPIView):
-    serializer_class = UserProfileSerializer 
-
-    def get_queryset(self):
-        name = self.request.query_params.get('name')
-        serializer = UserProfileSerializer
-        # Concatenate first name and last name together and filter results that contain search parameter
-        queryset = User.objects.annotate(search_name=Concat('first_name', Value(' '), 'last_name')) 
-        results = queryset.filter(search_name__contains=name)
-
-        serializer = UserProfileSerializer(results, many=True)
-        return Response(serializer.data)
-
 @api_view(['GET'])
 def search_user(request):
     name = request.query_params.get('name')
@@ -291,83 +255,90 @@ def toggle_admin(request, pk):
         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class EditUserView:
-    # Toggles a user's admin status between admin and not admin
-    def toggle_admin(self, pk):
-        user = User.objects.get(pk=pk)
-        profile = user.profile 
-        if (profile.is_admin):
-            data = {"is_admin": False}
-        else:
-            data = {"is_admin": True}
-        serializer = ProfileSerializer(profile, data=data, partial=True)
+@api_view(['PATCH'])
+def toggle_active(request, pk):
+    user = User.objects.get(pk=pk)
+    if (user.is_active):
+        data = {"is_active": False}
+    else:
+        data = {"is_active": True}
+    serializer = UserSerializer(user, data=data, partial=True)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
     
-    #5
-    def set_mentor(self, request, pk):
-        user = User.objects.get(pk=pk)
-        profile = user.profile 
-        serializer = ProfileSerializer(profile, data={"is_mentor": True}, partial=True)
-        
-        # Add topics of expertise
-        #for topic in request.data.topics:
-            #mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
-            #mentor_skill.save()
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['PATCH'])
+def set_mentor(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile 
+    serializer = ProfileSerializer(profile, data={"is_mentor": True}, partial=True)
     
-    #3
-    def set_mentee(self, request, pk):
-        user = User.objects.get(pk=pk)
-        profile = user.profile 
-        serializer = ProfileSerializer(profile, data={"is_mentee": True}, partial=True)
-        
-        # Add topics of interest
-        for topic in request.data.topics:
-            mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
-            mentor_skill.save()
+    # Add topics of expertise
+    #for topic in request.data.topics:
+        #mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+        #mentor_skill.save()
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
     
-    #21
-    def toggle_active(self, pk):
-        user = User.objects.get(pk=pk)
-        if (user.is_active):
-            data = {"is_active": False}
-        else:
-            data = {"is_active": True}
-        serializer = UserSerializer(user, data=data, partial=True)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['PATCH'])
+def set_mentee(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile 
+    serializer = ProfileSerializer(profile, data={"is_mentee": True}, partial=True)
     
-    #20
-    def set_business_area(self, request, pk):
-        user = User.objects.get(pk=pk)
-        profile = user.profile
-        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+    # Add topics of interest
+    for topic in request.data.topics:
+        mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+        mentor_skill.save()
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def set_business_area(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile
+    serializer = ProfileSerializer(profile, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def check_off_become_mentor(request, pk):
+    become_mentor_request = BecomeMentor.objects.get(pk=pk)
+    data = {"checked": True}
+    serializer = BecomeMentorSerializer(become_mentor_request, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def check_off_business_area_change_request(request, pk):
+    business_area_request = BusinessAreaChangeRequest.objects.get(pk=pk)
+    data = {"checked": True}
+    serializer = BusinessAreaChangeRequestSerializer(business_area_request, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Get user objects along with business area change requests
 class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Card, CardBody, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-const SearchUser = () => {
+const SearchUser = props => {
     
     const performSearch = async (e) => {
       e.preventDefault();
@@ -15,7 +15,7 @@ const SearchUser = () => {
             }
         })
         // Updates frontend
-        handleUpdate(response);
+        props.handleUpdate(response);
       } catch (error) {
         console.log(error);
       }

@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-^1gks7ongj*c1ylk+!#e*6dx2f$=m_^%*m=_3s&%nt_oq_p#95
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'http://localhost:3000']
 
 
 # Application definition
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,11 +57,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ORIGIN_WHITELIST = [
-     'http://localhost:8000'
+     'http://localhost:8000',
+     'http://localhost:3000'
 ]
 
 ROOT_URLCONF = 'mentoringsystem.urls'
@@ -141,5 +142,7 @@ LOGOUT_REDIRECT_URL = '/login'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ORIGIN_ALLOW_ALL = False
 
 #AUTH_USER_MODEL = 'mentoring.models.Profile'
