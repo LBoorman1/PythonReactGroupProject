@@ -19,6 +19,8 @@ import RemoveUser from './components/RemoveUser';
 import ChangeTopics from './components/ChangeTopics';
 import SetSessionThreshold from './components/SetSessionThreshold';
 import ViewFeedback from './components/ViewFeedback';
+import BecomeMentorRequest from './components/BecomeMentorRequest';
+import BusinessAreaChangeRequest from './components/BusinessAreaChangeRequest';
 import MyDetails from './components/MyDetails';
 import GiveFeedback from './components/GiveFeedback';
 import MyFeedback from './components/MyFeedback';
@@ -46,7 +48,7 @@ function App() {
       <div  onClick={refreshPage}>
       { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
       { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentee"
-      || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics"
+      || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics" || state.currentPath=="/BecomeMentorRequests" || state.currentPath=="/BusinessAreaChangeRequests"
       || state.currentPath=="/SetSessionThreshold"
       || state.currentPath=="/ViewFeedback"
       || state.currentPath=="/MyDetails"
@@ -69,6 +71,8 @@ function App() {
           <Route path="/ChangeTopics" component={ChangeTopics}/>
           <Route path="/SetSessionThreshold" component={SetSessionThreshold}/>
           <Route path="/ViewFeedback" component={ViewFeedback}/>
+          <Route path="/BecomeMentorRequests" component={BecomeMentorRequest}/>
+          <Route path="/BusinessAreaChangeRequests" component={BusinessAreaChangeRequest}/>
           <Route path="/MyDetails" component={MyDetails}/>
           <Route path="/GiveFeedback" component={GiveFeedback}/>
           <Route path="/MyFeedback" component={MyFeedback}/>

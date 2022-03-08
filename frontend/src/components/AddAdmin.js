@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SearchUser from './SearchUser';
 import UserCard from './UserCard';
+import boolToStr from './BoolToStringNice';
 
 const AddAdmin = () => {
     const [userData, setUserData] = useState([]);
@@ -12,21 +13,22 @@ const AddAdmin = () => {
 
     return (
         <div className="add_admin sec__one">
-            <h1> Add Admin </h1>
+            <h1>Edit Admin Status</h1>
             <SearchUser handleUpdate={generateResults}/>
             {userData.map(user => (
                 <UserCard 
-                    id={userData.id}
+                    id={user.id}
                     firstName={user.first_name}
                     lastName={user.last_name}
                     email={user.email}
                     businessArea={user.profile.business_area.name}
-                    active={user.is_active}
-                    mentee={user.profile.is_mentee}
-                    mentor={user.profile.is_mentor}
-                    admin={user.profile.is_admin}
-                    topicsOfInterest={user.profile.topics_of_interest}
-                    topicsOfExpertise={user.profile.topics_of_expertise}
+                    active={boolToStr(user.is_active)}
+                    mentee={boolToStr(user.profile.is_mentee)}
+                    mentor={boolToStr(user.profile.is_mentor)}
+                    admin={boolToStr(user.profile.is_admin)}
+                    // This is a bit clunky - each topic is returned wrapped in a 'skill' object
+                    topicsOfInterest={user.profile.topics_of_interest.map(topic => topic.skill.name)}
+                    topicsOfExpertise={user.profile.topics_of_expertise.map(topic => topic.skill.name)}
                     type="toggleAdmin"
                     //onClick={(e) => {
                         //e.preventDefault();

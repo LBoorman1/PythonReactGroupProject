@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button, Card, CardBody, CardText, Input, Label } from "reactstrap";
-import ToggleAdminButton from "./ToggleAdminButton";
 
 const UserCard = props => {
   const [admin, setAdmin] = useState(props.admin);
   const [active, setActive] = useState(props.active);
-  const [mentor, setMentor] = useState(props.mentor);
-  const [businessArea, setBusinessArea] = useState(props.businessArea);
 
   const toggleAdmin = async () => {
     try {
       // Make request
       const response = await axios({
         method: "PATCH",
-        url: "http://localhost:8000/REPLACETHIS/" + props.id,
+        url: "http://localhost:8000/toggleadmin/" + props.id + "/",
         headers: {
           "Content-Type": "application/json"
         }
@@ -34,7 +31,7 @@ const UserCard = props => {
     try {
       const response = await axios({
         method: "PATCH",
-        url: "http://localhost:8000/REPLACETHIS/" + props.id,
+        url: "http://localhost:8000/toggleactive/" + props.id + "/",
         headers: {
           "Content-Type": "application/json"
         }
@@ -74,7 +71,7 @@ const UserCard = props => {
               <strong>Topics of Interest</strong>: {props.topicsOfInterest.map(topic => topic + ", ")}
             </CardText>
           }
-          {props.mentor == "True" &&
+          {props.mentor == "True" && props.type != "makeMentor" &&
             <CardText>
               <strong>Topics of Expertise</strong>: {props.topicsOfExpertise.map(topic => topic + ", ")}
             </CardText>
@@ -105,18 +102,18 @@ const UserCard = props => {
             <div>
               <br />
               <CardText>
-                <strong>Proposed Topics of Expertise</strong>: {props.proposedTopics.map(topic => topic + ", ")}
+                <strong>Proposed Topics of Expertise</strong>: {props.topicsOfExpertise.map(topic => topic + ", ")}
               </CardText>
               <Button 
                 color="success"
-                onClick={props.onAccept(props.id, props.requestId)}
+                onClick={() => props.onAccept(props.id, props.requestId)}
               >
                 Make Mentor
               </Button>
               &emsp;
               <Button 
                 color="danger"
-                onClick={props.onDeny(props.requestId)}
+                onClick={() => props.onDeny(props.requestId)}
               >
                 Deny Request
               </Button>
@@ -130,14 +127,14 @@ const UserCard = props => {
               </CardText>
               <Button 
                 color="success"
-                onClick={props.onAccept(props.id, props.newBusinessAreaId, props.requestId)}
+                onClick={() => props.onAccept(props.id, props.newBusinessAreaId, props.requestId)}
               >
                 Change Business Area
               </Button>
               &emsp;
               <Button 
                 color="danger"
-                onClick={props.onDeny(props.requestId)}
+                onClick={() => props.onDeny(props.requestId)}
               >
                 Deny Request
               </Button>

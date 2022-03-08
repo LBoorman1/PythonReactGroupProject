@@ -19,8 +19,6 @@ from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
-router.register(r'changerequests', views.BusinessAreaChangeRequestUserView, 'changerequest')
-router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
 router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
@@ -52,6 +50,8 @@ router.register(r'addPOA', views.addPOAView, 'addPOA')
 router.register(r'showSkillInterest', views.showSkillInterestView, 'showSkillInterest')
 router.register(r'addGroupSession', views.addGroupSessionView, 'addGroupSession')
 router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
+router.register(r'businessareachangerequests', views.BusinessAreaChangeRequestUserView, 'businessareachangerequests')
+router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'applicationfeedback', views.ApplicationFeedbackView, 'applicationfeedback')
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
@@ -65,8 +65,8 @@ urlpatterns = [
     path('toggleactive/<int:pk>/', views.toggle_active),
     path('setmentor/<int:pk>/', views.set_mentor),
     path('setbusinessarea/<int:pk>/', views.set_business_area),
-    path('checkoffbecomementor/<int:pk>', views.check_off_become_mentor),
-    path('checkoffbusinessareachangerequest/<int:pk>', views.set_business_area),
+    path('checkoffbecomementor/<int:pk>/', views.check_off_become_mentor),
+    path('checkoffbusinessareachangerequest/<int:pk>/', views.check_off_business_area_change_request),
     re_path('searchuser/', views.search_user),
     path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),

@@ -1,46 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import UserCard from './UserCard';
 import axios from 'axios';
+import boolToStr from './BoolToStringNice';
 
 const BecomeMentorRequest = () => {
-    const [becomeMentorRequestData, setBecomeMentorRequestData] = useState(fetchBecomeMentorRequests)
-
+    const [becomeMentorRequestData, setBecomeMentorRequestData] = useState([]);
+    
     const fetchBecomeMentorRequests = async () => {
         try {
             const response = await axios({
                 method: "GET",
-                url: "http://localhost:8000/BecomeMentorUserView",
+                url: "http://localhost:8000/becomementors",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            return response;
+            setBecomeMentorRequestData(response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
+    useEffect(fetchBecomeMentorRequests, []);
+
     const handleAccept = (userId, requestId) => {
+        // Make user a mentor and check off the request
         setMentor(userId);
         checkOffRequest(requestId);
-        refreshRequests();
+        fetchBecomeMentorRequests();
     }
 
-    const handleDeny = requestId => {
+    const handleDeny = (requestId) => {
+        // Simply check off the request and do nothing else
         checkOffRequest(requestId);
-        refreshRequests();
+        fetchBecomeMentorRequests();
     }
-
 
     const setMentor = async (userId) => {
+        console.log('test');
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/REPLACETHIS/" + userId,
+                url: "http://localhost:8000/setmentor/" + userId + "/",
                 headers: {
                     "Content-Type": "application/json"
                 }
-            })
+            });
         } catch (error) {
             console.log(error);
         }
@@ -50,19 +55,14 @@ const BecomeMentorRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/REPLACETHIS/" + requestId,
+                url: "http://localhost:8000/checkoffbecomementor/" + requestId + "/",
                 headers: {
                     "Content-Type": "application/json"
                 }
-            })
+            });
         } catch (error) {
             console.log(error);
         }
-    }
-
-    const refreshRequests = () => {
-        newRequests = fetchBecomeMentorRequests;
-        setBecomeMentorRequestData(newRequests);
     }
 
     return (
@@ -75,12 +75,12 @@ const BecomeMentorRequest = () => {
                     lastName={request.profile.user.last_name}
                     email={request.profile.user.email}
                     businessArea={request.profile.business_area.name}
-                    active={request.profile.user.is_active}
-                    mentee={request.profile.is_mentee}
-                    mentor={request.profile.is_mentor}
-                    admin={request.profile.is_admin}
-                    topicsOfInterest={request.profile.topics_of_interest}
-                    topicsOfExpertise={request.profile.topics_of_expertise}
+                    active={boolToStr(request.profile.user.is_active)}
+                    mentee={boolToStr(request.profile.is_mentee)}
+                    mentor={boolToStr(request.profile.is_mentor)}
+                    admin={boolToStr(request.profile.is_admin)}
+                    topicsOfInterest={request.profile.topics_of_interest.map(topic => topic.skill.name)}
+                    topicsOfExpertise={request.profile.topics_of_expertise.map(topic => topic.skill.name)}
                     type="makeMentor"
                     requestId={request.id}
                     onAccept={handleAccept}

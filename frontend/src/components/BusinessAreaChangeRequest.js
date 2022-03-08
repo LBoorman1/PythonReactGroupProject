@@ -1,34 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserCard from './UserCard';
 import axios from 'axios';
+import boolToStr from './BoolToStringNice';
 
 const BusinessAreaChangeRequest = () => {
-    const [businessAreaChangeRequestData, setBusinessAreaChangeRequestData] = useState(fetchBusinessAreaChangeRequests)
+    const [businessAreaChangeRequestData, setBusinessAreaChangeRequestData] = useState([]);
 
     const fetchBusinessAreaChangeRequests = async () => {
         try {
             const response = await axios({
                 method: "GET",
-                url: "http://localhost:8000/BusinessAreaChangeRequestUserView",
+                url: "http://localhost:8000/businessareachangerequests",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            return response;
+            setBusinessAreaChangeRequestData(response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
+    useEffect(fetchBusinessAreaChangeRequests, []);
+
     const handleAccept = (userId, newBusinessAreaId, requestId) => {
+        // Change a user's business area and check off the request
         changeBusinessArea(userId, newBusinessAreaId);
         checkOffRequest(requestId);
-        refreshRequests();
+        fetchBusinessAreaChangeRequests();
     }
 
     const handleDeny = requestId => {
+        // Simply check off the request and do nothing else
         checkOffRequest(requestId);
-        refreshRequests();
+        fetchBusinessAreaChangeRequests();
     }
 
 
@@ -36,7 +41,7 @@ const BusinessAreaChangeRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/REPLACETHIS/" + userId,
+                url: "http://localhost:8000/setbusinessarea/" + userId + "/",
                 data: {
                     business_area: newBusinessAreaId
                 },
@@ -53,7 +58,7 @@ const BusinessAreaChangeRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/REPLACETHIS/" + requestId,
+                url: "http://localhost:8000/checkoffbusinessareachangerequest/" + requestId + "/",
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -61,11 +66,6 @@ const BusinessAreaChangeRequest = () => {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    const refreshRequests = () => {
-        newRequests = fetchBusinessAreaChangeRequests;
-        setBusinessAreaChangeRequestData(newRequests);
     }
 
     return (
@@ -78,12 +78,12 @@ const BusinessAreaChangeRequest = () => {
                     lastName={request.profile.user.last_name}
                     email={request.profile.user.email}
                     businessArea={request.profile.business_area.name}
-                    active={request.profile.user.is_active}
-                    mentee={request.profile.is_mentee}
-                    mentor={request.profile.is_mentor}
-                    admin={request.profile.is_admin}
-                    topicsOfInterest={request.profile.topics_of_interest}
-                    topicsOfExpertise={request.profile.topics_of_expertise}
+                    active={boolToStr(request.profile.user.is_active)}
+                    mentee={boolToStr(request.profile.is_mentee)}
+                    mentor={boolToStr(request.profile.is_mentor)}
+                    admin={boolToStr(request.profile.is_admin)}
+                    topicsOfInterest={request.profile.topics_of_interest.map(topic => topic.skill.name)}
+                    topicsOfExpertise={request.profile.topics_of_expertise.map(topic => topic.skill.name)}
                     type="changeBusinessArea"
                     requestId={request.id}
                     newBusinessAreaId={request.new_business_area.id}

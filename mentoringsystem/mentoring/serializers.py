@@ -119,24 +119,24 @@ class SkillNameSerializer(serializers.ModelSerializer):
         fields = ['name']
 
 class MentorSkillNameSerializer(serializers.ModelSerializer):
-    topic = SkillNameSerializer(required=True)
+    skill = SkillNameSerializer(required=True)
 
     class Meta:
         model = MentorSkill
-        fields = ['topic']
+        fields = ['skill']
 
 class MenteeInterestNameSerializer(serializers.ModelSerializer):
-    topic = SkillNameSerializer(required=True)
+    skill = SkillNameSerializer(required=True)
 
     class Meta:
         model = MenteeInterest 
-        fields = ['topic']
+        fields = ['skill']
 
 class ProfileWithExtraSerializer(serializers.ModelSerializer):
     # Might need to add search_related_field or whatever the fuck it is to view
     business_area = BusinessAreaSerializer(required=True)
-    topics_of_expertise = MentorSkillNameSerializer(many=True, required=True)
-    topics_of_interest = MenteeInterestNameSerializer(many=True, required=True)
+    topics_of_expertise = MentorSkillNameSerializer(many=True)
+    topics_of_interest = MenteeInterestNameSerializer(many=True)
 
     class Meta:
         model = Profile

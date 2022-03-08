@@ -25,7 +25,7 @@ const ViewFeedback = () => {
   
   return (
     <div className="view_feedback sec__one">
-      <h1> View Feedback </h1>
+      <h1>Feedback Submitted on the Application</h1>
       {feedbackData.map(feedback => (
         <FeedbackCard text={feedback.feedback} />
       ))}
