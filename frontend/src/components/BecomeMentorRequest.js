@@ -37,7 +37,6 @@ const BecomeMentorRequest = () => {
     }
 
     const setMentor = async (userId) => {
-        console.log('test');
         try {
             await axios({
                 method: "PATCH",

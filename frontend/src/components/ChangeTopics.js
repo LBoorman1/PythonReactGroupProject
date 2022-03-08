@@ -56,8 +56,26 @@ const ChangeTopics = () => {
           "Content-Type": "application/json"
         }
       });
-      console.log(response.data);
       setBusinessAreaData([...businessAreaData, response.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  // Could maybe add something that checks if a user has the business area/topic being deleted
+  const removeBusinessArea = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios({
+        method: "DELETE",
+        url: "http://localhost:8000/businessareas/" + e.target.businessArea.value + "/",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      setBusinessAreaData(businessAreaData.filter(
+        businessArea => businessArea.id != e.target.businessArea.value
+      ));
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +100,23 @@ const ChangeTopics = () => {
     }
   }
 
-  // Likely not to implement removing business areas and topics due to issues if a user has that business area or topic
+  const removeTopic = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios({
+        method: "DELETE",
+        url: "http://localhost:8000/skills/" + e.target.topic.value + "/",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      setTopicData(topicData.filter(
+        topic => topic.id != e.target.topic.value
+      ));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="change_topics sec__one">
@@ -93,12 +127,6 @@ const ChangeTopics = () => {
           <CardTitle tag="h4">
             Business Areas
           </CardTitle>
-          <CardTitle tag="h5">
-            Current Business Areas in Use
-          </CardTitle>
-          <CardText>
-            {businessAreaData.map(businessArea => businessArea.name + ", ")}
-          </CardText>
 
           <CardTitle tag="h5">
             Add Business Area
@@ -116,11 +144,17 @@ const ChangeTopics = () => {
           <CardTitle tag="h5">
             Remove Business Area
           </CardTitle>
-          <Form>
+          <Form onSubmit={removeBusinessArea}>
             <FormGroup>
-              <Label for="businessAreaRemove">Enter business area to remove</Label>
+              <Label for="businessAreaRemove">Select business area to remove</Label>
               <br />
-              <Input id="businessAreaRemove" name="businessArea" />
+              <Input type="select" name="businessArea" id="businessAreaRemove">
+                {businessAreaData.map(businessArea => 
+                  <option value={businessArea.id}>
+                    {businessArea.name}
+                  </option>
+                )}
+              </Input>
               <br />
               <Button color="danger">Remove</Button>
             </FormGroup>
@@ -135,12 +169,6 @@ const ChangeTopics = () => {
           <CardTitle tag="h4">
             Topics
           </CardTitle>
-          <CardTitle tag="h5">
-            Current Topics in Use
-          </CardTitle>
-          <CardText>
-            {topicData.map(topic => topic.name + ", ")}
-          </CardText>
 
           <CardTitle tag="h5">
             Add Topic
@@ -158,11 +186,17 @@ const ChangeTopics = () => {
           <CardTitle tag="h5">
             Remove Topic
           </CardTitle>
-          <Form>
+          <Form onSubmit={removeTopic}>
             <FormGroup>
-              <Label for="topicRemove">Enter topic to remove</Label>
+              <Label for="topicRemove">Select topic to remove</Label>
               <br />
-              <Input id="topicRemove" name="topic" />
+              <Input type="select" id="topicRemove" name="topic">
+                {topicData.map(topic => 
+                  <option value={topic.id}>
+                    {topic.name}
+                  </option>
+                )}
+              </Input>
               <br />
               <Button color="danger">Remove</Button>
             </FormGroup>

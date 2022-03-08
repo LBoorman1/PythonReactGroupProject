@@ -5,6 +5,7 @@ import boolToStr from './BoolToStringNice';
 
 const BusinessAreaChangeRequest = () => {
     const [businessAreaChangeRequestData, setBusinessAreaChangeRequestData] = useState([]);
+    const [fetch, setFetch] = useState(false);
 
     const fetchBusinessAreaChangeRequests = async () => {
         try {
@@ -21,21 +22,22 @@ const BusinessAreaChangeRequest = () => {
         }
     }
 
-    useEffect(fetchBusinessAreaChangeRequests, []);
+    useEffect(() => fetchBusinessAreaChangeRequests(), [fetch]);
 
     const handleAccept = (userId, newBusinessAreaId, requestId) => {
         // Change a user's business area and check off the request
         changeBusinessArea(userId, newBusinessAreaId);
         checkOffRequest(requestId);
-        fetchBusinessAreaChangeRequests();
+        setFetch(fetch => !fetch);
+        //fetchBusinessAreaChangeRequests();
     }
 
     const handleDeny = requestId => {
         // Simply check off the request and do nothing else
         checkOffRequest(requestId);
-        fetchBusinessAreaChangeRequests();
+        setFetch(fetch => !fetch);
+        //fetchBusinessAreaChangeRequests();
     }
-
 
     const changeBusinessArea = async (userId, newBusinessAreaId) => {
         try {
