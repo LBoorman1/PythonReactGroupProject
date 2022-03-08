@@ -135,7 +135,7 @@ class meetingView(viewsets.ModelViewSet):
         userID = request.query_params.get('userID', None)
         if userID is not None:
             #need to write the query here
-            profile = Profile.objects.get(pk = userID)
+            profile = Profile.objects.get(user = userID)
             menteeAttending = MenteeAttending.objects.filter(mentee = profile)
             relationships = list(menteeAttending.values_list('relationship', flat=True))
             
@@ -174,7 +174,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk = request.data.get('userID'))
+        profile = Profile.objects.get(user = request.data.get('userID'))
         feedback = request.data.get('feedback')
         if profile:
             #add the new object to the database
@@ -189,7 +189,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
         userID = request.query_params.get('userID', None)
         if userID is not None:
             #need to write the query here
-            profile = Profile.objects.get(pk = userID)
+            profile = Profile.objects.get(user = userID)
             appFeedback = ApplicationFeedback.objects.filter(user=profile)
 
             serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
@@ -222,7 +222,7 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     #return view
     serializer_class = MeetingFeedbackSerializer
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk = request.data.get('userID'))
+        profile = Profile.objects.get(user = request.data.get('userID'))
         
         meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
         meetingTitle = Meeting.objects.get(pk = request.data.get('meetingID')).title

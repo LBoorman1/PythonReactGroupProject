@@ -1,11 +1,11 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from 'axios';
 
 function MyMeetingFeedback() {
-  
+  const user_data = JSON.parse(localStorage.getItem("user"));
+  const userID = user_data.user.id;
   const [meetingFeedback, setMeetingFeedback] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function MyMeetingFeedback() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetingFeedbackView/?userID=1", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: "http://localhost:8000/meetingFeedbackView/?userID=" + userID, //replace userID = 4 with userID=${userID} whenever we get the login sorted
         });
         setMeetingFeedback(response);
       } catch (error) {

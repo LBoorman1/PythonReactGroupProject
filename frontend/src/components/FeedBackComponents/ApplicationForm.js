@@ -3,6 +3,9 @@ import axios from "axios";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 //testing
 function ApplicationForm(props) {
+
+  const user_data = JSON.parse(localStorage.getItem("user"));
+
   const url = "http://localhost:8000/applicationFeedbackView/";
   const [formValue, setformValue] = useState({
     feedback: '',
@@ -24,7 +27,7 @@ function ApplicationForm(props) {
         url: url,
         data: {
           feedback: formValue.feedback,
-          userID: 1,
+          userID: user_data.user.id,
         },
         headers: {
           'Content-Type': 'application/json',
