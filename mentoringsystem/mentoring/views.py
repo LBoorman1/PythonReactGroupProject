@@ -204,6 +204,11 @@ class SkillView(mixins.CreateModelMixin,
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
+    def destroy(self, request, pk):
+        skill = Skill.objects.get(pk=pk)
+        skill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 #18
 class BusinessAreaView(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
@@ -211,6 +216,11 @@ class BusinessAreaView(mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = BusinessArea.objects.all()
     serializer_class = BusinessAreaSerializer
+
+    def destroy(self, request, pk):
+        business_area = BusinessArea.objects.get(pk=pk)
+        business_area.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class addExpertiseView(viewsets.ModelViewSet):
     #edit db view
