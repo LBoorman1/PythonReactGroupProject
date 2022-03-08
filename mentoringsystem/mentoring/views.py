@@ -51,7 +51,6 @@ from mentoring.serializers import BusinessAreaChangeRequestProfileSerializer
 from mentoring.serializers import BecomeMentorProfileSerializer
 from mentoring.serializers import UserProfileSerializer
 
-#4, 5
 class BecomeMentorView(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = BecomeMentor.objects.all()
@@ -63,13 +62,11 @@ class PossibleMentorsView(mixins.ListModelMixin):
     #queryset = Profile.objects.select_related(User).filter(is_mentor=True)
     #serializer_class = UserSerializer(queryset, many=True)  
 
-#7, 8
 class MentorRequestView(mixins.CreateModelMixin,
                        mixins.DestroyModelMixin):
     queryset = MentorRequest.objects.all()
     serializer_class = MentorRequestSerializer(queryset, many=True) 
 
-#8
 class RelationshipView(mixins.CreateModelMixin):
     queryset = Relationship.objects.all()
     serializer_class = RelationshipSerializer(queryset, many=True) 
@@ -78,71 +75,25 @@ class MenteeAttendingView(mixins.CreateModelMixin):
     queryset = MenteeAttending.objects.all()
     serialzer_class = MenteeAttendingSerializer(queryset, many=True)
 
-#13 
 class MenteeInterestView(mixins.CreateModelMixin,
                      mixins.DestroyModelMixin):
     queryset = MenteeInterest.objects.all()
     serializer_class = MenteeInterestSerializer(queryset, many=True) 
-
-#14 
+ 
 class MentorSkillView(mixins.CreateModelMixin,
                      mixins.DestroyModelMixin):
     queryset = MentorSkill.objects.all()
     serializer_class = MentorSkillSerializer(queryset, many=True) 
 
-#19, 20
 class BusinessAreaChangeRequestView(mixins.CreateModelMixin,
                                    viewsets.GenericViewSet):
     queryset = BusinessAreaChangeRequest.objects.all()
     serializer_class = BusinessAreaChangeRequestSerializer(queryset, many=True) 
 
-#12 might need to change to instead select by user
 class AvailableHourView(mixins.CreateModelMixin,
                        mixins.DestroyModelMixin):
     queryset = CalendarUser.objects.all()
     serializer_class = CalendarUserSerializer(queryset, many=True) 
-
-class meetingViewTemp(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer
-
-    def list(self, request, *args, **kwargs):
-        userID = request.query_params.get('userID', None)
-        if userID is not None:
-            #need to write the query here
-            profile = Profile.objects.get(pk = userID)
-            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
-            relationships = list(menteeAttending.values_list('relationship', flat=True))
-            
-            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
-            result = Meeting.objects.filter(query)
-
-            serializedData = MeetingSerializer(result, many=True)
-
-            return Response(serializedData.data)
-        else:
-            return Response("no check")
-
-    #class meetingView2(viewsets.ModelViewSet):
-        #template_name = 'calendarView.html'
-        #serializer_class = MeetingSerializer
-
-        #def get_context_data(self,**kwargs):
-            #context = super(meetingViewTemp,self).get_context_data(**kwargs)
-            #context['eventList'] = Event.objects.all()
-            #return context
-
-#9
-class MeetingView(viewsets.ViewSet,
-                 mixins.CreateModelMixin):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer(queryset, many=True) 
-
-    def list(self):
-        relationship = self.kwargs['relationship']
-        queryset = Meeting.objects.filter(relationship=relationship)
-        serializer = MeetingSerializer(queryset, many=True) 
-        return Response(serializer.data)
 
 #self.kwargs[''] is what you need
 class showProfileView(viewsets.ModelViewSet):
@@ -229,6 +180,71 @@ class showExpertiseView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
+class addExpertiseView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class removeExpertiseView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class addBusinessAreaView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+#class businessAreaChangeRequestsView(viewsets.ModelViewSet):
+    #edit db view
+    #""
+
+class changeBusinessAreaView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+#remove user skipped
+
+class showMeetingFeedbackView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+class addMeetingFeedbackView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class showPOAsView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+class addPOAView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class showSkillInterestView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+class addGroupSessionView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class showGroupMeetingsView(viewsets.ModelViewSet):
+    #return view
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+
+#cancel attendance skipped
+
+class showSystemFeedbackView(viewsets.ModelViewSet):
+    pass 
+
+class addSystemFeedbackView(viewsets.ModelViewSet):
+    pass 
+
+class businessAreaChangeRequestsView(viewsets.ModelViewSet):
+    pass
+
 #17
 class SkillView(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
@@ -255,17 +271,8 @@ class BusinessAreaView(mixins.CreateModelMixin,
         business_area.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class addExpertiseView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class removeExpertiseView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
 # Ability to create and view application feedback
-#15, 16
-class ApplicationFeedbackView(mixins.CreateModelMixin,
+class AllApplicationFeedbackView(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = ApplicationFeedback.objects.all()
@@ -413,59 +420,32 @@ class BecomeMentorUserView(viewsets.GenericViewSet):
         serializer = BecomeMentorProfileSerializer(become_mentor_requests, many=True)
         return Response(serializer.data)
 
-class addBusinessAreaView(viewsets.ModelViewSet):
-    #edit db view
-    ""
+class meetingViewTemp(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
 
-#class businessAreaChangeRequestsView(viewsets.ModelViewSet):
-    #edit db view
-    #""
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
+            relationships = list(menteeAttending.values_list('relationship', flat=True))
+            
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query)
 
-class changeBusinessAreaView(viewsets.ModelViewSet):
-    #edit db view
-    ""
+            serializedData = MeetingSerializer(result, many=True)
 
-#remove user skipped
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
 
-class showMeetingFeedbackView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+    #class meetingView2(viewsets.ModelViewSet):
+        #template_name = 'calendarView.html'
+        #serializer_class = MeetingSerializer
 
-class addMeetingFeedbackView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showPOAsView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
-
-class addPOAView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showSkillInterestView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
-
-class addGroupSessionView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class showGroupMeetingsView(viewsets.ModelViewSet):
-    #return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
-
-#cancel attendance skipped
-
-class showSystemFeedbackView(viewsets.ModelViewSet):
-    pass 
-
-class addSystemFeedbackView(viewsets.ModelViewSet):
-    pass 
-
-class businessAreaChangeRequestsView(viewsets.ModelViewSet):
-    pass
+        #def get_context_data(self,**kwargs):
+            #context = super(meetingViewTemp,self).get_context_data(**kwargs)
+            #context['eventList'] = Event.objects.all()
+            #return context

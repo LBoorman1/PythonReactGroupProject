@@ -52,7 +52,7 @@ router.register(r'addGroupSession', views.addGroupSessionView, 'addGroupSession'
 router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
 router.register(r'businessareachangerequests', views.BusinessAreaChangeRequestUserView, 'businessareachangerequests')
 router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
-router.register(r'applicationfeedback', views.ApplicationFeedbackView, 'applicationfeedback')
+router.register(r'applicationfeedback', views.AllApplicationFeedbackView, 'applicationfeedback')
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
 router.register(r'meetingViewTemp', views.meetingViewTemp, 'meetingTemp')
