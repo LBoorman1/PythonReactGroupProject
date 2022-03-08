@@ -55,6 +55,7 @@ router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'applicationfeedback', views.ApplicationFeedbackView, 'applicationfeedback')
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
+router.register(r'meetingViewTemp', views.meetingViewTemp, 'meetingTemp')
 #router.register(r'searchuser', views.SearchUserView, 'searchuser')
 #router.register(r'toggleadmin/(?P<pk>\d+)/$', views.toggle_admin, 'toggleadmin')
 
@@ -64,6 +65,7 @@ urlpatterns = [
     path('toggleadmin/<int:pk>/', views.toggle_admin),
     path('toggleactive/<int:pk>/', views.toggle_active),
     path('setmentor/<int:pk>/', views.set_mentor),
+    path('removetopicsofexpertise/<int:pk>/', views.remove_topics_of_expertise),
     path('setbusinessarea/<int:pk>/', views.set_business_area),
     path('checkoffbecomementor/<int:pk>/', views.check_off_become_mentor),
     path('checkoffbusinessareachangerequest/<int:pk>/', views.check_off_business_area_change_request),

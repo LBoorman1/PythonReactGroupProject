@@ -7,6 +7,9 @@ from django.views.generic.list import ListView
 from django.contrib.auth.models import User 
 from django.db.models import Value
 from django.db.models.functions import Concat
+from django.db.models import Q
+from functools import reduce
+import operator
 
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
@@ -98,6 +101,36 @@ class AvailableHourView(mixins.CreateModelMixin,
                        mixins.DestroyModelMixin):
     queryset = CalendarUser.objects.all()
     serializer_class = CalendarUserSerializer(queryset, many=True) 
+
+class meetingViewTemp(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
+            relationships = list(menteeAttending.values_list('relationship', flat=True))
+            
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query)
+
+            serializedData = MeetingSerializer(result, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
+
+    #class meetingView2(viewsets.ModelViewSet):
+        #template_name = 'calendarView.html'
+        #serializer_class = MeetingSerializer
+
+        #def get_context_data(self,**kwargs):
+            #context = super(meetingViewTemp,self).get_context_data(**kwargs)
+            #context['eventList'] = Event.objects.all()
+            #return context
 
 #9
 class MeetingView(viewsets.ViewSet,
@@ -296,6 +329,15 @@ def set_mentor(request, pk):
         return Response(serializer.data)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+# If a prospective mentor is denied, their topics of expertise need to be
+# removed from the MentorSkill table
+def remove_topics_of_expertise(request, pk):
+    user = User.objects.get(pk=pk)
+    profile_id = user.profile.id
+    MentorSkill.objects.filter(mentor=profile_id).delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['PATCH'])
 def set_mentee(request, pk):

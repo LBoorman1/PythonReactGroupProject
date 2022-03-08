@@ -113,7 +113,7 @@ const UserCard = props => {
               &emsp;
               <Button 
                 color="danger"
-                onClick={() => props.onDeny(props.requestId)}
+                onClick={() => props.onDeny(props.id, props.requestId)}
               >
                 Deny Request
               </Button>

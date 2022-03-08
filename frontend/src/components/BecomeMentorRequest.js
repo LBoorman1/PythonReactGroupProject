@@ -30,9 +30,10 @@ const BecomeMentorRequest = () => {
         fetchBecomeMentorRequests();
     }
 
-    const handleDeny = (requestId) => {
-        // Simply check off the request and do nothing else
+    const handleDeny = (userId, requestId) => {
+        // Check off the request and remove proposed topics of expertise from database
         checkOffRequest(requestId);
+        removeTopicsOfExpertise(userId);
         fetchBecomeMentorRequests();
     }
 
@@ -41,6 +42,20 @@ const BecomeMentorRequest = () => {
             await axios({
                 method: "PATCH",
                 url: "http://localhost:8000/setmentor/" + userId + "/",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const removeTopicsOfExpertise = async (userId) => {
+        try {
+            await axios({
+                method: "DELETE",
+                url: "http://localhost:8000/removetopicsofexpertise/" + userId + "/",
                 headers: {
                     "Content-Type": "application/json"
                 }
