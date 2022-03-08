@@ -1,5 +1,7 @@
 import React from 'react';
 import UserCard from './UserCard';
+import Requests from './Request';
+import {Card, Button} from 'reactstrap';
 
 const DisplayMyMentee= () => {
     return (
@@ -47,6 +49,16 @@ const DisplayMyMentee= () => {
               topicsOfExpertise={[]}
               type=""
             />
+
+            <Card>
+              <h1>My Requests:</h1>
+
+              <Requests type="Become mentor" request="Of user X"/>
+              <Requests type="Set up group session" request="for skill y"/>
+              <Requests type="Set up group session" request="for skill y"/>
+
+
+            </Card>
         </div>
     )
 }
