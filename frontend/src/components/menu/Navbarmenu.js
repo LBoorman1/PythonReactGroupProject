@@ -121,7 +121,7 @@ const Navbarmenu = () => {
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/RemoveUser`}> Remove User </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ChangeTopics`}> Change Topics </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/SetSessionThreshold`}> Set Session Threshold </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> ViewFeedback </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> System Feedback </NavLink> </li>
                         </ul>
                     </li>
                     <li  className="logout_button menu-item " >

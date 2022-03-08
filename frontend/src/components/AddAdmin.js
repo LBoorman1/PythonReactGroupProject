@@ -1,6 +1,8 @@
 import React from 'react';
 import SearchUser from './SearchUser';
 import UserCard from './UserCard';
+import Request from './Request';
+import {Button,Card} from 'reactstrap';
 
 const AddAdmin = () => {
     return (
@@ -21,6 +23,17 @@ const AddAdmin = () => {
               topicsOfExpertise={[]}
               type="toggleAdmin"
             />
+
+
+            < Card>
+              <h1>Requests:</h1>
+              {/* Once we have the data we will get it from props.array and loop shoing the user name and request */}
+
+              <Request type="Become mentor" request="for user X"/>
+              <Request type="Become meentee" request="for user y"/>
+
+
+            </Card>
         </div>
     )
 }
