@@ -13,7 +13,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import re_path, path, include
 from rest_framework import routers
 from mentoring import views
 
@@ -34,7 +34,10 @@ router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'appl
 router.register(r'businessArea', views.businessAreaView, 'businessArea')
 router.register(r'businessAreaChangeRequests', views.businessAreaChangeRequestsView, 'businessAreaChangeRequests')
 router.register(r'meetingFeedbackView', views.meetingFeedbackView, 'meetingFeedback')
-router.register(r'POAs', views.POAsView, 'POAs')
+router.register(r'POA', views.POAView, 'POA')
+router.register(r'POATargetCreate', views.POATargetCreateView, 'POATargetCreate')
+router.register(r'POATargetUpdate', views.POATargetUpdateView, 'POATargetUpdate')
+router.register(r'menteeOptions', views.menteeOptionsView, 'menteeOptions')
 router.register(r'showSkillInterest', views.showSkillInterestView, 'showSkillInterest')
 router.register(r'groupMeetings', views.groupMeetingsView, 'groupMeetings')
 
@@ -43,6 +46,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('login/', views.LoginView.as_view(), name="login"),
     path('logout/', views.LogoutView.as_view(), name="logout"),
+    re_path('searchuser/', views.search_user),
 ]
 
 urlpatterns += router.urls

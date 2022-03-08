@@ -4,6 +4,7 @@ import DisplayDetails from './DisplayDetails';
 import DisplayDeatils from './DisplayDetails';
 
 const MyDetails = () => {
+    console.log(localStorage);
     return (
         <div className="my_details sec__one">
             <h1> My Details </h1>

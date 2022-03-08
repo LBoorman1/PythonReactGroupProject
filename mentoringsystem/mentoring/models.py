@@ -94,7 +94,7 @@ class PlanOfAction(models.Model):
     relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     set_by_user = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    finish_date = models.DateField()
+    finish_date = models.DateTimeField()
 
 class POATarget(models.Model):
     COMPLETED_STATUS_CHOICES = [
@@ -103,8 +103,6 @@ class POATarget(models.Model):
     ]
     plan_of_action = models.ForeignKey('PlanOfAction', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
-    deadline = models.DateField()
-    description = models.TextField()
     completed_status = models.CharField(max_length=10, choices=COMPLETED_STATUS_CHOICES)
 
 class MeetingRequest(models.Model):

@@ -28,10 +28,6 @@ const BulletList = () =>  {
         e.preventDefault();
       }
 
-    const handleTitle = e =>{
-        setTitle(e.target.value);
-    }
-
     return (
       <div className="user_card sec__one">
           <Card>
