@@ -11,70 +11,62 @@ import axios from 'axios';
 import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
-  //const CalendarD = () =>  {
-      //one = {title:"Meeting with phil",date_time: 0}
-      state = {
-        meetings:[]
-      }
-      componentDidMount() {
-        axios.get('http://localhost:8000/meetingView/?userID=5')
-          .then(res => {
-            const meetings = res.data;
-            this.setState({ meetings })
-          })
-      }
-  
-    render() {
-      return (
-        <div className="schedule  sec__one">
-          <title>Calendar</title>
-          <h1>Calendar</h1>
-
-          { this.state.meetings.map(meeting =>
-            <p>title:{meeting.title}, meeting:{meeting.date_time}</p>)}
-        
-
-        <FullCalendar
-          plugins={[ dayGridPlugin ]}
-          initialView="dayGridMonth"
-          //weekends = {false}
-          firstDay = '1'
-          
-          events = {[
-            {title:'My meeting',start:'2022-03-05T00:00:00Z'}
-          ]}
-          height = '100%'
-          contentHeight = 'auto'
-          displayEventTime = 'true'
-          eventBackgroundColor= '#D7F0F7'
-          eventBorderColor= '#000080'
-          eventTextColor= 'black'
-          bold = 'true'
-          eventDisplay = 'block'
-          eventContent={renderEventContent}
-          nowIndicator ='true'
-        />
-        </div>
-        
-      )
+    constructor(props) {
+        super(props);
+        this.state = { meetings: [] }
     }
-  }
 
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <p><b>{eventInfo.timeText}m</b><br></br>
-      {eventInfo.event.title}</p>
-    </>
-  )
+    componentDidMount() {
+        axios.get('http://localhost:8000/meetingView/?userID=5')
+            .then(res => {
+                this.setState({ meetings: res.data });
+            })
+    }
+
+    render() {
+        console.log(this.state.meetings);
+        return (
+            <div className="schedule  sec__one">
+                <h1>Calendar</h1>
+                <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    //weekends = {false}
+                    firstDay='1'
+                    events={
+                        this.state.meetings
+                            .map(meeting =>(
+                                {
+                                    title: meeting.title,
+                                    start: meeting.date_time 
+                                })
+                                )
+                    }
+                    height='100%'
+                    contentHeight='auto'
+                    displayEventTime='true'
+                    eventBackgroundColor='#D7F0F7'
+                    eventBorderColor='#000080'
+                    eventTextColor='black'
+                    bold='true'
+                    eventDisplay='block'
+                    eventContent={renderEventContent}
+                    nowIndicator='true'
+                />
+            </div>
+
+        )
+    }
 }
 
-//  return (
-//    title: title1,
-//    date_time:datetime
-//  )
-//}
-
+function renderEventContent(eventInfo) {
+    return (
+        <>
+            <p><b>{eventInfo.timeText}m</b><br></br>
+                {eventInfo.event.title}</p>
+        </>
+    )
+}
 
 //export default CalendarD;
 
