@@ -11,7 +11,8 @@ from functools import reduce
 import profile
 import operator
 from django.db.models import Q
-
+from django.db.models.functions import Concat
+from django.db.models import Value
 
 from django.contrib.auth.models import User
 from mentoring.models import Profile 
@@ -398,7 +399,17 @@ class showSkillInterestView(viewsets.ModelViewSet):
 
 #make function for create and show
 class groupMeetingsView(viewsets.ModelViewSet):
-    #return view
+    
+    #create a relationship which has group field True
+    #create a meeting with the relationshipID
+    def create(self, request, *args, **kwargs):
+
+    
+    
+    #use menteeAttending table to get the relationshipID of the group meeting and add the mentee to said relationship
+    #add a meeting to the database with the relationship that is the group
+
+
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
 
