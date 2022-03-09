@@ -1,5 +1,5 @@
-from rest_framework import serializers
-from django.contrib.auth.models import User
+from rest_framework import serializers 
+from django.contrib.auth.models import User 
 from django.contrib.auth import authenticate
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
@@ -14,15 +14,15 @@ from mentoring.models import BusinessArea
 from mentoring.models import BusinessAreaChangeRequest
 from mentoring.models import CalendarUser
 from mentoring.models import Meeting
-from mentoring.models import MeetingRequest
+#from mentoring.models import MeetingRequest
 from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+        model = User 
+        fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -56,7 +56,6 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect details")
-
 
 class ApplicationFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -111,17 +110,17 @@ class BusinessAreaChangeRequestSerializer(serializers.ModelSerializer):
 class CalendarUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalendarUser
-        fields = '__all__'
+        fields = ['available_hour']
 
 class MeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting 
         fields = '__all__'
 
-class MeetingRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MeetingRequest 
-        fields = '__all__'
+#class MeetingRequestSerializer(serializers.ModelSerializer):
+    #class Meta:
+        #model = MeetingRequest 
+        #fields = '__all__'
 
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -179,3 +178,32 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'is_active', 'profile']
+
+# Used for selecting user specific detail for a given profile
+class ProfileUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+    business_area = BusinessAreaSerializer(required=True)
+    topics_of_expertise = MentorSkillNameSerializer(many=True)
+    topics_of_interest = MenteeInterestNameSerializer(many=True, required=True)
+
+    class Meta:
+        model = Profile 
+        fields = ['id', 'is_mentee', 'is_mentor', 'is_admin', 'business_area', 'user', 'topics_of_expertise', 'topics_of_interest']
+
+# Used for selecting user details for a given business area change request
+class BusinessAreaChangeRequestProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileUserSerializer(required=True)
+    new_business_area = BusinessAreaSerializer(required=True)
+    
+    class Meta:
+        model = BusinessAreaChangeRequest
+        #fields = ['id', 'new_business_area']
+        fields = ['id', 'profile', 'new_business_area']
+
+# Used for selecting user details for a given become mentor request
+class BecomeMentorProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileUserSerializer(required=True)
+    
+    class Meta:
+        model = BecomeMentor
+        fields = ['id', 'profile']
