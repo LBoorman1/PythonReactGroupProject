@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
 
-const UserCard = props => {
+const FeedbackCard = props => {
     return (
         <div className="feedback_card sec__one">
           <Card>
@@ -15,4 +15,4 @@ const UserCard = props => {
     )
 }
 
-export default UserCard;
+export default FeedbackCard;

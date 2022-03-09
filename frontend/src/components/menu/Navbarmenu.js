@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
-import {NavLink, Link} from 'react-router-dom';
+import {NavLink, Link, Redirect} from 'react-router-dom';
 import {FiAlignRight,FiXCircle,FiChevronDown } from "react-icons/fi";
+import axios from "axios";
+import { unsetCurrentUser } from "../LoginComponents/LoginActions.js";
 const Navbarmenu = () => {
     const [isMenu, setisMenu] = useState(false);
     const [isResponsiveclose, setResponsiveclose] = useState(false);
@@ -51,6 +53,18 @@ const Navbarmenu = () => {
         boxClassSubMenuMentor.push('');
     }
 
+    const handle_logout = () =>{
+        const user_data = JSON.parse(localStorage.getItem("user"));
+        axios
+        .post("http://127.0.0.1:8000/logout/", user_data)
+        .then(response => {
+        unsetCurrentUser();
+        });
+        if (localStorage.getItem('token') == null) {
+            return <Redirect to = '/Signin' push/>
+        }
+    };
+
     return (
     <header className="header__middle">
         <div className="container">
@@ -70,6 +84,9 @@ const Navbarmenu = () => {
                     <ul className={boxClass.join(' ')}>
                     <li  className="menu-item" >
                         <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyDetails`}> My Details</NavLink>
+                    </li>
+                    <li  className="menu-item" >
+                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/Calendar`}> Calendar</NavLink>
                     </li>
 
                     <li  className="menu-item" >
@@ -104,11 +121,11 @@ const Navbarmenu = () => {
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/RemoveUser`}> Remove User </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ChangeTopics`}> Change Topics </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/SetSessionThreshold`}> Set Session Threshold </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> ViewFeedback </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> System Feedback </NavLink> </li>
                         </ul>
                     </li>
                     <li  className="logout_button menu-item " >
-                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/Signin`}> Logout </NavLink>
+                    <NavLink exact activeClassName='is-active' onClick={handle_logout} to={`/Signin`}> Logout </NavLink>
                     </li>
                     </ul>
 

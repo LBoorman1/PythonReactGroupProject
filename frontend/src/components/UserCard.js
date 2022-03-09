@@ -149,7 +149,6 @@ const UserCard = props => {
 
 /*
 If we ever want to just arbitrarily change a user's business area...
-
 <Label for="businessAreaSelect"><strong>Change Business Area</strong>:</Label>
 <Input 
 id="businessAreaSelect" 

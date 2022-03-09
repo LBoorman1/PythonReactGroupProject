@@ -10,7 +10,7 @@ const ViewFeedback = () => {
       try {
         const response = await axios({
           method: "GET",
-          url: "http://localhost:8000/applicationfeedback/",
+          url: "http://localhost:8000/allapplicationfeedback/",
           headers: {
             "Content-Type": "application/json"
           }
@@ -33,4 +33,4 @@ const ViewFeedback = () => {
   )
 }
 
-export default ViewFeedback
+export default ViewFeedback;

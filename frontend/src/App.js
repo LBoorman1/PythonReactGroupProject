@@ -27,12 +27,11 @@ import MyFeedback from './components/MyFeedback';
 import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
-import Home from './components/Home';
 import CalendarD from './components/CalendarD';
+import Home from './components/Home';
+import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 
 let state = {currentPath:window.location.pathname};
-
-
 
 function App() {
   function refreshPage() {
@@ -40,10 +39,6 @@ function App() {
   }
   return (
     <div>
-
-
-
-
       <Router basename="/">
 
       <div  onClick={refreshPage}>

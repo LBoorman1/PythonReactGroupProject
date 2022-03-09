@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import BulletPoints from "./BulletPoints";
-import SearchUser from "./SearchUser";
-import UserCard from "./UserCard";
+
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
+import Calendar from "react-select-date";
 
 
 const BulletList = () =>  {
     const [fname, setFname] = useState("");
     const [title, setTitle] = useState("");
     const [items, setItems]= useState([]);
+    const [date, setDate]= useState(new Date());
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -27,12 +28,6 @@ const BulletList = () =>  {
         e.preventDefault();
       }
 
-    const handleTitle = e =>{
-        setTitle(e.target.value);
-    }
-
-
-  
     return (
       <div className="user_card sec__one">
           <Card>
@@ -43,13 +38,16 @@ const BulletList = () =>  {
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/> 
             </label>
             </form>
+            <br></br>
             
-            
-            <SearchUser />
+            <Calendar 
+            onSelect={(d) => setDate(d)}
+           />
+            <br></br>
 
             <Card>
             <form>
-        
+            <br></br>
             <label>
             Add milestone:{" "}
             <input type="text" value={fname} onChange={handleChange} onKeyDown={handleKeyDown} />
@@ -62,16 +60,9 @@ const BulletList = () =>  {
         array={items}
             />
         </Card>
-
-        
         </CardBody>
         </Card>
-
-        <Button >Save and Create</Button>
       </div>
-
-    )
-  
+    ) 
 }
-
 export default BulletList;

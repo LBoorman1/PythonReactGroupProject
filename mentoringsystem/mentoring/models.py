@@ -7,27 +7,10 @@ from django.dispatch import receiver
 # first_name, last_name, email, is_active (account status), password already included
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    BUSINESS_AREA_CHOICES = [
-        ('marketing', 'Marketing'),
-        ('humanresources', 'Human Resources'),
-        ('finance', 'Finance'),
-        ('technology', 'Technology'),
-        ('strategy', 'Strategy'),
-        ('operations', 'Operations')
-    ]
-    business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE, choices=BUSINESS_AREA_CHOICES)
+    business_area = models.ForeignKey('BusinessArea', on_delete=models.CASCADE)
     is_mentee = models.BooleanField()
     is_mentor = models.BooleanField()
     is_admin = models.BooleanField()
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 class ApplicationFeedback(models.Model):
     feedback = models.TextField()
@@ -106,12 +89,13 @@ class MeetingFeedback(models.Model):
     rating = models.IntegerField()
     meeting = models.ForeignKey('Meeting', on_delete=models.CASCADE)
     user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    meetingtitle = models.TextField(default="Meeting Name Unavailiable")
 
 class PlanOfAction(models.Model):
     relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     set_by_user = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    finish_date = models.DateField()
+    finish_date = models.DateTimeField()
 
 class POATarget(models.Model):
     COMPLETED_STATUS_CHOICES = [
@@ -120,6 +104,15 @@ class POATarget(models.Model):
     ]
     plan_of_action = models.ForeignKey('PlanOfAction', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
-    deadline = models.DateField()
-    description = models.TextField()
     completed_status = models.CharField(max_length=10, choices=COMPLETED_STATUS_CHOICES)
+
+class MeetingRequest(models.Model):
+    ATTENDANCE_STATUS_CHOICES = [
+        ('GA', 'going_ahead'),
+        ('C', 'cancelled')
+    ]
+    relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
+    date_time = models.DateTimeField()
+    attendance_status = models.CharField(max_length=10, choices=ATTENDANCE_STATUS_CHOICES)
+    title = models.CharField(max_length=20)
+    notes = models.TextField()

@@ -1,5 +1,6 @@
 from rest_framework import serializers 
 from django.contrib.auth.models import User 
+from django.contrib.auth import authenticate
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
@@ -24,9 +25,38 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('id', 'user', 'business_area', 'is_mentee','is_mentor','is_admin')
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
+
+class RegisterProfileSerializer(serializers.ModelSerializer):
+    user = RegisterUserSerializer(many=False, read_only=False)
+    class Meta:
+        model = Profile
+        fields = ('id', 'user', 'business_area', 'is_mentee','is_mentor','is_admin')
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_instance=User.objects.create_user(is_active=True, **user_data)
+        profile_data = Profile.objects.create(user = user_instance, **validated_data)
+        return profile_data
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect details")
+
 
 class ApplicationFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,13 +131,13 @@ class MeetingFeedbackSerializer(serializers.ModelSerializer):
 class PlanOfActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanOfAction
-        fields = '__all__'
+        fields = ('id','relationship_id', 'title', 'set_by_user', 'finish_date')
 
 class POATargetSerializer(serializers.ModelSerializer):
     class Meta:
         model = POATarget 
         fields = '__all__'
-
+        
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
@@ -141,14 +171,6 @@ class ProfileWithExtraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'is_mentee', 'is_mentor', 'is_admin', 'business_area', 'topics_of_expertise', 'topics_of_interest']
-
-#class UserWithTopicsSerializer(serializers.ModelSerializer):
-    #topics_of_expertise = MentorSkillSerializer(many=True, required=True)
-    #topics_of_interest = MenteeInterestSerializer(many=True, required=True)
-
-    #class Meta:
-        #model = Profile 
-        #fields = ['id', 'first_name', 'last_name', 'email', 'is_active', 'topics_of_expertise', 'topics_of_interest']
 
 # Used for selecting profile specific detail for a given user
 class UserProfileSerializer(serializers.ModelSerializer):

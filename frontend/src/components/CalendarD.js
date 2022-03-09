@@ -17,14 +17,13 @@ export default class CalendarD extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8000/meetingViewTemp/?userID=5')
+        axios.get('http://localhost:8000/meetings/?userID=5')
             .then(res => {
                 this.setState({ meetings: res.data });
             })
     }
 
     render() {
-        console.log(this.state.meetings);
         return (
             <div className="schedule  sec__one">
                 <h1>Calendar</h1>
