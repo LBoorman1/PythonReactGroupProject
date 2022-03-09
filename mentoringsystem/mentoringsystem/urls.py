@@ -58,7 +58,7 @@ router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
-router.register(r'meetings', views.MeetingView, 'meetings')
+router.register(r'meetings', views.MeetingView, 'meetings') 
 
 # Here we must also add the non-class based views
 urlpatterns = [
@@ -71,7 +71,7 @@ urlpatterns = [
     path('setbusinessarea/<int:pk>/', views.set_business_area),
     path('checkoffbecomementor/<int:pk>/', views.check_off_become_mentor),
     path('checkoffbusinessareachangerequest/<int:pk>/', views.check_off_business_area_change_request),
-    path('getmenteerelationship', views.get_mentee_relationship),
+    path('getmenteerelationship/', views.get_mentee_relationship),
     re_path('searchuser/', views.search_user),
     #path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),

@@ -4,6 +4,7 @@ import { Card, Button } from 'reactstrap';
 import DateTimePicker from 'react-datetime-picker';
 import DisplayFreeHours from "./DisplayFreeHours";
 //import DateTimePicker from '@mui/lab/DateTimePicker';
+import fetchFreeHours from "./GetFreeHours";
 
 const AddFreeHours = () => {
     let date = new Date();
@@ -16,21 +17,8 @@ const AddFreeHours = () => {
     const [freeHourData, setFreeHourData] = useState([]);
 
     useEffect(() => {
-        const fetchFreeHours = async () => {
-            try {
-                const response = await axios({
-                    method: "GET",
-                    url: `http://localhost:8000/freehours?user_id=${userId}`,
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                setFreeHourData(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchFreeHours();
+        fetchFreeHours(userId)
+          .then(data => setFreeHourData(data));
     }, []);
 
     const addToFreeHours = async (e) => { 
