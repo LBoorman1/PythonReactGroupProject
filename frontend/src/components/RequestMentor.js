@@ -2,17 +2,16 @@ import {React} from 'react'
 import UserCard from './UserCard';
 import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
 
-const SelectMentor= (props) => {
+const RequestMentor = (props) => {
+
     const select   = () => {
-
-
         {/*Request this business department*/}
-
     }
+
     return (
         <div className="my_poa_mentee sec__one">
             <Card>
-            <h1> Select a Mentor! </h1>
+            <h1>Request a Mentor</h1>
 
             {props.array.map(item => ( 
                     <div>
@@ -25,12 +24,8 @@ const SelectMentor= (props) => {
 
 
             </Card>
-
-
-
-
         </div>
     )
 }
 
-export default SelectMentor
+export default RequestMentor;

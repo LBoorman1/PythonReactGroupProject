@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import FeedbackCard from './FeedbackCard';
 
-const ViewFeedback = () => {
+const ViewAllApplicationFeedback = () => {
   const [feedbackData, setFeedbackData] = useState([]);
   
   useEffect(() => {
@@ -33,4 +33,4 @@ const ViewFeedback = () => {
   )
 }
 
-export default ViewFeedback;
+export default ViewAllApplicationFeedback;

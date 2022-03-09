@@ -57,7 +57,6 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Incorrect details")
 
-
 class ApplicationFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationFeedback
@@ -111,7 +110,7 @@ class BusinessAreaChangeRequestSerializer(serializers.ModelSerializer):
 class CalendarUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalendarUser
-        fields = '__all__'
+        fields = ['available_hour']
 
 class MeetingSerializer(serializers.ModelSerializer):
     class Meta:

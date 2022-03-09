@@ -3,7 +3,7 @@ import SearchUser from './SearchUser';
 import UserCard from './UserCard';
 import boolToStr from './BoolToStringNice';
 
-const AddAdmin = () => {
+const ToggleAdmin = () => {
     const [userData, setUserData] = useState([]);
     
     const generateResults = responseData => {
@@ -13,7 +13,7 @@ const AddAdmin = () => {
 
     return (
         <div className="add_admin sec__one">
-            <h1>Edit Admin Status</h1>
+            <h1>Toggle Admin Status</h1>
             <SearchUser handleUpdate={generateResults}/>
             {userData.map(user => (
                 <UserCard 
@@ -40,4 +40,4 @@ const AddAdmin = () => {
     )
 }
 
-export default AddAdmin;
+export default ToggleAdmin;

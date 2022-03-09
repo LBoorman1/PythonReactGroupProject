@@ -126,9 +126,24 @@ class addRelationshipView(viewsets.ModelViewSet):
     ""
 
 #might not need function for create, remove and show
-class freeTimeView(viewsets.ModelViewSet):
+class FreeHoursView(viewsets.GenericViewSet):
     queryset = Meeting.objects.all()
-    serializer_class = CalendarUserSerializer(queryset, many=True)
+    serializer_class = CalendarUserSerializer
+
+    def create(self, request):
+        user = User.objects.get(pk=request.data.get('user_id'))
+        profile = user.profile
+        new_hour = CalendarUser(user=profile, available_hour=request.data.get('available_hour'))
+        new_hour.save()
+        return Response(request.data)
+    
+    def list(self, request):
+        user = User.objects.get(pk=request.query_params.get('user_id'))
+        profile = user.profile
+        free_hours = CalendarUser.objects.filter(user=profile).order_by('-available_hour')
+        serializer = CalendarUserSerializer(free_hours, many=True)
+        return Response(serializer.data)
+
 
 #might not need function for create, remove and show
 class interestsView(viewsets.ModelViewSet):
@@ -147,10 +162,6 @@ class addExpertiseView(viewsets.ModelViewSet):
     ""
 
 class removeExpertiseView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-
-class addBusinessAreaView(viewsets.ModelViewSet):
     #edit db view
     ""
 
@@ -187,6 +198,8 @@ class applicationFeedbackView(viewsets.ModelViewSet):
 class meetingFeedbackView(viewsets.ModelViewSet):
     #return view
     serializer_class = MeetingFeedbackSerializer
+    queryset = MeetingFeedback.objects.all()
+
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
         
@@ -394,7 +407,20 @@ class AllApplicationFeedbackView(mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
-    #serializer_class = ApplicationFeedbackSerializer(queryset, many=True)      
+
+# Get mentoring relationship that a user is part of as a mentee for a given user ID 
+@api_view(['GET'])
+def get_mentee_relationship(request):
+    user = User.objects.get(pk=request.query_params.get('user_id'))
+    profile_id = user.profile.id
+    # Get all relationships that mentee is part of
+    relationship_id_set = list(MenteeAttending.objects.filter(mentee=profile_id).values_list('relationship', flat=True))
+    relationship_set = [Relationship.objects.get(id=id) for id in relationship_id_set]
+    # Filter out group and inactive relationships so we get the one mentoring relationship for the mentor
+    relationship = filter(lambda r: not r.group and r.active_status == "A", relationship_set)
+    serializer = RelationshipSerializer(relationship, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def search_user(request):
@@ -524,9 +550,6 @@ class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
         business_area_requests = BusinessAreaChangeRequest.objects.filter(checked=False)
         serializer = BusinessAreaChangeRequestProfileSerializer(business_area_requests, many=True)
         return Response(serializer.data)
-
-def business_area_change_request_user_view():
-    pass 
 
 # Get user objects along with become mentor requests
 class BecomeMentorUserView(viewsets.GenericViewSet):

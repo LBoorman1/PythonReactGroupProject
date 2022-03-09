@@ -40,8 +40,7 @@ router.register(r'addRelationship', views.addRelationshipView, 'addRelationship'
 #router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
 router.register(r'addExpertise', views.addExpertiseView, 'addExpertise')
 router.register(r'removeExpertise', views.removeExpertiseView, 'removeExpertise') 
-router.register(r'addBusinessArea', views.addBusinessAreaView, 'addBusinessArea')
-router.register(r'freeTime', views.freeTimeView, 'freeTime')
+router.register(r'freehours', views.FreeHoursView, 'freehours')
 router.register(r'interests', views.interestsView, 'interests')
 router.register(r'expertise', views.expertiseView, 'expertise')
 router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'applicationFeedback')
@@ -72,6 +71,7 @@ urlpatterns = [
     path('setbusinessarea/<int:pk>/', views.set_business_area),
     path('checkoffbecomementor/<int:pk>/', views.check_off_become_mentor),
     path('checkoffbusinessareachangerequest/<int:pk>/', views.check_off_business_area_change_request),
+    path('getmenteerelationship', views.get_mentee_relationship),
     re_path('searchuser/', views.search_user),
     #path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),

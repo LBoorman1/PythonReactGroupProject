@@ -81,7 +81,7 @@ const BecomeMentorRequest = () => {
 
     return (
         <div className=" sec__one">
-            <h1>Mentor Requests</h1>
+            <h1>Become Mentor Requests</h1>
             {becomeMentorRequestData.map(request => (
                 <UserCard
                     id={request.profile.user.id}

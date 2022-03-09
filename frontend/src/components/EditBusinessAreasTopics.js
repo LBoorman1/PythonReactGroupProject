@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, Card, CardBody, CardText, CardTitle, Form, FormGroup, Input, Label } from "reactstrap";
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas";
 
-const ChangeTopics = () => {
+const EditBusinessAreasTopics = () => {
   const [businessAreaData, setBusinessAreaData] = useState([]);
   const [topicData, setTopicData] = useState([]);
 
@@ -206,4 +206,4 @@ const ChangeTopics = () => {
     </div>
   )
 }
-export default ChangeTopics;
+export default EditBusinessAreasTopics;

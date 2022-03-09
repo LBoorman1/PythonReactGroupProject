@@ -72,7 +72,7 @@ const BusinessAreaChangeRequest = () => {
 
     return (
         <div className=" sec__one">
-            <h1>User Business Area Change Requests</h1>
+            <h1>Business Area Change Requests</h1>
             {businessAreaChangeRequestData.map(request => (
                 <UserCard
                     id={request.profile.user.id}

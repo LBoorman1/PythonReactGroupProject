@@ -3,9 +3,7 @@ import UserCard from './UserCard';
 import SearchUser from './SearchUser';
 import boolToStr from './BoolToStringNice';
 
-// Should be changed to toggle user activity
-
-const RemoveUser = () => {
+const ToggleActive = () => {
     const [userData, setUserData] = useState([]);
     
     const generateResults = responseData => {
@@ -14,7 +12,7 @@ const RemoveUser = () => {
 
     return (
         <div className="add_admin sec__one">
-            <h1>Toggle User Activity</h1>
+            <h1>Toggle User Active Status</h1>
             <SearchUser handleUpdate={generateResults}/>
             {userData.map(user => (
                 <UserCard 
@@ -36,4 +34,4 @@ const RemoveUser = () => {
     )
 }
 
-export default RemoveUser;
+export default ToggleActive;
