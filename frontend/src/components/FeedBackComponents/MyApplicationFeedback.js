@@ -15,7 +15,7 @@ function MyApplicationFeedback() {
             try {
               const { data: response } = await axios({
                 method: "GET",
-                url: "http://localhost:8000/applicationFeedbackView/?userID=" + userID, //replace userID = 4 with userID=${userID} whenever we get the login sorted
+                url: "http://localhost:8000/applicationFeedbackView/?userID=" + userID, 
               });
               setApplicationFeedback(response);
             } catch (error) {
