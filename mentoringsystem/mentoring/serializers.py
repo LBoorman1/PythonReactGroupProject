@@ -28,7 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ('user', 'business_area', 'is_mentee','is_mentor','is_admin')
+        fields = ('id', 'user', 'business_area', 'is_mentee','is_mentor','is_admin')
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,7 +39,7 @@ class RegisterProfileSerializer(serializers.ModelSerializer):
     user = RegisterUserSerializer(many=False, read_only=False)
     class Meta:
         model = Profile
-        fields = ('user', 'business_area', 'is_mentee','is_mentor','is_admin')
+        fields = ('id', 'user', 'business_area', 'is_mentee','is_mentor','is_admin')
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -131,9 +131,51 @@ class MeetingFeedbackSerializer(serializers.ModelSerializer):
 class PlanOfActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanOfAction
-        fields = '__all__'
+        fields = ('id','relationship_id', 'title', 'set_by_user', 'finish_date')
 
 class POATargetSerializer(serializers.ModelSerializer):
     class Meta:
         model = POATarget 
         fields = '__all__'
+        
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = '__all__'
+
+class SkillNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill 
+        fields = ['name']
+
+class MentorSkillNameSerializer(serializers.ModelSerializer):
+    skill = SkillNameSerializer(required=True)
+
+    class Meta:
+        model = MentorSkill
+        fields = ['skill']
+
+class MenteeInterestNameSerializer(serializers.ModelSerializer):
+    skill = SkillNameSerializer(required=True)
+
+    class Meta:
+        model = MenteeInterest 
+        fields = ['skill']
+
+class ProfileWithExtraSerializer(serializers.ModelSerializer):
+    # Might need to add search_related_field or whatever the fuck it is to view
+    business_area = BusinessAreaSerializer(required=True)
+    topics_of_expertise = MentorSkillNameSerializer(many=True)
+    topics_of_interest = MenteeInterestNameSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = ['id', 'is_mentee', 'is_mentor', 'is_admin', 'business_area', 'topics_of_expertise', 'topics_of_interest']
+
+# Used for selecting profile specific detail for a given user
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileWithExtraSerializer(required=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'is_active', 'profile']
