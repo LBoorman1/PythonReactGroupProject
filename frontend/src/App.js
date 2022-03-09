@@ -9,16 +9,18 @@ import DisplayMyMentor from './components/DisplayMyMentor';
 import MyPOAMentee from './components/MyPOAMentee';
 import Navbarmenu from './components/menu/Navbarmenu';
 import NavbarLogin from './components/menu/NavbarLogin';
-import DisplayMyMentee from './components/DisplayMyMentee';
-import SetFreeHours from './components/SetFreeHours';
+import DisplayMyMentees from './components/DisplayMyMentees';
+import AddFreeHours from './components/AddFreeHours';
 import CreatePOAMentor from './components/CreatePOAMentor';
 import MyPOAMentor from './components/MyPOAMentor';
 import OrganiseGroupSession from './components/OrganiseGroupSession';
-import AddAdmin from './components/AddAdmin';
-import RemoveUser from './components/RemoveUser';
-import ChangeTopics from './components/ChangeTopics';
+import ToggleAdmin from './components/ToggleAdmin';
+import ToggleActive from './components/ToggleActive';
+import EditBusinessAreasTopics from './components/EditBusinessAreasTopics';
 import SetSessionThreshold from './components/SetSessionThreshold';
-import ViewFeedback from './components/ViewFeedback';
+import ViewAllApplicationFeedback from './components/ViewAllApplicationFeedback';
+import BecomeMentorRequest from './components/BecomeMentorRequest';
+import BusinessAreaChangeRequest from './components/BusinessAreaChangeRequest';
 import MyDetails from './components/MyDetails';
 import GiveFeedback from './components/GiveFeedback';
 import MyFeedback from './components/MyFeedback';
@@ -31,29 +33,23 @@ import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 
 let state = {currentPath:window.location.pathname};
 
-
-
 function App() {
   function refreshPage() {
     window.location.reload(false);
   }
   return (
     <div>
-
-
-
-
       <Router basename="/">
 
       <div  onClick={refreshPage}>
       { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
-      { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentee"
-      || state.currentPath=="/SetFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/AddAdmin" || state.currentPath=="/RemoveUser" || state.currentPath=="/ChangeTopics"
+      { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentees"
+      || state.currentPath=="/AddFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/ToggleAdmin" || state.currentPath=="/ToggleActive" || state.currentPath=="/EditBusinessAreasTopics" || state.currentPath=="/BecomeMentorRequests" || state.currentPath=="/BusinessAreaChangeRequests"
       || state.currentPath=="/SetSessionThreshold"
-      || state.currentPath=="/ViewFeedback"
+      || state.currentPath=="/ViewAllApplicationFeedback"
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback"
-      || state.currentPath=="/MyFeedback" || state.currentPath=="/CalendarD" || state.currentPath=="/EditDetails") && <Navbarmenu />}
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/Calendar") && <Navbarmenu />}
       </div>
         
         <Switch>
@@ -62,22 +58,24 @@ function App() {
           <Route path="/DisplayMyMentor" component={DisplayMyMentor}/>
           <Route path="/MyPOAMentee" component={MyPOAMentee}/>
           <Route path="/MyPOAMentor" component={MyPOAMentor}/>
-          <Route path="/DisplayMyMentee" component={DisplayMyMentee}/>
-          <Route path="/SetFreeHours" component={SetFreeHours}/>
+          <Route path="/DisplayMyMentees" component={DisplayMyMentees}/>
+          <Route path="/AddFreeHours" component={AddFreeHours}/>
           <Route path="/CreatePOAMentor" component={CreatePOAMentor}/>
           <Route path="/OrganiseGroupSession" component={OrganiseGroupSession}/>
-          <Route path="/AddAdmin" component={AddAdmin}/>
-          <Route path="/RemoveUser" component={RemoveUser}/>
-          <Route path="/ChangeTopics" component={ChangeTopics}/>
+          <Route path="/ToggleAdmin" component={ToggleAdmin}/>
+          <Route path="/ToggleActive" component={ToggleActive}/>
+          <Route path="/EditBusinessAreasTopics" component={EditBusinessAreasTopics}/>
           <Route path="/SetSessionThreshold" component={SetSessionThreshold}/>
-          <Route path="/ViewFeedback" component={ViewFeedback}/>
+          <Route path="/ViewAllApplicationFeedback" component={ViewAllApplicationFeedback}/>
+          <Route path="/BecomeMentorRequests" component={BecomeMentorRequest}/>
+          <Route path="/BusinessAreaChangeRequests" component={BusinessAreaChangeRequest}/>
           <Route path="/MyDetails" component={MyDetails}/>
           <Route path="/GiveFeedback" component={GiveFeedback}/>
           <Route path="/MyFeedback" component={MyFeedback}/>
           <Route path="/EditDetails" component={EditDetails}/>
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
-          <Route path="/CalendarD" component={CalendarD}/>
+          <Route path="/Calendar" component={CalendarD}/>
         </Switch>
         
       </Router>

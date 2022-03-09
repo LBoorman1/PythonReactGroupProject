@@ -1,19 +1,21 @@
 import re
 from django.http import request
 from django.shortcuts import render
-from rest_framework import viewsets, generics, permissions
+from rest_framework import status, viewsets, mixins, generics, permissions
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.views.generic.list import ListView
+from django.contrib.auth.models import User 
+from django.db.models import Value
+from django.db.models.functions import Concat
+from django.db.models import Q
+from functools import reduce
+import operator
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
-from functools import reduce
 import profile
-import operator
-from django.db.models import Q
 
-
-from django.contrib.auth.models import User
 from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
@@ -27,7 +29,6 @@ from mentoring.models import BusinessArea
 from mentoring.models import BusinessAreaChangeRequest
 from mentoring.models import CalendarUser
 from mentoring.models import Meeting
-from mentoring.models import MeetingRequest
 from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
@@ -49,11 +50,30 @@ from mentoring.serializers import BusinessAreaSerializer
 from mentoring.serializers import BusinessAreaChangeRequestSerializer
 from mentoring.serializers import CalendarUserSerializer
 from mentoring.serializers import MeetingSerializer
-from mentoring.serializers import MeetingRequestSerializer
+#from mentoring.serializers import MeetingRequestSerializer
 from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
+from mentoring.serializers import BusinessAreaChangeRequestProfileSerializer
+from mentoring.serializers import BecomeMentorProfileSerializer
 from mentoring.serializers import UserProfileSerializer
+
+#TEMP - REPLACE WITH ACTUAL MATCHING ALGORITHM
+class PotentialMentorsView(mixins.ListModelMixin,
+                         viewsets.GenericViewSet):
+    pass
+    #queryset = Profile.objects.select_related(User).filter(is_mentor=True)
+    #serializer_class = UserSerializer(queryset, many=True)  
+
+class MentorRequestView(mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin):
+    queryset = MentorRequest.objects.all()
+    serializer_class = MentorRequestSerializer(queryset, many=True) 
+
+class BusinessAreaChangeRequestView(mixins.CreateModelMixin,
+                                   viewsets.GenericViewSet):
+    queryset = BusinessAreaChangeRequest.objects.all()
+    serializer_class = BusinessAreaChangeRequestSerializer(queryset, many=True) 
 
 class RegisterView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
@@ -101,67 +121,29 @@ class mentorSignupView(viewsets.ModelViewSet):
     #edit db view
     ""
 
-#Verify mentor - Skipped
-
-class showPotentialMentorsView(viewsets.ModelViewSet):
-    #return view
-    queryset = Meeting.objects.all()
-    serializer_class = ProfileSerializer(queryset, many=True)
-
-# make functions for create and show requests
-class mentorRequestView(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MentorRequestSerializer(queryset, many=True)
-
-
 class addRelationshipView(viewsets.ModelViewSet):
     #edit db view
     ""
 
 #might not need function for create, remove and show
-class freeTimeView(viewsets.ModelViewSet):
+class FreeHoursView(viewsets.GenericViewSet):
     queryset = Meeting.objects.all()
-    serializer_class = CalendarUserSerializer(queryset, many=True)
+    serializer_class = CalendarUserSerializer
 
-#make function for create and show
-class meetingRequestsView(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingRequestSerializer(queryset, many=True)
+    def create(self, request):
+        user = User.objects.get(pk=request.data.get('user_id'))
+        profile = user.profile
+        new_hour = CalendarUser(user=profile, available_hour=request.data.get('available_hour'))
+        new_hour.save()
+        return Response(request.data)
+    
+    def list(self, request):
+        user = User.objects.get(pk=request.query_params.get('user_id'))
+        profile = user.profile
+        free_hours = CalendarUser.objects.filter(user=profile).order_by('-available_hour')
+        serializer = CalendarUserSerializer(free_hours, many=True)
+        return Response(serializer.data)
 
-#make function for create and show
-class meetingView(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer
-
-    def list(self, request, *args, **kwargs):
-        userID = request.query_params.get('userID', None)
-        if userID is not None:
-            #need to write the query here
-            profile = Profile.objects.get(pk = userID)
-            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
-            relationships = list(menteeAttending.values_list('relationship', flat=True))
-            
-            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
-            result = Meeting.objects.filter(query)
-
-            serializedData = MeetingSerializer(result, many=True)
-
-            return Response(serializedData.data)
-        else:
-            return Response("no check")
-
-    class meetingView2(viewsets.ModelViewSet):
-        template_name = 'calendarView.html'
-        serializer_class = MeetingSerializer
-
-        def get_context_data(self,**kwargs):
-            context = super(meetingView,self).get_context_data(**kwargs)
-            context['eventList'] = Event.objects.all()
-            return context
-
-#cancel meeting view skipped
-
-#end mentoring relationship skipped
 
 #might not need function for create, remove and show
 class interestsView(viewsets.ModelViewSet):
@@ -169,16 +151,19 @@ class interestsView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
 
-#delete this, not doing as someone might need this for now:
-class showAllMeetingsView(viewsets.ModelViewSet):
-    serializer_class = MeetingSerializer
-    queryset = Meeting.objects.all()
-
 #might not need function for create, remove and show
 class expertiseView(viewsets.ModelViewSet):
     #return view
     queryset = Meeting.objects.all()
     serializer_class = SkillSerializer(queryset, many=True)
+
+class addExpertiseView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+
+class removeExpertiseView(viewsets.ModelViewSet):
+    #edit db view
+    ""
 
 #make function for create and show
 class applicationFeedbackView(viewsets.ModelViewSet):
@@ -209,26 +194,12 @@ class applicationFeedbackView(viewsets.ModelViewSet):
         else:
             return Response("no check")
 
-
-#make function for create and show
-class businessAreaView(viewsets.ModelViewSet):
-    query_set = BusinessArea
-    serializer_class = BusinessAreaSerializer
-
-    def get_queryset(self):
-        return BusinessArea.objects.all()
-        
-#make function for create and show
-class businessAreaChangeRequestsView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-    
-#remove user skipped
-
 #make function for create and show
 class meetingFeedbackView(viewsets.ModelViewSet):
     #return view
     serializer_class = MeetingFeedbackSerializer
+    queryset = MeetingFeedback.objects.all()
+
     def create(self, request, *args, **kwargs):
         profile = Profile.objects.get(pk = request.data.get('userID'))
         
@@ -400,6 +371,57 @@ class groupMeetingsView(viewsets.ModelViewSet):
 
 #cancel attendance skipped
 
+class showSystemFeedbackView(viewsets.ModelViewSet):
+    pass 
+
+class addSystemFeedbackView(viewsets.ModelViewSet):
+    pass 
+
+class SkillView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+
+    def destroy(self, request, pk):
+        skill = Skill.objects.get(pk=pk)
+        skill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class BusinessAreaView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = BusinessArea.objects.all()
+    serializer_class = BusinessAreaSerializer
+
+    def destroy(self, request, pk):
+        business_area = BusinessArea.objects.get(pk=pk)
+        business_area.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Ability to create and view application feedback
+class AllApplicationFeedbackView(mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = ApplicationFeedback.objects.all()
+    serializer_class = ApplicationFeedbackSerializer
+
+# Get mentoring relationship that a user is part of as a mentee for a given user ID 
+@api_view(['GET'])
+def get_mentee_relationship(request):
+    user = User.objects.get(pk=request.query_params.get('user_id'))
+    profile_id = user.profile.id
+    # Get all relationships that mentee is part of
+    relationship_id_set = list(MenteeAttending.objects.filter(mentee=profile_id).values_list('relationship', flat=True))
+    relationship_set = [Relationship.objects.get(id=id) for id in relationship_id_set]
+    # Filter out group and inactive relationships so we get the one mentoring relationship for the mentor
+    relationship = filter(lambda r: not r.group and r.active_status == "A", relationship_set)
+    serializer = RelationshipSerializer(relationship, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 def search_user(request):
     name = request.query_params.get('name')
@@ -409,3 +431,161 @@ def search_user(request):
 
     serializer = UserProfileSerializer(results, many=True)
     return Response(serializer.data)
+
+@api_view(['PATCH'])
+def toggle_admin(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile 
+    if (profile.is_admin):
+        data = {"is_admin": False}
+    else:
+        data = {"is_admin": True}
+    serializer = ProfileSerializer(profile, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+        
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def toggle_active(request, pk):
+    user = User.objects.get(pk=pk)
+    if (user.is_active):
+        data = {"is_active": False}
+    else:
+        data = {"is_active": True}
+    serializer = UserSerializer(user, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def set_mentor(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile 
+    serializer = ProfileSerializer(profile, data={"is_mentor": True}, partial=True)
+    
+    # Add topics of expertise
+    #for topic in request.data.topics:
+        #mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+        #mentor_skill.save()
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+# If a prospective mentor is denied, their topics of expertise need to be
+# removed from the MentorSkill table
+def remove_topics_of_expertise(request, pk):
+    user = User.objects.get(pk=pk)
+    profile_id = user.profile.id
+    MentorSkill.objects.filter(mentor=profile_id).delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['PATCH'])
+def set_mentee(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile 
+    serializer = ProfileSerializer(profile, data={"is_mentee": True}, partial=True)
+    
+    # Add topics of interest
+    for topic in request.data.topics:
+        mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
+        mentor_skill.save()
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def set_business_area(request, pk):
+    user = User.objects.get(pk=pk)
+    profile = user.profile
+    serializer = ProfileSerializer(profile, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def check_off_become_mentor(request, pk):
+    become_mentor_request = BecomeMentor.objects.get(pk=pk)
+    data = {"checked": True}
+    serializer = BecomeMentorSerializer(become_mentor_request, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def check_off_business_area_change_request(request, pk):
+    business_area_request = BusinessAreaChangeRequest.objects.get(pk=pk)
+    data = {"checked": True}
+    serializer = BusinessAreaChangeRequestSerializer(business_area_request, data=data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Get user objects along with business area change requests
+class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
+    queryset = BusinessAreaChangeRequest.objects.filter(checked=False)
+
+    def list(self, request):
+        business_area_requests = BusinessAreaChangeRequest.objects.filter(checked=False)
+        serializer = BusinessAreaChangeRequestProfileSerializer(business_area_requests, many=True)
+        return Response(serializer.data)
+
+# Get user objects along with become mentor requests
+class BecomeMentorUserView(viewsets.GenericViewSet):
+    queryset = BecomeMentor.objects.filter(checked=False)
+
+    def list(self, request):
+        become_mentor_requests = BecomeMentor.objects.filter(checked=False)
+        serializer = BecomeMentorProfileSerializer(become_mentor_requests, many=True)
+        return Response(serializer.data)
+
+class MeetingView(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(pk = userID)
+            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
+            relationships = list(menteeAttending.values_list('relationship', flat=True))
+            
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query)
+
+            serializedData = MeetingSerializer(result, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
+
+    #class meetingView2(viewsets.ModelViewSet):
+        #template_name = 'calendarView.html'
+        #serializer_class = MeetingSerializer
+
+        #def get_context_data(self,**kwargs):
+            #context = super(meetingViewTemp,self).get_context_data(**kwargs)
+            #context['eventList'] = Event.objects.all()
+            #return context

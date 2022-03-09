@@ -83,33 +83,33 @@ const Navbarmenu = () => {
 
                     <ul className={boxClass.join(' ')}>
                     <li  className="menu-item" >
-                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyDetails`}> My Details</NavLink>
+                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyDetails`}>View My Details</NavLink>
                     </li>
                     <li  className="menu-item" >
-                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/CalendarD`}> Calendar</NavLink>
+                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/EditDetails`}>Edit My Details</NavLink>
+                    </li>
+                    <li  className="menu-item" >
+                        <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/Calendar`}>My Calendar</NavLink>
                     </li>
 
                     <li  className="menu-item" >
-                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/GiveFeedback`}> Give Feedback </NavLink>
+                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/GiveFeedback`}>Give Feedback</NavLink>
                     </li>
                     <li  className="menu-item" >
-                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyFeedback`}> My Feedback </NavLink>
-                    </li>
-                    <li  className="menu-item" >
-                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/EditDetails`}> Edit Details </NavLink>
+                    <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyFeedback`}>My Feedback</NavLink>
                     </li>
                     <li onClick={toggleSubmenuMentee} className="menu-item sub__menus__arrows" > <Link to="#"> Mentee <FiChevronDown /> </Link>
                         <ul className={boxClassSubMenuMentee.join(' ')} >
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/BookMentoringMeeting`}> Book Mentoring Meeting </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentee`}> Create POA Mentee </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/DisplayMyMentor`}> Display My Mentor </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentee`}> My POA Mentee </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/DisplayMyMentor`}>Display or Find Mentor</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/BookMentoringMeeting`}>Book Mentoring Meeting</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentee`}> Create POA</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentee`}>My POAs</NavLink> </li>
                         </ul>
                     </li>
                     <li onClick={toggleSubmenuMentor} className="menu-item sub__menus__arrows" > <Link to="#"> Mentor <FiChevronDown /> </Link>
                         <ul className={boxClassSubMenuMentor.join(' ')} >
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active'  to={`/DisplayMyMentee`}> Display My Mentee </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/SetFreeHours`}>Set Free Hours </NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active'  to={`/DisplayMyMentees`}>Display My Mentees</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/AddFreeHours`}>Add Free Hours </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentor`}> Create POA Mentor </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentor`}> My POA Mentor </NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/OrganiseGroupSession`}> Organise Group Session </NavLink> </li>
@@ -117,11 +117,12 @@ const Navbarmenu = () => {
                     </li>
                     <li onClick={toggleSubmenuMentor} className="menu-item sub__menus__arrows" > <Link to="#"> Admin <FiChevronDown /> </Link>
                         <ul className={boxClassSubMenuMentor.join(' ')} >
-                            <li> <NavLink onClick={toggleClass} activeClassName='is-active'  to={`/AddAdmin`}> Add Admin </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/RemoveUser`}> Remove User </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ChangeTopics`}> Change Topics </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/SetSessionThreshold`}> Set Session Threshold </NavLink> </li>
-                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewFeedback`}> System Feedback </NavLink> </li>
+                            <li> <NavLink onClick={toggleClass} activeClassName='is-active'  to={`/ToggleAdmin`}>Toggle Admin</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ToggleActive`}>Toggle User Active</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/EditBusinessAreasTopics`}>Edit Business Areas and Topics</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/ViewAllApplicationFeedback`}>View All Application Feedback</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/BecomeMentorRequests`}>Become Mentor Requests</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/BusinessAreaChangeRequests`}>Business Area Change Requests</NavLink> </li>
                         </ul>
                     </li>
                     <li  className="logout_button menu-item " >

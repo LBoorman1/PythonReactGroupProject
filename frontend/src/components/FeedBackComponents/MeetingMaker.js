@@ -17,7 +17,7 @@ function MeetingMaker() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetingView/?userID=5", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: "http://localhost:8000/meetings/?userID=5", //replace userID = 4 with userID=${userID} whenever we get the login sorted
         });
         setMeetingData(response);
       } catch (error) {

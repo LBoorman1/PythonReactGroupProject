@@ -2,13 +2,13 @@ import React from 'react'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!n
 
-import { Calendar } from '@fullcalendar/core';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
+//import { Calendar } from '@fullcalendar/core';
+//import timeGridPlugin from '@fullcalendar/timegrid';
+//import listPlugin from '@fullcalendar/list';
 import './Calendar.css';
 import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
-import MeetingMaker from "./FeedBackComponents/MeetingMaker";
+//import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
     constructor(props) {
@@ -17,14 +17,13 @@ export default class CalendarD extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8000/meetingView/?userID=5')
+        axios.get('http://localhost:8000/meetings/?userID=5')
             .then(res => {
                 this.setState({ meetings: res.data });
             })
     }
 
     render() {
-        console.log(this.state.meetings);
         return (
             <div className="schedule  sec__one">
                 <h1>Calendar</h1>
