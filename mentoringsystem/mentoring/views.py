@@ -196,9 +196,10 @@ class applicationFeedbackView(viewsets.ModelViewSet):
 
             return Response(serializedData.data)
         else:
-            return Response("no check")
-
-
+            #return all application feedback
+            appFeedback = ApplicationFeedback.objects.all().order_by('user')
+            serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
+            return Response(serializedData.data)
  
     ""
 
@@ -242,7 +243,7 @@ class meetingFeedbackView(viewsets.ModelViewSet):
         userID = request.query_params.get('userID', None)
         if userID is not None:
             #need to write the query here
-            profile = Profile.objects.get(pk = userID)
+            profile = Profile.objects.get(user = userID)
             meetingFeedback = MeetingFeedback.objects.filter(user=profile)
             serializedData = MeetingFeedbackSerializer(meetingFeedback, many=True)
             return Response(serializedData.data)
