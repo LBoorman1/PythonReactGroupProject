@@ -99,12 +99,15 @@ const Navbarmenu = () => {
                     <li  className="menu-item" >
                     <NavLink exact activeClassName='is-active' onClick={toggleClass} to={`/MyFeedback`}>My Feedback</NavLink>
                     </li>
+
+                    
                     <li onClick={toggleSubmenuMentee} className="menu-item sub__menus__arrows" > <Link to="#"> Mentee <FiChevronDown /> </Link>
                         <ul className={boxClassSubMenuMentee.join(' ')} >
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/DisplayMyMentor`}>Display or Find Mentor</NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/BookMentoringMeeting`}>Book Mentoring Meeting</NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentee`}> Create POA</NavLink> </li>
                             <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentee`}>My POAs</NavLink> </li>
+                            <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/JoinGroupMeeting`}>Join Group meetings</NavLink></li>
                         </ul>
                     </li>
                     <li onClick={toggleSubmenuMentor} className="menu-item sub__menus__arrows" > <Link to="#"> Mentor <FiChevronDown /> </Link>

@@ -58,7 +58,8 @@ router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
-router.register(r'meetings', views.MeetingView, 'meetings') 
+router.register(r'meetings', views.MeetingView, 'meetings')
+router.register(r'menteeAttendingView', views.menteeAttendingView, 'menteeAttendingView') 
 
 # Here we must also add the non-class based views
 urlpatterns = [

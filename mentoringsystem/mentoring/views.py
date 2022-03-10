@@ -424,23 +424,43 @@ class showSkillInterestView(viewsets.ModelViewSet):
 
 #make function for create and show
 class groupMeetingsView(viewsets.ModelViewSet):
-    #     #create a relationship which has group field True
-    #     #create a meeting with the relationshipID
-    
     def create(self, request, *args, **kwargs):
         mentor = Profile.objects.get(user = request.data.get('userID'))
-        #newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile, meetingtitle=meetingTitle)
-            #newFeedback.save()
         if mentor:
+            #could check if the user is a mentor
             newRelationship = Relationship.objects.create(mentor=mentor, group=True, active_status='A', advertising_for_group=True)
             newRelationship.save()
             newMeeting = Meeting(relationship=newRelationship, date_time=request.data.get('dateStart'), attendance_status='GA', title=request.data.get('meetingTitle'), notes=request.data.get('meetingNotes'))
             newMeeting.save()
             return Response("check")
-#     #use menteeAttending table to get the relationshipID of the group meeting and add the mentee to said relationship
-#     #add a meeting to the database with the relationship that is the group
+    
+    def list(self, request, *args, **kwargs):
+        
+            #need to write the query here
+            #relationships = list(Relationship.objects.filter(group=True).values_list('pk', flat=True))
+            relationships = Relationship.objects.filter(group=True)
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query).order_by('relationship')
+
+            serializedData = MeetingSerializer(result, many=True)
+            return Response(serializedData.data)
+
 
 #cancel attendance skipped
+
+class menteeAttendingView(viewsets.ModelViewSet):
+    def create(self, request, *args, **kwargs):
+        userID = request.data.get('userID')
+        if userID:
+            profile = Profile.objects.get(user=userID)    
+            relationshipID = request.data.get('relationship')
+            relationship = Relationship.objects.get(pk = relationshipID)
+            if MenteeAttending.objects.filter(mentee=profile, relationship=relationship).exists():
+                return Response("exists already")
+            else:
+                newMenteeAttending = MenteeAttending.objects.create(mentee=profile, relationship=relationship)
+                newMenteeAttending.save()    
+                return Response("added to db")
 
 class showSystemFeedbackView(viewsets.ModelViewSet):
     pass 

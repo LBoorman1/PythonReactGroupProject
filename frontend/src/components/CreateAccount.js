@@ -43,7 +43,7 @@ const CreateAccount = () => {
 
   const get_business_area = () => {
     axios
-    .get("http://127.0.0.1:8000/businessArea/")
+    .get("http://localhost:8000/businessareas/")
     .then(response => {
       const data = response.data;
 
@@ -73,7 +73,7 @@ const CreateAccount = () => {
         is_admin : false
       };
       axios
-      .post("http://127.0.0.1:8000/register/", userData)
+      .post("http://localhost:8000/register/", userData)
       .then(response => {
           const { user, token } = response.data;
           setAxiosAuthToken(token);
