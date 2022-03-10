@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Card, CardBody, CardText, Input, Label } from "reactstrap";
 
 const UserCard = props => {
-  const [admin, setAdmin] = useState(props.admin);
-  const [active, setActive] = useState(props.active);
+  //const [admin, setAdmin] = useState(props.admin);
+  //const [active, setActive] = useState(props.active);
+  const [admin, setAdmin] = useState(false);
+  const [active, setActive] = useState(false);
+  
+  useEffect(() => {
+    setAdmin(props.admin);
+    setActive(props.active);
+  }, [props])
 
   const toggleAdmin = async () => {
     try {

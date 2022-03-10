@@ -207,3 +207,11 @@ class BecomeMentorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BecomeMentor
         fields = ['id', 'profile']
+
+# Used for selecting mentee details for a given mentor request
+class MentorRequestProfileSerializer(serializers.ModelSerializer):
+    mentee = ProfileUserSerializer(required=True)
+    
+    class Meta:
+        model = MentorRequest
+        fields = ['id', 'mentee']
