@@ -171,14 +171,14 @@ class meetingView(viewsets.ModelViewSet):
         else:
             return Response("no check")
 
-    class meetingView2(viewsets.ModelViewSet):
-        template_name = 'calendarView.html'
-        serializer_class = MeetingSerializer
+    # class meetingView2(viewsets.ModelViewSet):
+    #     template_name = 'calendarView.html'
+    #     serializer_class = MeetingSerializer
 
-        def get_context_data(self,**kwargs):
-            context = super(meetingView,self).get_context_data(**kwargs)
-            context['eventList'] = Event.objects.all()
-            return context
+    #     def get_context_data(self,**kwargs):
+    #         context = super(meetingView,self).get_context_data(**kwargs)
+    #         context['eventList'] = Event.objects.all()
+    #         return context
 
 #cancel meeting view skipped
 
@@ -424,19 +424,21 @@ class showSkillInterestView(viewsets.ModelViewSet):
 
 #make function for create and show
 class groupMeetingsView(viewsets.ModelViewSet):
+    #     #create a relationship which has group field True
+    #     #create a meeting with the relationshipID
     
-    #create a relationship which has group field True
-    #create a meeting with the relationshipID
     def create(self, request, *args, **kwargs):
-
-    
-    
-    #use menteeAttending table to get the relationshipID of the group meeting and add the mentee to said relationship
-    #add a meeting to the database with the relationship that is the group
-
-
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+        mentor = Profile.objects.get(user = request.data.get('userID'))
+        #newFeedback = MeetingFeedback(feedback=feedback, rating=rating, meeting=meeting, user=profile, meetingtitle=meetingTitle)
+            #newFeedback.save()
+        if mentor:
+            newRelationship = Relationship.objects.create(mentor=mentor, group=True, active_status='A', advertising_for_group=True)
+            newRelationship.save()
+            newMeeting = Meeting(relationship=newRelationship, date_time=request.data.get('dateStart'), attendance_status='GA', title=request.data.get('meetingTitle'), notes=request.data.get('meetingNotes'))
+            newMeeting.save()
+            return Response("check")
+#     #use menteeAttending table to get the relationshipID of the group meeting and add the mentee to said relationship
+#     #add a meeting to the database with the relationship that is the group
 
 #cancel attendance skipped
 
