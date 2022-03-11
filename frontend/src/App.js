@@ -28,6 +28,7 @@ import EditDetails from './components/EditDetails';
 import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
 import CalendarD from './components/CalendarD';
+import MentorRequestRespond from './components/MentorRequestRespond';
 import Home from './components/Home';
 import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 import JoinGroupMeeting from './components/JoinGroupMeeting';
@@ -44,7 +45,7 @@ function App() {
 
       <div  onClick={refreshPage}>
       { (state.currentPath=="/Signin" || state.currentPath=="/CreateAccount") &&<NavbarLogin />}
-      { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentees"
+      { (state.currentPath=="/BookMentoringMeeting" || state.currentPath=="/CreatePOAMentee" || state.currentPath=="/DisplayMyMentor" || state.currentPath=="/MyPOAMentee" || state.currentPath=="/MyPOAMentor" || state.currentPath=="/DisplayMyMentees" || state.currentPath == "/MentorRequestRespond"
       || state.currentPath=="/AddFreeHours" || state.currentPath=="/CreatePOAMentor" || state.currentPath=="/OrganiseGroupSession" || state.currentPath=="/ToggleAdmin" || state.currentPath=="/ToggleActive" || state.currentPath=="/EditBusinessAreasTopics" || state.currentPath=="/BecomeMentorRequests" || state.currentPath=="/BusinessAreaChangeRequests"
       || state.currentPath=="/SetSessionThreshold"
       || state.currentPath=="/ViewAllApplicationFeedback"
@@ -78,6 +79,7 @@ function App() {
           <Route path="/CreateAccount" component={CreateAccount}/>
           <Route path="/Calendar" component={CalendarD}/>
           <Route path="/JoinGroupMeeting" component={JoinGroupMeeting}/>
+          <Route path="/MentorRequestRespond" component={MentorRequestRespond}/>
         </Switch>
         
       </Router>

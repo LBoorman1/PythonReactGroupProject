@@ -6,7 +6,6 @@ const SearchUser = props => {
     
     const performSearch = async (e) => {
       e.preventDefault();
-      console.log(e.target.search.value);
       try {
         const response = await axios({
             method: "GET",
@@ -16,7 +15,6 @@ const SearchUser = props => {
             }
         })
         // Updates frontend
-        console.log(response.data);
         props.handleUpdate(response.data);
       } catch (error) {
         console.log(error);

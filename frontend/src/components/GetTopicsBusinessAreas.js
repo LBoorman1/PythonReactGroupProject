@@ -9,8 +9,8 @@ export const fetchBusinessAreas = async () => {
                 "Content-Type": "application/json"
             }
         })
-        console.log(response);
-        return response;
+        //console.log(response);
+        return response.data;
     } catch (error) {
         console.log(error);
     }
@@ -25,7 +25,7 @@ export const fetchTopics = async () => {
                 "Content-Type": "application/json"
             }
         })
-        return response;
+        return response.data;
     } catch (error) {
         console.log(error);
     }

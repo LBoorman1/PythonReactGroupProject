@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Card, CardBody, CardText, Input, Label } from "reactstrap";
+import { Button, Card, CardBody, CardText } from "reactstrap";
 
 const UserCard = props => {
-  const [admin, setAdmin] = useState(props.admin);
-  const [active, setActive] = useState(props.active);
+  const [admin, setAdmin] = useState(false);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    setAdmin(props.admin);
+    setActive(props.active);
+  }, [props]);
 
   const toggleAdmin = async () => {
     try {
@@ -88,7 +93,7 @@ const UserCard = props => {
             </Button>
           }
           {props.type == "toggleInactive" &&
-            <Button 
+            <Button
               color="primary"
               onClick={e => {
                 e.preventDefault();
@@ -104,14 +109,14 @@ const UserCard = props => {
               <CardText>
                 <strong>Proposed Topics of Expertise</strong>: {props.topicsOfExpertise.map(topic => topic + ", ")}
               </CardText>
-              <Button 
+              <Button
                 color="success"
                 onClick={() => props.onAccept(props.id, props.requestId)}
               >
                 Make Mentor
               </Button>
               &emsp;
-              <Button 
+              <Button
                 color="danger"
                 onClick={() => props.onDeny(props.id, props.requestId)}
               >
@@ -125,18 +130,53 @@ const UserCard = props => {
               <CardText>
                 <strong>New Business Area</strong>: {props.newBusinessAreaName}
               </CardText>
-              <Button 
+              <Button
                 color="success"
                 onClick={() => props.onAccept(props.id, props.newBusinessAreaId, props.requestId)}
               >
                 Change Business Area
               </Button>
               &emsp;
-              <Button 
+              <Button
                 color="danger"
                 onClick={() => props.onDeny(props.requestId)}
               >
                 Deny Request
+              </Button>
+            </div>
+          }
+          {props.type == "mentoringRelationship" &&
+            <Button
+              color="danger"
+              onClick={() => props.onEndRel(props.relationshipId)}
+            >
+              End Mentoring Relationship
+            </Button>
+          }
+          {props.type == "potentialMentor" &&
+            <div>
+              <Button
+                color="primary"
+                onClick={() => props.onRequest(props.menteeId, props.id)}
+              >
+                Request this Mentor
+              </Button>
+            </div>
+          }
+          {props.type == "mentorRequest" &&
+            <div>
+              <Button
+                color="success"
+                onClick={() => props.onAccept(props.id, props.requestId)}
+              >
+                Accept
+              </Button>
+              &emsp;
+              <Button
+                color="danger"
+                onClick={() => props.onDeny(props.requestId)}
+              >
+                Deny
               </Button>
             </div>
           }
@@ -145,7 +185,6 @@ const UserCard = props => {
     </div>
   )
 }
-
 
 /*
 If we ever want to just arbitrarily change a user's business area...

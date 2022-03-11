@@ -8,7 +8,9 @@ const EditBusinessAreasTopics = () => {
   const [topicData, setTopicData] = useState([]);
 
   useEffect(() => {
-    const fetchBusinessAreas = async () => {
+    fetchBusinessAreas()
+      .then(data => setBusinessAreaData(data));
+    /*const fetchBusinessAreas = async () => {
       try {
         const response = await axios({
           method: "GET",
@@ -22,11 +24,13 @@ const EditBusinessAreasTopics = () => {
         console.log(error);
       }
     };
-    fetchBusinessAreas();
+    fetchBusinessAreas();*/
   }, []);
 
   useEffect(() => {
-    const fetchTopics = async () => {
+    fetchTopics()
+      .then(data => setTopicData(data));
+    /*const fetchTopics = async () => {
       try {
         const response = await axios({
           method: "GET",
@@ -40,7 +44,7 @@ const EditBusinessAreasTopics = () => {
         console.log(error);
       }
     };
-    fetchTopics();
+    fetchTopics();*/
   }, []);
 
   const addBusinessArea = async (e) => {

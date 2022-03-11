@@ -1,23 +1,14 @@
-import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import DisplayDetails from './DisplayDetails';
+import React from 'react';
+import DisplayDetails from "./DisplayDetails";
 
 const MyDetails = () => {
-    console.log(localStorage);
+    
+    const userId = 4;
+
     return (
-        <div className="my_details sec__one">
-            <h1> My Details </h1>
-
-            <DisplayDetails
-                firstname="testing"
-                surname="testing two"
-                business_area="my department 2"
-                is_mentee="true"
-                is_mentor="true"
-                is_admin="true"
-            />
-
-        </div>
-    )
+        <DisplayDetails userId={userId} />
+    );
 }
-export default MyDetails
+
+export default MyDetails;
+
