@@ -129,6 +129,7 @@ function MeetingMaker() {
             onClick={(e) => {
               e.preventDefault();
               meetingFeedback();
+              setFeedback("");
               setOpenModal(false);
             }}
           >

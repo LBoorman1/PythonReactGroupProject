@@ -7,15 +7,20 @@ function ApplicationForm(props) {
   const user_data = JSON.parse(localStorage.getItem("user"));
 
   const url = "http://localhost:8000/applicationFeedbackView/";
-  const [formValue, setformValue] = useState({
-    feedback: '',
-  });
+  // const [formValue, setformValue] = useState({
+  //   feedback: '',
+  // });
+  const [feedback, setFeedback] = useState("");
+
+  // const handleChange = (event) => {
+  //   setformValue({
+  //     ...formValue,
+  //     [event.target.name]: event.target.value
+  //   });
+  // }
 
   const handleChange = (event) => {
-    setformValue({
-      ...formValue,
-      [event.target.name]: event.target.value
-    });
+    setFeedback(event.target.value);
   }
 
   const handleSubmit = async() => {
@@ -26,7 +31,7 @@ function ApplicationForm(props) {
         method: "POST",
         url: url,
         data: {
-          feedback: formValue.feedback,
+          feedback: feedback,
           userID: user_data.user.id,
         },
         headers: {
@@ -43,7 +48,7 @@ function ApplicationForm(props) {
       <form>
         <FormGroup>
           <Label className="text-light" for="feedback">What can we do to improve this system?</Label>
-          <Input type="text" name="feedback" id="feedback" value={formValue.feedback} onChange={handleChange}/>
+          <Input type="text" name="feedback" id="feedback" value={feedback} onChange={handleChange}/>
         </FormGroup>
         
         <Button
@@ -56,6 +61,7 @@ function ApplicationForm(props) {
           /*functions that will be called when clicking meeting button */
           e.preventDefault();
           handleSubmit();
+          setFeedback("");
         }}
       >
         Submit
