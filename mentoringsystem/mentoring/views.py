@@ -61,11 +61,14 @@ from mentoring.serializers import UserProfileSerializer
 from mentoring.serializers import ProfileUserSerializer
 
 # TEMP - REPLACE WITH ACTUAL MATCHING ALGORITHM
+class PotentialMentorsView(viewsets.GenericViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileUserSerializer 
 
-
-class PotentialMentorsView(mixins.ListModelMixin,
-                           viewsets.GenericViewSet):
-    pass
+    def list(self, request):
+        potential_mentors = Profile.objects.filter(is_mentor=True)
+        serializer = ProfileUserSerializer(potential_mentors, many=True)
+        return Response(serializer.data)
     #queryset = Profile.objects.select_related(User).filter(is_mentor=True)
     #serializer_class = UserSerializer(queryset, many=True)
 
@@ -128,20 +131,20 @@ class mentorSignupView(viewsets.ModelViewSet):
     ""
 
 # Create both relationship and a mentee attending it
-
-
+# WILL NEED FIXING 
 @api_view(['POST'])
 def add_mentoring_relationship(request):
+    mentor = User.objects.get(pk=request.data.get('mentor_id')).profile
+    mentee = User.objects.get(pk=request.data.get('mentee_id')).profile
+
     relationship = Relationship.objects.create(
-        mentor=request.data.mentor, group=request.data.group, active_status='A',
-        advertising_for_group=request.data.advertising_for_group)
-    relationship_id = relationship.id
+        mentor=mentor, group=request.data.get('group'), active_status='A',
+        advertising_for_group=request.data.get('advertising_for_group'))
     mentee_attending = MenteeAttending.objects.create(
-        mentee=request.data.mentor, relationship=relationship_id)
+        mentee=mentee, relationship=relationship)
     return Response(request.data)
 
 # If a mentor or mentee ends a mentoring relationship
-
 @api_view(['PATCH'])
 def end_mentoring_relationship(request):
     relationship = Relationship.objects.get(pk=request.data.get('id'))
@@ -724,7 +727,6 @@ class BecomeMentorUserView(viewsets.GenericViewSet):
 
 # Get user objects along with mentor requests for a specific mentor !!!!
 
-
 class MentorRequestUserView(viewsets.GenericViewSet,
                             mixins.CreateModelMixin,
                             mixins.DestroyModelMixin):
@@ -738,8 +740,16 @@ class MentorRequestUserView(viewsets.GenericViewSet,
         serializer = MentorRequestProfileSerializer(mentor_requests, many=True)
         return Response(serializer.data)
 
+    def create(self, request):
+        # Get mentee and mentor objects from user IDs
+        mentee = User.objects.get(pk=request.data.get('mentee_id')).profile
+        mentor = User.objects.get(pk=request.data.get('mentor_id')).profile
+        MentorRequest.objects.create(mentee=mentee, mentor=mentor)
+        return Response(request.data)
+
     # Once a request has been dealt with it should be deleted
     def destroy(self, request, pk):
+        # Should only be one request from a mentee at a given time
         mentor_request = MentorRequest.objects.get(pk=pk)
         mentor_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

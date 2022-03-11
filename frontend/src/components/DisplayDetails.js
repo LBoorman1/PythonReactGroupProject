@@ -24,10 +24,6 @@ const MyDetails = props => {
         fetchUserDetails();
     }, []);
 
-    if (userDetails) {
-        console.log(userDetails.is_active);
-    }
-
     return (
         <div className="display_details sec__one">
             <h1>My Details</h1>

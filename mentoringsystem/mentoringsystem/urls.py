@@ -22,7 +22,7 @@ router.register(r'register', views.RegisterView, 'register')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
 router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
-router.register(r'potentialmentors', views.PotentialMentorsView, 'potentialmentors')
+router.register(r'possiblementors', views.PotentialMentorsView, 'possiblementors')
 #router.register(r'mentorRequest', views.mentorRequestView, 'mentorRequest')
 #router.register(r'addRelationship', views.addRelationshipView, 'addRelationship')
 #router.register(r'addFreeTime', views.addFreeTimeView, 'addFreeTime')
@@ -55,7 +55,7 @@ router.register(r'showSystemFeedback', views.showSystemFeedbackView, 'showSystem
 router.register(r'addSystemFeedback', views.addSystemFeedbackView, 'addSystemFeedback')
 router.register(r'businessareachangerequests', views.BusinessAreaChangeRequestUserView, 'businessareachangerequests')
 router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
-router.register(r'mentorrequestsbymentor', views.MentorRequestUserView, 'mentorrequestsbymentor') 
+router.register(r'mentorrequests', views.MentorRequestUserView, 'mentorrequests') 
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
@@ -76,8 +76,8 @@ urlpatterns = [
     path('userdetails/', views.get_user_details),
     path('mentormentees/', views.get_mentor_mentees),
     path('menteementor/', views.get_mentee_mentor),
-    path('addmentoringrelationship/', views.add_mentoring_relationship), #!!
-    path('endmentoringrelationship/', views.end_mentoring_relationship), #!!
+    path('addmentoringrelationship/', views.add_mentoring_relationship), 
+    path('endmentoringrelationship/', views.end_mentoring_relationship),
     path('mentorrequestsbymentee/', views.get_mentee_mentor_requests), 
     re_path('searchuser/', views.search_user),
     #path('account/',include('users.urls')),
