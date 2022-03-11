@@ -121,14 +121,37 @@ class showProfileView(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer(queryset, many=True)
 
 
-class menteeSignupView(viewsets.ModelViewSet):
-    # edit db view
-    ""
+# Set up a user as a mentee
+@api_view(['POST'])
+def mentee_signup(request):
+    user = User.objects.get(pk=request.data.get('user_id'))
+    profile = user.profile
+    data = {"is_mentee" : True}
+    serializer = ProfileSerializer(profile, data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    for id in request.data.get('topics'):
+        skill = Skill.objects.get(pk=id)
+        MenteeInterest.objects.create(mentee=profile, skill=skill)
+    
+    return Response(request.data)
 
 
-class mentorSignupView(viewsets.ModelViewSet):
-    # edit db view
-    ""
+# Create a request for a user to become a mentor
+@api_view(['POST'])
+def mentor_signup(request):
+    user = User.objects.get(pk=request.data.get('user_id'))
+    profile = user.profile
+    BecomeMentor.objects.create(profile=profile, checked=False)
+
+    for id in request.data.get('topics'):
+        skill = Skill.objects.get(pk=id)
+        MentorSkill.objects.create(mentor=profile, skill=skill)
+    
+    return Response(request.data)
 
 # Create both relationship and a mentee attending it
 # WILL NEED FIXING 

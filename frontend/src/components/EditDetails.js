@@ -11,27 +11,23 @@ const EditDetails = props => {
     const [item, setItem] = useState(null);
 
     const [businessAreaData, setBusinessAreaData] = useState([]);
-    const [topicInterestItemData, setTopicInterestItemData] = useState([]);
-    const [topicExpertiseItemData, setTopicExpertiseItemData] = useState([]);
+    const [topicData, setTopicData] = useState([]);
+    const [isMentee, setIsMentee] = useState(false);
+    const [isMentor, setIsMentor] = useState(false);
+    //const [selectedTopicsInterest, setSelectedTopicsInterest] = useState([]);
+
+    const selectedTopicsInterest = [];
+    const selectedTopicsExpertise = [];
 
     const [BAAlertVisible, setBAAlertVisible] = useState(false);
 
-    const userId = 4;
+    const userId = 46;
 
     // Map each topic to a checkbox for topics of interest and a checkbox for topics of expertise
     useEffect(() => {
         fetchTopics()
             .then(data => {
-                setTopicInterestItemData(data);
-                //alert(topicInterestItemData);
-                /*topicInterestItemData.map(topic => {
-                    <CustomInput type="checkbox" id="topicCheck" label={topic.name} name={topic.id.toString()} />
-                });*/
-                /*topicExpertiseItemData.map(topic => {
-                    <CustomInput type="checkbox" id="topicCheck" label={topic.name} name={topic.id.toString()} />
-                });*/
-                console.log(topicInterestItemData);
-                //console.log(topicInterestItemData);
+                setTopicData(data);
             });
     }, []);
 
@@ -40,25 +36,64 @@ const EditDetails = props => {
             .then(data => setBusinessAreaData(data));
     }, []);
 
-    /*topicInterestItemData.map(topic => {
-        <CustomInput type="checkbox" id="topicCheck" label={topic.name} name={topic.id.toString()} />
-    });
-    topicExpertiseItemData.map(topic => {
-        <CustomInput type="checkbox" id="topicCheck" label={topic.name} name={topic.id.toString()} />
-    });*/
+    const topicsInterestSelectedChange = async (e) => {
+        console.log(e.target.value);
+        if (e.target.checked) {
+            selectedTopicsInterest.push(e.target.value);
+        } else {
+            selectedTopicsInterest.splice(selectedTopicsInterest.indexOf(e.target.value), 1);
+        }
+        console.log(selectedTopicsInterest);
+    }
+
+    const topicsExpertiseSelectedChange = async (e) => {
+        console.log(e.target.value);
+        if (e.target.checked) {
+            selectedTopicsExpertise.push(e.target.value);
+        } else {
+            selectedTopicsExpertise.splice(selectedTopicsExpertise.indexOf(e.target.value), 1);
+        }
+        console.log(selectedTopicsExpertise);
+    }
 
     const becomeMentee = async (e) => {
-        //for 
-
-        {/*become mentee*/ }
-
+        e.preventDefault();
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "http://localhost:8000/mentee_signup/",
+                data: {
+                    "user_id": userId,
+                    "topics": selectedTopicsInterest
+                },
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            setIsMentee(true);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const becomeMentor = async (e) => {
-
-
-        {/*become mentor*/ }
-
+        e.preventDefault();
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "http://localhost:8000/mentor_signup/",
+                data: {
+                    "user_id": userId,
+                    "topics": selectedTopicsExpertise
+                },
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            setIsMentor(true);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const handleBusinessAreaChange = async (e) => {
@@ -94,16 +129,45 @@ const EditDetails = props => {
 
             <Card>
                 <CardBody>
-                    <Form>
-                        {topicInterestItemData.map(topic => <CustomInput type="checkbox" id={topic.name} label={topic.name} name={topic.id.toString()} />)}
-                        <br />
-                        <Button onClick={mentee}>Select here to become a mentor!</Button>
-                    </Form>
+                    {!isMentee &&
+                        <div>
+                            <h3>Become a Mentee</h3>
+                            Select your topics of interest:
+                            <br/>
+                            <br/>
+                            <Form onSubmit={becomeMentee}>
+                                {topicData.map(topic => <CustomInput
+                                    type="checkbox"
+                                    id={topic.name}
+                                    label={topic.name}
+                                    name={topic.name}
+                                    value={topic.id}
+                                    onChange={topicsInterestSelectedChange}
+                                />)}
+                                <br />
+                                <Button color="primary" onClick={becomeMentee}>Become a Mentee</Button>
+                            </Form>
+                        </div>
+                    }
                     <br />
-                    <Form>
-                        {topicExpertiseItemData.map(item => item)}
-                        <Button onClick={mentor}>Select here to become a mentee!</Button>
-                    </Form>
+                    {!isMentor &&
+                        <div>
+                            <h3>Become a Mentor</h3>
+                            Select your topics of expertise:
+                            <br/><br/>
+                            <Form onSubmit={becomeMentor}>
+                                {topicData.map(topic => <CustomInput
+                                    type="checkbox"
+                                    id={topic.name}
+                                    label={topic.name}
+                                    name={topic.name}
+                                    value={topic.id}
+                                    onChange={topicsExpertiseSelectedChange}
+                                />)}
+                                <Button color="primary" onClick={becomeMentor}>Send Mentor Request</Button>
+                            </Form>
+                        </div>
+                    }
                     <br />
                 </CardBody>
             </Card>
