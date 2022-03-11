@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Checkboxes from './Checkboxes';
 
 const MyPOAMentee= () => {
+    console.log(localStorage);
     const [poas, setPoas] = useState([]);
 
     useEffect(() => {
@@ -10,8 +11,8 @@ const MyPOAMentee= () => {
       }, []);
 
     const get_poas = () =>{
-        const user_profile_id = JSON.parse(localStorage.getItem("user")).id;
-        var url = "http://127.0.0.1:8000/POA/?profile_id="+user_profile_id+"&m_value=m1";
+        const user_profile_id = JSON.parse(localStorage.getItem("user"));
+        var url = "http://127.0.0.1:8000/POA/?profile_id="+user_profile_id.id+"&m_value=m1";
         axios
         .get(url)
         .then(response => {

@@ -43,7 +43,7 @@ const CreateAccount = () => {
 
   const get_business_area = () => {
     axios
-    .get("http://localhost:8000/businessareas/")
+    .get("http://127.0.0.1:8000/showBusinessArea/")
     .then(response => {
       const data = response.data;
 
@@ -122,6 +122,8 @@ const CreateAccount = () => {
       onChange ={handle_email}/>
       </p><p>
       <label>Password</label>
+      <p>- password must be 8 characters long</p>
+      <p>- password must contain at least one: upper case, lower case, special character</p>
       <input
       type = "password"
       name = "password"

@@ -58,6 +58,7 @@ router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'mentorrequests', views.MentorRequestUserView, 'mentorrequests') 
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
+router.register(r'showBusinessArea', views.showBusinessAreaView, 'showBusinessArea')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
 router.register(r'meetings', views.MeetingView, 'meetings') 
 

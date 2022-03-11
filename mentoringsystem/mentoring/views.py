@@ -483,6 +483,13 @@ class SkillView(mixins.CreateModelMixin,
         skill.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class showBusinessAreaView(viewsets.ModelViewSet):
+    queryset = BusinessArea.objects.all()
+    serializer_class = BusinessAreaSerializer
+
+    def list(self, request, *args, **kwargs):
+        serialized_data= [BusinessAreaSerializer(x).data for x in BusinessArea.objects.all()]
+        return Response(serialized_data)
 
 class BusinessAreaView(mixins.CreateModelMixin,
                        mixins.ListModelMixin,
