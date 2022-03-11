@@ -1,40 +1,49 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import UserCard from './UserCard';
-import Requests from './Request';
-import { Card, Button } from 'reactstrap';
 import boolToStr from "./BoolToStringNice";
 import axios from "axios";
+import endRelationship from "./EndRelationship";
 
 const DisplayMyMentees = () => {
   const [menteeDetails, setMenteeDetails] = useState([]);
-  
+
   // user ID 3 user with mentees example
   // user ID 2 user without mentees example
   const userId = 3;
   let content;
 
+  const fetchMenteeDetails = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `http://localhost:8000/mentormentees/?user_id=${userId}`,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      setMenteeDetails(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMenteeDetails = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: `http://localhost:8000/mentormentees/?user_id=${userId}`,
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        setMenteeDetails(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchMenteeDetails();
   }, []);
+
+  const handleEndRelationship = relationshipId => {
+    endRelationship(relationshipId)
+      .then(res => {
+        //setMenteeDetails([]);
+        fetchMenteeDetails();
+      });
+  }
 
   if (menteeDetails.length == 0) {
     content = (
       <div style={{ textAlign: "center" }}>
-        Looks like you don't currently have any mentees. Check your requests from mentees for you to mentor them.
+        Looks like you don't currently have any mentees. Check your <Link activeClassName='is-active' to={`/MentorRequestRespond`}>requests</Link> from mentees for you to mentor them.
       </div>
     )
   } else {
@@ -53,6 +62,9 @@ const DisplayMyMentees = () => {
             mentor={boolToStr(mentee.is_mentor)}
             topicsOfInterest={mentee.topics_of_interest.map(topic => topic.skill.name)}
             topicsOfExpertise={mentee.topics_of_expertise.map(topic => topic.skill.name)}
+            type="mentoringRelationship"
+            relationshipId={mentee.relationship}
+            onEndRel={handleEndRelationship}
           />
         ))}
       </div>

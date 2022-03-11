@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Card, CardBody, CardText, Input, Label } from "reactstrap";
+import { Button, Card, CardBody, CardText } from "reactstrap";
 
 const UserCard = props => {
-  //const [admin, setAdmin] = useState(props.admin);
-  //const [active, setActive] = useState(props.active);
   const [admin, setAdmin] = useState(false);
   const [active, setActive] = useState(false);
 
   useEffect(() => {
     setAdmin(props.admin);
     setActive(props.active);
-  }, [props])
+  }, [props]);
 
   const toggleAdmin = async () => {
     try {
@@ -147,6 +145,14 @@ const UserCard = props => {
               </Button>
             </div>
           }
+          {props.type == "mentoringRelationship" &&
+            <Button
+              color="danger"
+              onClick={() => props.onEndRel(props.relationshipId)}
+            >
+              End Mentoring Relationship
+            </Button>
+          }
           {props.type == "potentialMentor" &&
             <div>
               <Button
@@ -179,7 +185,6 @@ const UserCard = props => {
     </div>
   )
 }
-
 
 /*
 If we ever want to just arbitrarily change a user's business area...

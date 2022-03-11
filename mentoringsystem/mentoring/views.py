@@ -147,6 +147,7 @@ def add_mentoring_relationship(request):
 # If a mentor or mentee ends a mentoring relationship
 @api_view(['PATCH'])
 def end_mentoring_relationship(request):
+    print("test")
     relationship = Relationship.objects.get(pk=request.data.get('id'))
     # Set to inactive
     data = {'active_status': 'I'}
