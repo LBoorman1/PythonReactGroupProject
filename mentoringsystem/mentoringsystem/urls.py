@@ -20,8 +20,6 @@ from mentoring import views
 router = routers.DefaultRouter()
 router.register(r'register', views.RegisterView, 'register')
 router.register(r'showProfile', views.showProfileView, 'showProfile')
-router.register(r'menteeSignup', views.menteeSignupView, 'menteeSignup')
-router.register(r'mentorSignup', views.mentorSignupView, 'mentorSignup')
 router.register(r'possiblementors', views.PotentialMentorsView, 'possiblementors')
 #router.register(r'mentorRequest', views.mentorRequestView, 'mentorRequest')
 #router.register(r'addRelationship', views.addRelationshipView, 'addRelationship')
@@ -83,7 +81,9 @@ urlpatterns = [
     #path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),
     path('login/', views.LoginView.as_view(), name="login"),
-    path('logout/', views.LogoutView.as_view(), name="logout")
+    path('logout/', views.LogoutView.as_view(), name="logout"),
+    path('mentee_signup/', views.mentee_signup),
+    path('mentor_signup/', views.mentor_signup)
 ]
 
 urlpatterns += router.urls
