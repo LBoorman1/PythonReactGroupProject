@@ -73,10 +73,10 @@ class PotentialMentorsView(viewsets.GenericViewSet):
     #serializer_class = UserSerializer(queryset, many=True)
 
 
-class BusinessAreaChangeRequestView(mixins.CreateModelMixin,
-                                    viewsets.GenericViewSet):
+class BusinessAreaChangeRequestView(viewsets.GenericViewSet,
+                                  mixins.CreateModelMixin):
     queryset = BusinessAreaChangeRequest.objects.all()
-    serializer_class = BusinessAreaChangeRequestSerializer(queryset, many=True)
+    serializer_class = BusinessAreaChangeRequestSerializer
 
 
 class RegisterView(viewsets.ModelViewSet):
@@ -702,10 +702,9 @@ def check_off_business_area_change_request(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Get user objects along with business area change requests
-
-
 class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
     queryset = BusinessAreaChangeRequest.objects.filter(checked=False)
+    serializer_class = BusinessAreaChangeRequestSerializer
 
     def list(self, request):
         business_area_requests = BusinessAreaChangeRequest.objects.filter(
@@ -713,10 +712,18 @@ class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
         serializer = BusinessAreaChangeRequestProfileSerializer(
             business_area_requests, many=True)
         return Response(serializer.data)
+    
+    def create(self, request):
+        profile = User.objects.get(pk=request.data.get('user_id')).profile
+        new_business_area = BusinessArea.objects.get(pk=request.data.get('new_business_area_id'))
+        business_area_change_request = BusinessAreaChangeRequest.objects.create(
+            profile=profile,
+            checked=request.data.get('checked'),
+            new_business_area=new_business_area
+        )
+        return Response(request.data)
 
 # Get user objects along with become mentor requests
-
-
 class BecomeMentorUserView(viewsets.GenericViewSet):
     queryset = BecomeMentor.objects.filter(checked=False)
 
@@ -726,8 +733,7 @@ class BecomeMentorUserView(viewsets.GenericViewSet):
             become_mentor_requests, many=True)
         return Response(serializer.data)
 
-# Get user objects along with mentor requests for a specific mentor !!!!
-
+# Get user objects along with mentor requests for a specific mentor 
 class MentorRequestUserView(viewsets.GenericViewSet,
                             mixins.CreateModelMixin,
                             mixins.DestroyModelMixin):
