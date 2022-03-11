@@ -20,10 +20,12 @@ const Signin = () => {
             username: username,
             password: password
         };
+        console.log(userData);
         axios
         .post("http://localhost:8000/login/", userData)
         .then(response => {
             const { user, token } = response.data;
+            console.log(user,token);
             setAxiosAuthToken(token);
             setToken(token);
             setCurrentUser(user);
