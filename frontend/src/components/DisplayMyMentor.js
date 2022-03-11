@@ -4,6 +4,7 @@ import Card from 'reactstrap';
 import RequestMentor from './RequestMentor';
 import boolToStr from "./BoolToStringNice";
 import axios from "axios";
+import endRelationship from "./EndRelationship";
 
 const DisplayMyMentor = () => {
     const [mentorDetails, setMentorDetails] = useState([]);
@@ -13,7 +14,7 @@ const DisplayMyMentor = () => {
 
     // user ID 4 user with mentor example
     // user ID 11 user without mentor example
-    const userId = 11;
+    const userId = 4;
     let content;
 
     const requestMentor = async (menteeId, mentorId) => {
@@ -69,49 +70,35 @@ const DisplayMyMentor = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchMentorDetails = async () => {
-            try {
-                const response = await axios({
-                    method: "GET",
-                    url: `http://localhost:8000/menteementor/?user_id=${userId}`,
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                if (Object.keys(response.data).length !== 0) {
-                    setMentorDetails([response.data]);
-                } else {
-                    fetchUserMentorRequests();
+    const fetchMentorDetails = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `http://localhost:8000/menteementor/?user_id=${userId}`,
+                headers: {
+                    "Content-Type": "application/json"
                 }
-            } catch (error) {
-                console.log(error);
+            });
+            if (Object.keys(response.data).length !== 0) {
+                setMentorDetails([response.data]);
+            } else {
+                fetchUserMentorRequests();
             }
-        };
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
         fetchMentorDetails();
     }, []);
 
-    const renderMentorDetails = mentorData => {
-        return (
-            <div className="display_my_mentor sec__one">
-                {mentorData.map(mentor => (
-                    <UserCard
-                        id={mentor.user.id}
-                        firstName={mentor.user.first_name}
-                        lastName={mentor.user.last_name}
-                        email={mentor.user.email}
-                        businessArea={mentor.business_area.name}
-                        active={boolToStr(mentor.user.is_active)}
-                        admin={boolToStr(mentor.is_admin)}
-                        mentee={boolToStr(mentor.is_mentee)}
-                        mentor={boolToStr(mentor.is_mentor)}
-                        topicsOfInterest={mentor.topics_of_interest.map(topic => topic.skill.name)}
-                        topicsOfExpertise={mentor.topics_of_expertise.map(topic => topic.skill.name)}
-
-                    />
-                ))}
-            </div>
-        );
+    const handleEndRelationship = relationshipId => {
+        endRelationship(relationshipId)
+            .then(res => {
+                setMentorDetails([]);
+                fetchMentorDetails();
+            });
     }
 
     if (mentorDetails.length == 0 && !userHasRequest) {
@@ -146,8 +133,25 @@ const DisplayMyMentor = () => {
         )
     } else {
         content = (
-            <div>
-                {renderMentorDetails(mentorDetails)}
+            <div className="display_my_mentor sec__one">
+                {mentorDetails.map(mentor => (
+                    <UserCard
+                        id={mentor.user.id}
+                        firstName={mentor.user.first_name}
+                        lastName={mentor.user.last_name}
+                        email={mentor.user.email}
+                        businessArea={mentor.business_area.name}
+                        active={boolToStr(mentor.user.is_active)}
+                        admin={boolToStr(mentor.is_admin)}
+                        mentee={boolToStr(mentor.is_mentee)}
+                        mentor={boolToStr(mentor.is_mentor)}
+                        topicsOfInterest={mentor.topics_of_interest.map(topic => topic.skill.name)}
+                        topicsOfExpertise={mentor.topics_of_expertise.map(topic => topic.skill.name)}
+                        type="mentoringRelationship"
+                        relationshipId={mentor.relationship}
+                        onEndRel={handleEndRelationship}
+                    />
+                ))}
             </div>
         )
     }

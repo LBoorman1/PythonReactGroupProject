@@ -1,38 +1,22 @@
 import React from 'react';
-import {Card,Button} from 'reactstrap';
+import { Card, CardBody, Button, Form } from 'reactstrap';
 
 
-const RadioButtons = (props) => {
-    const changeRadio   = () => {
-
-
-        {/*Request this business department*/}
-
-    }
+const RadioButtons = props => {
     return (
         <div className="Business_area_buttons">
-            <Card>
-            <h3> Request business area: </h3>
-                <br></br>
-
-                <p>Please click the radio button to request joining the appropriate business area:</p>
-
-                <div>
-                {props.array.map(item => ( 
+            <Form onSubmit={props.onRequest}>
+                {props.businessAreas.map(businessArea => (
                     <div>
-                     
-                     <input id="buttons"  type="radio" /> 
-                       {item}
-                     </div>
-                 ))}
-
-                 <Button onClick={changeRadio}>Submit </Button>
-                 </div>
-                 </Card>
-            
-            </div>
-            
-
+                        <input name="businessArea" value={businessArea.id} id="buttons" type="radio" />
+                        &emsp;{businessArea.name}
+                    </div>
+                ))}
+                <br />
+                <Button color="primary">Submit </Button>
+            </Form>
+        </div>
     )
 }
-export default RadioButtons
+
+export default RadioButtons;
