@@ -5,6 +5,8 @@ import axios from "axios";
 function MeetingMaker() {
   const [openModal, setOpenModal] = useState(false);
   const [meetingData, setMeetingData] = useState([]);
+  const user_data = JSON.parse(localStorage.getItem("user"));
+  const userID = user_data.user.id;
 
   //state for sending post request to backend
   const [meetingID, setMeetingID] = useState([]);
@@ -17,7 +19,7 @@ function MeetingMaker() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetings/?userID=5", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: "http://localhost:8000/meetingView/?userID=" + userID, //replace userID = 4 with userID=${userID} whenever we get the login sorted
         });
         setMeetingData(response);
       } catch (error) {
@@ -67,7 +69,7 @@ function MeetingMaker() {
         url: "http://localhost:8000/meetingFeedbackView/",
         data: {
           feedback: feedback,
-          userID: 1,
+          userID: user_data.user.id,
           meetingID: meetingID,
           rating: rating, //will be replaced with ${userID}
         },
@@ -127,6 +129,7 @@ function MeetingMaker() {
             onClick={(e) => {
               e.preventDefault();
               meetingFeedback();
+              setFeedback("");
               setOpenModal(false);
             }}
           >

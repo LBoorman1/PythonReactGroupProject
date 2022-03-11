@@ -35,7 +35,7 @@ router.register(r'possiblementors', views.PotentialMentorsView, 'possiblementors
 #router.register(r'meetingRequests', views.meetingRequestsView, 'meetingRequests')
 #router.register(r'meetingView', views.meetingView, 'meeting')
 #router.register(r'addGroupSession', views.addGroupSessionView, 'addGroupSession')
-#router.register(r'showGroupMeetings', views.showGroupMeetingsView, 'showGroupMeetings')
+#router.register(r'groupMeetingsView', views.showGroupMeetingsView, 'groupMeetingsView')
 router.register(r'addExpertise', views.addExpertiseView, 'addExpertise')
 router.register(r'removeExpertise', views.removeExpertiseView, 'removeExpertise') 
 router.register(r'freehours', views.FreeHoursView, 'freehours')
@@ -48,7 +48,7 @@ router.register(r'POATargetCreate', views.POATargetCreateView, 'POATargetCreate'
 router.register(r'POATargetUpdate', views.POATargetUpdateView, 'POATargetUpdate')
 router.register(r'menteeOptions', views.menteeOptionsView, 'menteeOptions')
 router.register(r'showSkillInterest', views.showSkillInterestView, 'showSkillInterest')
-router.register(r'groupMeetings', views.groupMeetingsView, 'groupMeetings')
+router.register(r'groupMeetingsView', views.groupMeetingsView, 'groupMeetingsView')
 router.register(r'showSystemFeedback', views.showSystemFeedbackView, 'showSystemFeedback')
 router.register(r'addSystemFeedback', views.addSystemFeedbackView, 'addSystemFeedback')
 router.register(r'businessareachangerequests', views.BusinessAreaChangeRequestUserView, 'businessareachangerequests')
@@ -58,7 +58,8 @@ router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
 router.register(r'showBusinessArea', views.showBusinessAreaView, 'showBusinessArea')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
-router.register(r'meetings', views.MeetingView, 'meetings') 
+router.register(r'meetings', views.MeetingView, 'meetings')
+router.register(r'menteeAttendingView', views.menteeAttendingView, 'menteeAttendingView') 
 
 # Here we must also add the non-class based views
 urlpatterns = [

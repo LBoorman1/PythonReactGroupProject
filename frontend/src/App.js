@@ -31,6 +31,7 @@ import CalendarD from './components/CalendarD';
 import MentorRequestRespond from './components/MentorRequestRespond';
 import Home from './components/Home';
 import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
+import JoinGroupMeeting from './components/JoinGroupMeeting';
 
 let state = {currentPath:window.location.pathname};
 
@@ -50,7 +51,7 @@ function App() {
       || state.currentPath=="/ViewAllApplicationFeedback"
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback"
-      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/Calendar") && <Navbarmenu />}
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/Calendar" || state.currentPath=="/JoinGroupMeeting") && <Navbarmenu />}
       </div>
         
         <Switch>
@@ -77,6 +78,7 @@ function App() {
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
           <Route path="/Calendar" component={CalendarD}/>
+          <Route path="/JoinGroupMeeting" component={JoinGroupMeeting}/>
           <Route path="/MentorRequestRespond" component={MentorRequestRespond}/>
         </Switch>
         

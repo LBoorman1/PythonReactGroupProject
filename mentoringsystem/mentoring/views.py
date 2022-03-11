@@ -15,8 +15,13 @@ import operator
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
 import profile
+import operator
+from django.db.models import Q
+from django.db.models.functions import Concat
+from django.db.models import Value
 
-from mentoring.models import Profile
+from django.contrib.auth.models import User
+from mentoring.models import Profile 
 from mentoring.models import ApplicationFeedback
 from mentoring.models import Skill
 from mentoring.models import MentorSkill
@@ -205,6 +210,40 @@ class FreeHoursView(viewsets.GenericViewSet):
         serializer = CalendarUserSerializer(free_hours, many=True)
         return Response(serializer.data)
 
+#make function for create and show
+class meetingView(viewsets.ModelViewSet):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+
+    def list(self, request, *args, **kwargs):
+        userID = request.query_params.get('userID', None)
+        if userID is not None:
+            #need to write the query here
+            profile = Profile.objects.get(user = userID)
+            menteeAttending = MenteeAttending.objects.filter(mentee = profile)
+            relationships = list(menteeAttending.values_list('relationship', flat=True))
+            
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query)
+
+            serializedData = MeetingSerializer(result, many=True)
+
+            return Response(serializedData.data)
+        else:
+            return Response("no check")
+
+    # class meetingView2(viewsets.ModelViewSet):
+    #     template_name = 'calendarView.html'
+    #     serializer_class = MeetingSerializer
+
+    #     def get_context_data(self,**kwargs):
+    #         context = super(meetingView,self).get_context_data(**kwargs)
+    #         context['eventList'] = Event.objects.all()
+    #         return context
+
+#cancel meeting view skipped
+
+#end mentoring relationship skipped
 
 # might not need function for create, remove and show
 class interestsView(viewsets.ModelViewSet):
@@ -238,7 +277,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk=request.data.get('userID'))
+        profile = Profile.objects.get(user = request.data.get('userID'))
         feedback = request.data.get('feedback')
         if profile:
             # add the new object to the database
@@ -252,8 +291,8 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            # need to write the query here
-            profile = Profile.objects.get(pk=userID)
+            #need to write the query here
+            profile = Profile.objects.get(user = userID)
             appFeedback = ApplicationFeedback.objects.filter(user=profile)
 
             serializedData = ApplicationFeedbackSerializer(
@@ -261,7 +300,27 @@ class applicationFeedbackView(viewsets.ModelViewSet):
 
             return Response(serializedData.data)
         else:
-            return Response("no check")
+            #return all application feedback
+            appFeedback = ApplicationFeedback.objects.all().order_by('user')
+            serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
+            return Response(serializedData.data)
+ 
+    ""
+
+#make function for create and show
+class businessAreaView(viewsets.ModelViewSet):
+    query_set = BusinessArea
+    serializer_class = BusinessAreaSerializer
+
+    def get_queryset(self):
+        return BusinessArea.objects.all()
+        
+#make function for create and show
+class businessAreaChangeRequestsView(viewsets.ModelViewSet):
+    #edit db view
+    ""
+    
+#remove user skipped
 
 # make function for create and show
 
@@ -272,11 +331,10 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     queryset = MeetingFeedback.objects.all()
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk=request.data.get('userID'))
-
-        meeting = Meeting.objects.get(pk=request.data.get('meetingID'))
-        meetingTitle = Meeting.objects.get(
-            pk=request.data.get('meetingID')).title
+        profile = Profile.objects.get(user = request.data.get('userID'))
+        
+        meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
+        meetingTitle = Meeting.objects.get(pk = request.data.get('meetingID')).title
         feedback = request.data.get('feedback')
         rating = request.data.get('rating')
 
@@ -293,8 +351,8 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            # need to write the query here
-            profile = Profile.objects.get(pk=userID)
+            #need to write the query here
+            profile = Profile.objects.get(user = userID)
             meetingFeedback = MeetingFeedback.objects.filter(user=profile)
             serializedData = MeetingFeedbackSerializer(
                 meetingFeedback, many=True)
@@ -479,12 +537,44 @@ class showSkillInterestView(viewsets.ModelViewSet):
 
 
 class groupMeetingsView(viewsets.ModelViewSet):
-    # return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
+    def create(self, request, *args, **kwargs):
+        mentor = Profile.objects.get(user = request.data.get('userID'))
+        if mentor:
+            #could check if the user is a mentor
+            newRelationship = Relationship.objects.create(mentor=mentor, group=True, active_status='A', advertising_for_group=True)
+            newRelationship.save()
+            newMeeting = Meeting(relationship=newRelationship, date_time=request.data.get('dateStart'), attendance_status='GA', title=request.data.get('meetingTitle'), notes=request.data.get('meetingNotes'))
+            newMeeting.save()
+            return Response("check")
+    
+    def list(self, request, *args, **kwargs):
+        
+            #need to write the query here
+            #relationships = list(Relationship.objects.filter(group=True).values_list('pk', flat=True))
+            relationships = Relationship.objects.filter(group=True)
+            query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
+            result = Meeting.objects.filter(query).order_by('relationship')
+
+            serializedData = MeetingSerializer(result, many=True)
+            return Response(serializedData.data)
+
 
 # cancel attendance skipped
 
+
+class menteeAttendingView(viewsets.ModelViewSet):
+    def create(self, request, *args, **kwargs):
+        userID = request.data.get('userID')
+        if userID:
+            profile = Profile.objects.get(user=userID)    
+            relationshipID = request.data.get('relationship')
+            relationship = Relationship.objects.get(pk = relationshipID)
+            if MenteeAttending.objects.filter(mentee=profile, relationship=relationship).exists():
+                return Response("exists already")
+            else:
+                newMenteeAttending = MenteeAttending.objects.create(mentee=profile, relationship=relationship)
+                newMenteeAttending.save()    
+                return Response("added to db")
 
 class showSystemFeedbackView(viewsets.ModelViewSet):
     pass

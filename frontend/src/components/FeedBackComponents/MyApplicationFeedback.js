@@ -6,7 +6,8 @@ import axios from 'axios';
 
 
 function MyApplicationFeedback() {
-  
+    const user_data = JSON.parse(localStorage.getItem("user"));
+    const userID = user_data.user.id;
     const [applicationFeedback, setApplicationFeedback] = useState([]);
 
     useEffect(() => {
@@ -14,7 +15,7 @@ function MyApplicationFeedback() {
             try {
               const { data: response } = await axios({
                 method: "GET",
-                url: "http://localhost:8000/applicationFeedbackView/?userID=1", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+                url: "http://localhost:8000/applicationFeedbackView/?userID=" + userID, 
               });
               setApplicationFeedback(response);
             } catch (error) {
