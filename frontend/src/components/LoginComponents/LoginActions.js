@@ -19,6 +19,7 @@ export const setCurrentUser = (user) => {
 };
 
 export const unsetCurrentUser = () =>  {
+  alert('test');
   setAxiosAuthToken("");
-  localStorage.clear();
+  window.localStorage.clear();
 };

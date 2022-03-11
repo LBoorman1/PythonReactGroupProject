@@ -1,4 +1,3 @@
-import SelectThisTime from './SelectThisTime';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Form, Label, Alert, Input, Button } from 'reactstrap';
 import axios from 'axios';
@@ -9,19 +8,13 @@ const BookMentoringMeeting = () => {
     const [relationship, setRelationship] = useState(false);
     const [freeHourData, setFreeHourData] = useState([]);
     const [alertVisible, setAlertVisible] = useState(false);
-
+    const [userDetails, setUserDetails] = useState({});
+    
     const userId = 4;
     let content;
-
+    
     const createMeeting = async (e) => {
         e.preventDefault();
-        console.log("test");
-        console.log(e.target.meetingTime.value);
-        console.log(e.target.meetingTitle.value);
-        console.log(e.target.meetingNotes.value);
-        console.log(typeof(relationship[0].id));
-        console.log(typeof(e.target.meetingTime.value));
-        console.log(Date.parse(e.target.meetingTime.value));
         try {
             const response = await axios({
                 method: "POST",
@@ -37,7 +30,6 @@ const BookMentoringMeeting = () => {
                     "Content-Type": "application/json"
                 }
             })
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -48,7 +40,7 @@ const BookMentoringMeeting = () => {
             try {
                 const response = await axios({
                     method: "GET",
-                    url: `http://localhost:8000/getmenteerelationship/?user_id=${userId}`,
+                    url: `http://localhost:8000/menteerelationship/?user_id=${userId}`,
                     headers: {
                         "Content-Type": "application/json"
                     }
@@ -66,7 +58,6 @@ const BookMentoringMeeting = () => {
             fetchFreeHours(relationship[0].mentor)
                 .then(data => setFreeHourData(data));
         }
-        console.log(freeHourData);
     }, [relationship]);
 
     if (relationship.length == 0) {
@@ -116,11 +107,11 @@ const BookMentoringMeeting = () => {
     return (
         <div className="book_mentoring_meeting sec__one">
             <h1> Book Mentoring Meeting </h1>
-            <br></br>
+            <br />
 
             {content}
         </div>
     );
 }
 
-export default BookMentoringMeeting
+export default BookMentoringMeeting;

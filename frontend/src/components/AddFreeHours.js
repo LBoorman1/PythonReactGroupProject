@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Card, Button } from 'reactstrap';
+import { Card, CardBody, Button } from 'reactstrap';
 import DateTimePicker from 'react-datetime-picker';
 import DisplayFreeHours from "./DisplayFreeHours";
 //import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -18,25 +18,25 @@ const AddFreeHours = () => {
 
     useEffect(() => {
         fetchFreeHours(userId)
-          .then(data => setFreeHourData(data));
+            .then(data => setFreeHourData(data));
     }, []);
 
-    const addToFreeHours = async (e) => { 
+    const addToFreeHours = async (e) => {
         e.preventDefault();
         try {
             const response = await axios({
-              method: "POST",
-              url: "http://localhost:8000/freehours/",
-              data: {
-                user_id: userId,
-                available_hour: dateStart
-              },
-              headers: {
-                "Content-Type": "application/json"
-              }
+                method: "POST",
+                url: "http://localhost:8000/freehours/",
+                data: {
+                    user_id: userId,
+                    available_hour: dateStart
+                },
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
             console.log(dateStart);
-            setFreeHourData([...freeHourData, {"available_hour": dateStart}]);
+            setFreeHourData([...freeHourData, { "available_hour": dateStart }]);
             console.log(freeHourData);
         } catch (error) {
             console.log(error);
@@ -48,43 +48,41 @@ const AddFreeHours = () => {
             <h1>Add Free Hours </h1>
             <br />
             <Card>
-                <form onSubmit={addToFreeHours}>
-                    &emsp;
-                    <h2>Select Hour:</h2>
-                    {/* Time must be selected by the hour */}
-                    <br />
-                    &emsp;
-                    <DateTimePicker onChange={(d) => setDateStart(d)}
-                        value={dateStart}
-                        timeFormat="HH"
-                        maxDetail="hour"
-                        disableClock
-                        dateFormat="MMMM Do YYYY, h a"
-                    />
-                    <br />
-                    <br />
+                <CardBody>
+                    <form onSubmit={addToFreeHours}>
+                        Select Hour: &emsp;
+                        {/* Time must be selected by the hour */}
+                        <DateTimePicker onChange={(d) => setDateStart(d)}
+                            value={dateStart}
+                            timeFormat="HH"
+                            maxDetail="hour"
+                            disableClock
+                            dateFormat="MMMM Do YYYY, h a"
+                        />
+                        <br />
+                        <br />
 
-                    <h2>New Free Hour:</h2>
+                        New Free Hour:
 
-                    <DisplayFreeHours startTime={dateStart.toString()} />
+                        <DisplayFreeHours startTime={dateStart.toString()} />
 
-                    &emsp;
-
-                    <Button color="primary">Submit</Button>
-                    <br />
-                    <br />
-                </form>
+                        <Button color="primary">Submit</Button>
+                        <br />
+                        <br />
+                    </form>
+                </CardBody>
             </Card>
 
             <br />
             <Card>
-                <br />
-                <h1>My Free Hours:</h1>
-                {freeHourData.map(
-                    freeHour => (<DisplayFreeHours startTime={freeHour.available_hour.toString()} />)
-                )}
+                <CardBody>
+                    <h3>My Free Hours:</h3>
+                    {freeHourData.map(
+                        freeHour => (<DisplayFreeHours startTime={freeHour.available_hour.toString()} />)
+                    )}
+                </CardBody>
             </Card>
-        </div>
+        </div >
     )
 }
 

@@ -21,7 +21,7 @@ const Signin = () => {
             password: password
         };
         axios
-        .post("http://127.0.0.1:8000/login/", userData)
+        .post("http://localhost:8000/login/", userData)
         .then(response => {
             const { user, token } = response.data;
             setAxiosAuthToken(token);
