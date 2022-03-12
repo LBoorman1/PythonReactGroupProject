@@ -8,7 +8,8 @@ import axios from "axios";
 const MentorRequestRespond = () => {
     const [requestData, setRequestData] = useState([]);
 
-    const userId = 5;
+    const user = JSON.parse(localStorage.getItem('user'))
+    const userId = user.user.id;
 
     useEffect(() => {
         const fetchMentorRequests = async () => {
@@ -20,7 +21,6 @@ const MentorRequestRespond = () => {
                         "Content-Type": "application/json"
                     }
                 });
-                console.log(response.data);
                 setRequestData(response.data);
             } catch (error) {
                 console.log(error);

@@ -60,11 +60,12 @@ const Navbarmenu = () => {
         axios
             .post("http://localhost:8000/logout/", user_data)
             .then(response => {
+                console.log(response);
                 unsetCurrentUser();
+                if (localStorage.getItem('token') == null) {
+                    return <Redirect to='/Signin' push />
+                }
             });
-        if (localStorage.getItem('token') == null) {
-            return <Redirect to='/Signin' push />
-        }
     };
 
     return (

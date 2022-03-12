@@ -11,13 +11,16 @@ import axios from 'axios';
 //import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
+
     constructor(props) {
         super(props);
-        this.state = { meetings: [] }
+        const user = JSON.parse(localStorage.getItem('user'));
+        //const userId = user.user.id;
+        this.state = { meetings: [], user: user }
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8000/meetings/?userID=4')
+        axios.get(`http://localhost:8000/meetings/?userID=${this.state.user.user.id}`)
             .then(res => {
                 this.setState({ meetings: res.data });
             })
@@ -34,12 +37,12 @@ export default class CalendarD extends React.Component {
                     firstDay='1'
                     events={
                         this.state.meetings
-                            .map(meeting =>(
+                            .map(meeting => (
                                 {
                                     title: meeting.title,
-                                    start: meeting.date_time 
+                                    start: meeting.date_time
                                 })
-                                )
+                            )
                     }
                     height='100%'
                     contentHeight='auto'

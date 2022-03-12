@@ -12,7 +12,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib import admin, auth
 from django.urls import re_path, path, include
 from rest_framework import routers
 from mentoring import views
@@ -77,11 +77,13 @@ urlpatterns = [
     path('addmentoringrelationship/', views.add_mentoring_relationship), 
     path('endmentoringrelationship/', views.end_mentoring_relationship),
     path('mentorrequestsbymentee/', views.get_mentee_mentor_requests), 
+    path('freehoursbymentor/', views.get_free_hours_by_mentor),
     re_path('searchuser/', views.search_user),
     #path('account/',include('users.urls')),
     path('account/', include('django.contrib.auth.urls')),
     path('login/', views.LoginView.as_view(), name="login"),
     path('logout/', views.LogoutView.as_view(), name="logout"),
+    #url('logout/', 'django.contrib.auth.views.logout'),
     path('mentee_signup/', views.mentee_signup),
     path('mentor_signup/', views.mentor_signup)
 ]

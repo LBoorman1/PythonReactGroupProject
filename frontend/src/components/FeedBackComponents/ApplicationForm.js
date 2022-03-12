@@ -8,6 +8,9 @@ function ApplicationForm(props) {
     feedback: '',
   });
 
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
+
   const handleChange = (event) => {
     setformValue({
       ...formValue,
@@ -24,7 +27,7 @@ function ApplicationForm(props) {
         url: url,
         data: {
           feedback: formValue.feedback,
-          userID: 1,
+          userID: userId,
         },
         headers: {
           'Content-Type': 'application/json',

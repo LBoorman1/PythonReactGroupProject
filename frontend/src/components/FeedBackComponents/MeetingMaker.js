@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from "axios";
+
 function MeetingMaker() {
   const [openModal, setOpenModal] = useState(false);
   const [meetingData, setMeetingData] = useState([]);
@@ -11,13 +12,16 @@ function MeetingMaker() {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(1);
 
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
+
   //get the meetings every time the url changes
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetings/?userID=5", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: `http://localhost:8000/meetings/?userID=${userId}`, 
         });
         setMeetingData(response);
       } catch (error) {
@@ -67,7 +71,7 @@ function MeetingMaker() {
         url: "http://localhost:8000/meetingFeedbackView/",
         data: {
           feedback: feedback,
-          userID: 1,
+          userID: userId,
           meetingID: meetingID,
           rating: rating, //will be replaced with ${userID}
         },

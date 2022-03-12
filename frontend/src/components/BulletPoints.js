@@ -9,7 +9,7 @@ const BulletPoints = props => {
     );
     return (
         <div>
-        {listItems}
+            {listItems}
         </div>
     )
 }

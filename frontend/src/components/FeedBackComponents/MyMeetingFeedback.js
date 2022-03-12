@@ -7,13 +7,16 @@ import axios from 'axios';
 function MyMeetingFeedback() {
   
   const [meetingFeedback, setMeetingFeedback] = useState([]);
+  
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
 
   useEffect(() => {
     const fetchMeetingFeedback = async () => {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetingFeedbackView/?userID=1", //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: `http://localhost:8000/meetingFeedbackView/?userID=${userId}`, 
         });
         setMeetingFeedback(response);
       } catch (error) {

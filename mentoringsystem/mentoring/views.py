@@ -109,10 +109,13 @@ class LoginView(generics.GenericAPIView):
         })
 
 class LogoutView(APIView):
-
     def post(self, request, *args, **kwargs):
+        #logout(request)
         Token.objects.filter(user=request.data["user"]["id"]).delete()
+        #print("test")
         logout(request)
+        print("test")
+        #return Response(request.data)
         return Response("Logout successful")
 
 
@@ -205,6 +208,14 @@ class FreeHoursView(viewsets.GenericViewSet):
         serializer = CalendarUserSerializer(free_hours, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def get_free_hours_by_mentor(request):
+    profile = Profile.objects.get(pk=request.query_params.get('profile_id'))
+    #profile = user.profile
+    free_hours = CalendarUser.objects.filter(
+        user=profile).order_by('-available_hour')
+    serializer = CalendarUserSerializer(free_hours, many=True)
+    return Response(serializer.data)
 
 # might not need function for create, remove and show
 class interestsView(viewsets.ModelViewSet):
@@ -238,7 +249,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk=request.data.get('userID'))
+        profile = User.objects.get(pk=request.data.get('userID')).profile
         feedback = request.data.get('feedback')
         if profile:
             # add the new object to the database
@@ -253,7 +264,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
         userID = request.query_params.get('userID', None)
         if userID is not None:
             # need to write the query here
-            profile = Profile.objects.get(pk=userID)
+            profile = User.objects.get(pk=userID).profile
             appFeedback = ApplicationFeedback.objects.filter(user=profile)
 
             serializedData = ApplicationFeedbackSerializer(
@@ -272,7 +283,7 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     queryset = MeetingFeedback.objects.all()
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(pk=request.data.get('userID'))
+        profile = User.objects.get(pk=request.data.get('userID')).profile
 
         meeting = Meeting.objects.get(pk=request.data.get('meetingID'))
         meetingTitle = Meeting.objects.get(
@@ -293,8 +304,7 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            # need to write the query here
-            profile = Profile.objects.get(pk=userID)
+            profile = User.objects.get(pk=userID).profile
             meetingFeedback = MeetingFeedback.objects.filter(user=profile)
             serializedData = MeetingFeedbackSerializer(
                 meetingFeedback, many=True)
@@ -553,9 +563,8 @@ def get_user_details(request):
     serializer = UserProfileSerializer(user_details)
     return Response(serializer.data)
 
+
 # Get a mentor's mentees as well as each relationship ID
-
-
 @api_view(['GET'])
 def get_mentor_mentees(request):
     mentee_details = []
@@ -571,9 +580,8 @@ def get_mentor_mentees(request):
             mentee_details.append(mentee_data)
     return Response(mentee_details)
 
+
 # Get a mentee's mentor as well as the relationship ID
-
-
 @api_view(['GET'])
 def get_mentee_mentor(request):
     user = User.objects.get(pk=request.query_params.get('user_id'))
@@ -801,21 +809,42 @@ class MeetingView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            # need to write the query here
-            profile = Profile.objects.get(pk=userID)
+            profile = User.objects.get(pk=userID).profile
+            #profile = Profile.objects.get(pk=userID)
             menteeAttending = MenteeAttending.objects.filter(mentee=profile)
             relationships = list(
                 menteeAttending.values_list('relationship', flat=True))
 
-            query = reduce(operator.or_, (Q(relationship=x)
-                           for x in relationships))
+            try:
+                query = reduce(operator.or_, (Q(relationship=x)
+                    for x in relationships))
+            except:
+                # No meetings found
+                return Response([])
+
             result = Meeting.objects.filter(query)
+
 
             serializedData = MeetingSerializer(result, many=True)
 
             return Response(serializedData.data)
         else:
             return Response("no check")
+    
+    def create(self, request):
+        #mentor = User.objects.get(pk=request.data.get('mentor')).profile
+        print(request.data.get('mentor'))
+        mentor = Profile.objects.get(pk=request.data.get('mentor_id'))
+        del request.data['mentor_id']
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            meeting = serializer.save()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Remove hour meeting is scheduled at from mentor's free hours
+        CalendarUser.objects.filter(available_hour=request.data.get('date_time'), user=mentor).delete()
+        return Response(request.data)
 
     # class meetingView2(viewsets.ModelViewSet):
         #template_name = 'calendarView.html'

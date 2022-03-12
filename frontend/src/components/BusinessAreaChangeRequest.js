@@ -43,7 +43,7 @@ const BusinessAreaChangeRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/setbusinessarea/" + userId + "/",
+                url: `http://localhost:8000/setbusinessarea/${userId}/`,
                 data: {
                     business_area: newBusinessAreaId
                 },
@@ -60,7 +60,7 @@ const BusinessAreaChangeRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/checkoffbusinessareachangerequest/" + requestId + "/",
+                url: `http://localhost:8000/checkoffbusinessareachangerequest/${requestId}/`,
                 headers: {
                     "Content-Type": "application/json"
                 }

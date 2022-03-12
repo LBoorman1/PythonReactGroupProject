@@ -8,9 +8,9 @@ import endRelationship from "./EndRelationship";
 const DisplayMyMentees = () => {
   const [menteeDetails, setMenteeDetails] = useState([]);
 
-  // user ID 3 user with mentees example
-  // user ID 2 user without mentees example
-  const userId = 3;
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
+
   let content;
 
   const fetchMenteeDetails = async () => {

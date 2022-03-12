@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Redirect} from 'react-router-dom';
 import UserCard from './UserCard';
 import Card from 'reactstrap';
 import RequestMentor from './RequestMentor';
@@ -14,7 +15,12 @@ const DisplayMyMentor = () => {
 
     // user ID 4 user with mentor example
     // user ID 11 user without mentor example
-    const userId = 4;
+
+    //user = localStorage.getItem('user');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.user.id;
+
+    //const userId = 44;
     let content;
 
     const requestMentor = async (menteeId, mentorId) => {

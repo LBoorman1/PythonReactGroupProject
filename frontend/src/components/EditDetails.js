@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import DisplayDetails from './DisplayDetails';
 import RadioButtons from './RadioButtons';
 import SkillButtons from './Skills';
 import { Card, CardBody, Button, Alert, Form, CustomInput } from 'reactstrap';
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas"
 import axios from "axios";
-//import DropDown from './DropDown';
 
 const EditDetails = props => {
-    const [item, setItem] = useState(null);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.user.id;
 
     const [businessAreaData, setBusinessAreaData] = useState([]);
     const [topicData, setTopicData] = useState([]);
-    const [isMentee, setIsMentee] = useState(false);
-    const [isMentor, setIsMentor] = useState(false);
+    // Temp until get user data works
+    const [isMentee, setIsMentee] = useState(user.is_mentee);
+    const [isMentor, setIsMentor] = useState(user.is_mentor);
     //const [selectedTopicsInterest, setSelectedTopicsInterest] = useState([]);
 
     const selectedTopicsInterest = [];
     const selectedTopicsExpertise = [];
 
     const [BAAlertVisible, setBAAlertVisible] = useState(false);
-
-    const userId = 46;
 
     // Map each topic to a checkbox for topics of interest and a checkbox for topics of expertise
     useEffect(() => {
@@ -138,7 +136,7 @@ const EditDetails = props => {
                             <Form onSubmit={becomeMentee}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
-                                    id={topic.name}
+                                    id={topic.name + "mentee"}
                                     label={topic.name}
                                     name={topic.name}
                                     value={topic.id}
@@ -158,7 +156,7 @@ const EditDetails = props => {
                             <Form onSubmit={becomeMentor}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
-                                    id={topic.name}
+                                    id={topic.name + "mentor"}
                                     label={topic.name}
                                     name={topic.name}
                                     value={topic.id}

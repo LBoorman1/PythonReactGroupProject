@@ -72,7 +72,7 @@ const EditBusinessAreasTopics = () => {
     try {
       const response = await axios({
         method: "DELETE",
-        url: "http://localhost:8000/businessareas/" + e.target.businessArea.value + "/",
+        url: `http://localhost:8000/businessareas/${e.target.businessArea.value}/`,
         headers: {
           "Content-Type": "application/json"
         }
@@ -109,7 +109,7 @@ const EditBusinessAreasTopics = () => {
     try {
       const response = await axios({
         method: "DELETE",
-        url: "http://localhost:8000/skills/" + e.target.topic.value + "/",
+        url: `http://localhost:8000/skills/${e.target.topic.value}/`,
         headers: {
           "Content-Type": "application/json"
         }
