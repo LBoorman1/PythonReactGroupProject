@@ -1,6 +1,3 @@
-import re
-from django.http import request
-from django.shortcuts import render
 from rest_framework import status, viewsets, mixins, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,7 +11,6 @@ from functools import reduce
 import operator
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import login, logout
-import profile
 import operator
 from django.db.models import Q
 from django.db.models.functions import Concat
@@ -40,16 +36,12 @@ from mentoring.models import POATarget
 
 from mentoring.serializers import UserSerializer
 from mentoring.serializers import ProfileSerializer
-from mentoring.serializers import RegisterUserSerializer
 from mentoring.serializers import RegisterProfileSerializer
 from mentoring.serializers import LoginSerializer
 from mentoring.serializers import ApplicationFeedbackSerializer
 from mentoring.serializers import SkillSerializer
-from mentoring.serializers import MentorSkillSerializer
-from mentoring.serializers import MenteeInterestSerializer
 from mentoring.serializers import MentorRequestSerializer
 from mentoring.serializers import RelationshipSerializer
-from mentoring.serializers import MenteeAttendingSerializer
 from mentoring.serializers import BecomeMentorSerializer
 from mentoring.serializers import BusinessAreaSerializer
 from mentoring.serializers import BusinessAreaChangeRequestSerializer
@@ -127,11 +119,6 @@ class LogoutView(APIView):
         Token.objects.filter(user=request.data["user"]["id"]).delete()
         logout(request)
         return Response("Logout successful")
-
-
-class showProfileView(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = ProfileSerializer(queryset, many=True)
 
 
 # Set up a user as a mentee
@@ -218,7 +205,7 @@ class FreeHoursView(viewsets.GenericViewSet):
         serializer = CalendarUserSerializer(free_hours, many=True)
         return Response(serializer.data)
 
-#make function for create and show
+
 class meetingView(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
@@ -240,23 +227,10 @@ class meetingView(viewsets.ModelViewSet):
         else:
             return Response("no check")
 
-    # class meetingView2(viewsets.ModelViewSet):
-    #     template_name = 'calendarView.html'
-    #     serializer_class = MeetingSerializer
-
-    #     def get_context_data(self,**kwargs):
-    #         context = super(meetingView,self).get_context_data(**kwargs)
-    #         context['eventList'] = Event.objects.all()
-    #         return context
-
-#cancel meeting view skipped
-
-#end mentoring relationship skipped
 
 @api_view(['GET'])
 def get_free_hours_by_mentor(request):
     profile = Profile.objects.get(pk=request.query_params.get('profile_id'))
-    #profile = user.profile
     free_hours = CalendarUser.objects.filter(
         user=profile).order_by('-available_hour')
     serializer = CalendarUserSerializer(free_hours, many=True)
@@ -296,26 +270,16 @@ class applicationFeedbackView(viewsets.ModelViewSet):
             serializedData = ApplicationFeedbackSerializer(appFeedback, many=True)
             return Response(serializedData.data)
  
-    ""
-
-#make function for create and show
+    
 class businessAreaView(viewsets.ModelViewSet):
     query_set = BusinessArea
     serializer_class = BusinessAreaSerializer
 
     def get_queryset(self):
         return BusinessArea.objects.all()
-        
-#make function for create and show
-class businessAreaChangeRequestsView(viewsets.ModelViewSet):
-    #edit db view
-    ""
-    
-#remove user skipped
 
 
 class meetingFeedbackView(viewsets.ModelViewSet):
-    # return view
     serializer_class = MeetingFeedbackSerializer
     queryset = MeetingFeedback.objects.all()
 
@@ -548,13 +512,6 @@ class menteeAttendingView(viewsets.ModelViewSet):
                 newMenteeAttending = MenteeAttending.objects.create(mentee=profile, relationship=relationship)
                 newMenteeAttending.save()    
                 return Response("added to db")
-
-class showSystemFeedbackView(viewsets.ModelViewSet):
-    pass
-
-
-class addSystemFeedbackView(viewsets.ModelViewSet):
-    pass
 
 
 class SkillView(mixins.CreateModelMixin,
