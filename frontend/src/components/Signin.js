@@ -5,12 +5,6 @@ import axios from "axios";
 import { setAxiosAuthToken, setToken, setCurrentUser, unsetCurrentUser } from "./LoginComponents/LoginActions.js";
 
 const Signin = props => {
-    //const history = useHistory();
-    //window.location.reload();
-    //useEffect(() => {
-    //window.location.reload();
-    //}, []);
-
     const [redirect, setRedirect] = useState(false);
 
     const [username, setUsername] = useState("");
@@ -22,12 +16,6 @@ const Signin = props => {
     const handle_password = e => {
         setPassword(e.target.value)
     }
-
-    //if (redirect) {
-    //console.log('test');
-    //props.history.push('/MyDetails');
-    //return <Redirect to='/MyDetails' />;
-    //}
 
     const handle_submit = e => {
         e.preventDefault();
@@ -50,11 +38,6 @@ const Signin = props => {
             .catch(error => {
                 unsetCurrentUser();
             });
-        if (localStorage.getItem('token') !== null) {
-            console.log('test');
-            //history.push('/MyDetails');
-            //return <Redirect to='/MyDetails' push />
-        }
     };
 
     return (
