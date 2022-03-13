@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import Select from "react-select";
 import { setAxiosAuthToken, setToken, setCurrentUser, unsetCurrentUser } from "./LoginComponents/LoginActions.js";
 
-const CreateAccount = () => {
+const CreateAccount = props => {
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -75,19 +75,21 @@ const CreateAccount = () => {
     axios
       .post("http://localhost:8000/register/", userData)
       .then(response => {
-        const { user, token } = response.data;
-        setAxiosAuthToken(token);
-        setToken(token);
-        setCurrentUser(user);
+        const { user } = response.data;
+        props.history.push('/Signin');
+        //setAxiosAuthToken(token);
+        //setToken(token);
+        //setCurrentUser(user);
       })
       .catch(error => {
-        unsetCurrentUser();
+        //unsetCurrentUser();
         err = true;
       });
     if (!err) {
       return <Redirect to='/MyDetails' push />
     }
   }
+
   return (
     <div className="create_account sec__one">
       <h1> Create Account </h1>
@@ -140,4 +142,4 @@ const CreateAccount = () => {
   )
 }
 
-export default CreateAccount;
+export default withRouter(CreateAccount);

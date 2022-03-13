@@ -38,7 +38,7 @@ const MyPOAMentor = () => {
 
     return (
         <div className="my_poa_mentor sec__one">
-            <h1>My Mentee's POAs</h1>
+            <h1>My Mentees' POAs</h1>
 
             {poas.map(poa => (
                 <Checkboxes

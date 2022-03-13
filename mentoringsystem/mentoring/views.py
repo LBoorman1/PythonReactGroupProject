@@ -69,8 +69,6 @@ class PotentialMentorsView(viewsets.GenericViewSet):
         potential_mentors = Profile.objects.filter(is_mentor=True)
         serializer = ProfileUserSerializer(potential_mentors, many=True)
         return Response(serializer.data)
-    #queryset = Profile.objects.select_related(User).filter(is_mentor=True)
-    #serializer_class = UserSerializer(queryset, many=True)
 
 
 class BusinessAreaChangeRequestView(viewsets.GenericViewSet,
@@ -88,10 +86,8 @@ class RegisterView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_profile = serializer.save()
-        # return Response({})
         return Response({
             "user": ProfileSerializer(user_profile).data,
-            # "token": Token.objects.create(user=user_profile.user).key
         })
 
 
@@ -112,26 +108,19 @@ class LoginView(generics.GenericAPIView):
 # Returns the current user logged in
 @api_view(['GET'])
 def get_current_user(request):
-    print(request.data.get('token'))
     try:
         token = Token.objects.get(key=request.query_params.get('token'))
     except:
         return Response({})
-    print(token.user)
     profile = token.user.profile
-    print(profile)
     serializer = ProfileSerializer(profile)
     return Response(serializer.data)
 
 
 class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
-        # logout(request)
         Token.objects.filter(user=request.data["user"]["id"]).delete()
-        # print("test")
         logout(request)
-        print("test")
-        # return Response(request.data)
         return Response("Logout successful")
 
 

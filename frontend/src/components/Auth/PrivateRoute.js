@@ -3,8 +3,6 @@ import axios from 'axios';
 import { Route, Redirect } from 'react-router-dom';
 import { setCurrentUser } from '../LoginComponents/LoginActions';
 
-//import { useEffect } from 'react/cjs/react.production.min';
-
 class PrivateRoute extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -14,7 +12,6 @@ class PrivateRoute extends React.Component {
             isAuthenticated: false
         };
 
-        // Your axios call here
         const response = axios.get(`http://localhost:8000/currentuser/?token=${localStorage.getItem('token')}`)
             .then(response => {
                 if (Object.keys(response.data).length !== 0) {
@@ -25,67 +22,30 @@ class PrivateRoute extends React.Component {
                 }
             });
 
-        /*// For success, update state like
-        this.setState(() => ({ isLoading: false, isAuthenticated: true }));
-
-        // For fail, update state like
-        this.setState(() => ({ isLoading: false, isLoggedIn: false }));*/
-
     }
 
     render() {
         if (this.state.isLoading) {
+            // Temporary while waiting for API call
             return <div>Loading...</div>;
         } else if (!this.state.isAuthenticated) {
-            console.log('test');
+            // Not logged in so redirect to sign in page
             return <Redirect to={{ pathname: '/Signin' }} />
         } else {
             const user = JSON.parse(localStorage.getItem('user'));
+            // Check if route is restricted by role
             if (this.props.roles) {
                 if (this.props.roles.indexOf('Admin') !== -1 && !user.is_admin
                     || this.props.roles.indexOf('Mentor') !== -1 && !user.is_mentor
                     || this.props.roles.indexOf('Mentee') !== -1 && !user.is_mentee) {
-                    // role not authorised so redirect to home page
-                    console.log('test');
+                    // Role not authorised so redirect to home page
                     return <Redirect to={{ pathname: '/MyDetails' }} />
                 }
             }
+            // Authorised so return component
             const Component = this.props.component
             return <Component {...this.props} />
         }
-
-        /*const user = JSON.parse(localStorage.getItem('user'));
-
-        if (!isAuthenticated) {
-            // not logged in so redirect to sign in page
-            return <Redirect to={{ pathname: '/Signin' }} />
-        }
-        if (!user) {
-            // not logged in so redirect to sign in page
-            return <Redirect to={{ pathname: '/Signin' }} />
-        }
-
-        console.log(roles);
-
-        // check if route is restricted by role
-        if (roles) {
-            if (roles.indexOf('Admin') !== -1 && !user.is_admin
-                || roles.indexOf('Mentor') !== -1 && !user.is_mentor
-                || roles.indexOf('Mentee') !== -1 && !user.is_mentee) {
-                // role not authorised so redirect to home page
-                console.log('test');
-                return <Redirect to={{ pathname: '/MyDetails' }} />
-            }
-        }
-
-        // authorised so return component
-        console.log('test 2');
-        return <Component {...props} />
-        return this.state.isLoading ? null :
-            this.state.isLoggedIn ?
-            <Route path={this.props.path} component={this.props.component} exact={this.props.exact}/> :
-            <Redirect to={{ pathname: '/login', state: { from: this.props.location } }} />*/
-
     }
 
 }

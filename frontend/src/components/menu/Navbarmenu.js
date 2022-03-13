@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { NavLink, Link, Redirect } from 'react-router-dom';
+import { NavLink, Link, Redirect, withRouter } from 'react-router-dom';
 import { FiAlignRight, FiXCircle, FiChevronDown } from "react-icons/fi";
 import axios from "axios";
 import { unsetCurrentUser } from "../LoginComponents/LoginActions.js";
 
-const Navbarmenu = () => {
+const Navbarmenu = props => {
     const [isMenu, setisMenu] = useState(false);
     const [isResponsiveclose, setResponsiveclose] = useState(false);
     const toggleClass = () => {
@@ -60,14 +60,17 @@ const Navbarmenu = () => {
     const handle_logout = e => {
         e.preventDefault();
         const user_data = JSON.parse(localStorage.getItem("user"));
+        unsetCurrentUser();
         axios
             .post("http://localhost:8000/logout/", user_data)
             .then(response => {
                 console.log(response);
-                unsetCurrentUser();
-                if (localStorage.getItem('token') == null) {
-                    return <Redirect to='/Signin' push />
-                }
+                props.history.push('/Signin');
+                window.location.reload();
+                //unsetCurrentUser();
+                //if (localStorage.getItem('token') == null) {
+                    //return <Redirect to='/Signin' push />
+                //}
             });
     };
 
@@ -114,7 +117,7 @@ const Navbarmenu = () => {
                                         <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MentorRequestRespond`}>Mentor Requests </NavLink> </li>
                                         <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/AddFreeHours`}>Add Free Hours </NavLink> </li>
                                         <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/CreatePOAMentor`}>Create POA for Mentee</NavLink> </li>
-                                        <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentor`}>My Mentee's POAs</NavLink> </li>
+                                        <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/MyPOAMentor`}>My Mentees' POAs</NavLink> </li>
                                         <li><NavLink onClick={toggleClass} activeClassName='is-active' to={`/OrganiseGroupSession`}> Organise Group Session </NavLink> </li>
                                     </ul>
                                 </li>}
@@ -140,4 +143,4 @@ const Navbarmenu = () => {
     )
 }
 
-export default Navbarmenu;
+export default withRouter(Navbarmenu);
