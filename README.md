@@ -6,8 +6,8 @@
 * Create a virtual environment with `virtualenv <environment-name>`
 * Start the virtual environment with running `pipenv shell`
 * Install the required packages within this virtual environment: `pipenv install requirements.txt`
-* `cd` into the `mentoringsystem` directory
-* To start the backend server, run `python3 manage.py runserver`
+* Still in the virtual environment, `cd` into the `mentoringsystem` directory
+* To start the backend server, run `python manage.py runserver`
 * In another terminal, `cd` into the `frontend` directory
 * To start the frontend site, run `npm run start`
 * The backend should run on `localhost:8000` and the frontend on `localhost:3000` by default
