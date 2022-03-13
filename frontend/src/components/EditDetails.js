@@ -12,6 +12,7 @@ const EditDetails = props => {
     const [topicData, setTopicData] = useState([]);
     const [isMentee, setIsMentee] = useState(user.is_mentee);
     const [isMentor, setIsMentor] = useState(user.is_mentor);
+    const [userHasRequest, setUserHasRequest] = useState(false);
 
     const selectedTopicsInterest = [];
     const selectedTopicsExpertise = [];
@@ -30,6 +31,13 @@ const EditDetails = props => {
         fetchBusinessAreas()
             .then(data => setBusinessAreaData(data));
     }, []);
+
+    useEffect(() => {
+        if (!isMentor) {
+            // Check whether user already has an active become mentor request
+            fetchUserBecomeMentorRequests();
+        }
+    }, [])
 
     const topicsInterestSelectedChange = async (e) => {
         console.log(e.target.value);
@@ -116,15 +124,32 @@ const EditDetails = props => {
         }
     }
 
+    const fetchUserBecomeMentorRequests = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `http://localhost:8000/becomementorbymentee/?user_id=${userId}`,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (Object.keys(response.data).length !== 0) {
+                setUserHasRequest(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="edit_details sec__one">
             <br></br>
             <h1> Edit Details </h1>
             <br />
 
+            {!isMentee &&
             <Card>
                 <CardBody>
-                    {!isMentee &&
                         <div>
                             <h3>Become a Mentee</h3>
                             Select your topics of interest:
@@ -143,9 +168,12 @@ const EditDetails = props => {
                                 <Button color="primary" onClick={becomeMentee}>Become a Mentee</Button>
                             </Form>
                         </div>
-                    }
+                </CardBody>
+            </Card>}
+            {!isMentor && !userHasRequest &&
+            <Card>
+                <CardBody>
                     <br />
-                    {!isMentor &&
                         <div>
                             <h3>Become a Mentor</h3>
                             Select your topics of expertise:
@@ -162,10 +190,9 @@ const EditDetails = props => {
                                 <Button color="primary" onClick={becomeMentor}>Send Mentor Request</Button>
                             </Form>
                         </div>
-                    }
                     <br />
                 </CardBody>
-            </Card>
+            </Card>}
 
             <br />
 

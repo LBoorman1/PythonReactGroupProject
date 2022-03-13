@@ -40,11 +40,13 @@ urlpatterns = [
     path('addmentoringrelationship/', views.add_mentoring_relationship), 
     path('endmentoringrelationship/', views.end_mentoring_relationship),
     path('mentorrequestsbymentee/', views.get_mentee_mentor_requests), 
+    path('becomementorbymentee/', views.get_mentee_become_mentor),
     path('freehoursbymentor/', views.get_free_hours_by_mentor),
     path('searchuser/', views.search_user),
     path('account/', include('django.contrib.auth.urls')),
     path('login/', views.LoginView.as_view(), name="login"),
     path('logout/', views.LogoutView.as_view(), name="logout"),
+    path('currentuser/', views.get_current_user),
     path('menteesignup/', views.mentee_signup),
     path('mentorsignup/', views.mentor_signup)
 ]

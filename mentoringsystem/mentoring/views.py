@@ -109,6 +109,21 @@ class LoginView(generics.GenericAPIView):
         })
 
 
+# Returns the current user logged in
+@api_view(['GET'])
+def get_current_user(request):
+    print(request.data.get('token'))
+    try:
+        token = Token.objects.get(key=request.query_params.get('token'))
+    except:
+        return Response({})
+    print(token.user)
+    profile = token.user.profile
+    print(profile)
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data)
+
+
 class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         # logout(request)
@@ -745,6 +760,15 @@ def get_mentee_mentor_requests(request):
     profile_id = user.profile.id
     mentor_requests = MentorRequest.objects.filter(mentee=profile_id)
     serializer = MentorRequestSerializer(mentor_requests, many=True)
+    return Response(serializer.data)
+
+# Get become mentor requests for a specific mentee
+@api_view(['GET'])
+def get_mentee_become_mentor(request):
+    user = User.objects.get(pk=request.query_params.get('user_id'))
+    profile_id = user.profile.id
+    mentor_requests = BecomeMentor.objects.filter(profile=profile_id)
+    serializer = BecomeMentorSerializer(mentor_requests, many=True)
     return Response(serializer.data)
 
 

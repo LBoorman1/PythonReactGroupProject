@@ -1,7 +1,7 @@
 import React from 'react';
 import {Redirect, BrowserRouter as Router,Switch,Route} from "react-router-dom";
 import './App.css';
-import {PrivateRoute} from './components/Auth/PrivateRoute';
+import PrivateRoute from './components/Auth/PrivateRoute';
 import {Role} from './components/Auth/roles';
 import BookMentoringMeeting from './components/BookMentoringMeeting';
 import CreatePOAMentee from './components/CreatePOAMentee';
@@ -29,6 +29,7 @@ import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
 import CalendarD from './components/CalendarD';
 import MentorRequestRespond from './components/MentorRequestRespond';
+import PageNotFound from './components/PageNotFound';
 
 let state = {currentPath:window.location.pathname};
 
@@ -85,6 +86,7 @@ function App() {
           </Route>
           <Route path="/Signin" component={Signin}/>
           <Route path="/CreateAccount" component={CreateAccount}/>
+          <Route component={PageNotFound}/>
         </Switch>
         
       </Router>
