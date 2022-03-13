@@ -3,8 +3,6 @@ import { Card, Button } from 'reactstrap';
 import Requests from './Request';
 import DropDown from './DropDown';
 import DateTimePicker from 'react-datetime-picker';
-import DisplayFreeHours from "./DisplayFreeHours";
-
 
 const OrganiseGroupSession = () => {
     const [dateStart, setDateStart] = useState(new Date());
@@ -53,4 +51,4 @@ const OrganiseGroupSession = () => {
         </div>
     )
 }
-export default OrganiseGroupSession
+export default OrganiseGroupSession;

@@ -6,9 +6,10 @@ const SetSessionThreshold = () => {
         <div className="set_session_threshold sec__one">
             <h1> Set Session Threshold </h1>
             <SlidingNumber
-            default={50} />
+                default={50}
+            />
         </div>
     )
 }
 
-export default SetSessionThreshold
+export default SetSessionThreshold;

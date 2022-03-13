@@ -4,7 +4,7 @@ import { Card, Button } from 'reactstrap';
 
 const SelectThisTime = () => {
     const [text, setText] = useState("Book Available Time");
-    
+
     const handleBooking = () => {
         if (text === "Book Available Time") {
             setText("Remove Requested Time");
@@ -28,4 +28,5 @@ const SelectThisTime = () => {
         </div>
     )
 }
-export default SelectThisTime
+
+export default SelectThisTime;

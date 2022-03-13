@@ -7,7 +7,6 @@ const BookMentoringMeeting = () => {
     const [relationship, setRelationship] = useState(false);
     const [freeHourData, setFreeHourData] = useState([]);
     const [alertVisible, setAlertVisible] = useState(false);
-    const [userDetails, setUserDetails] = useState({});
 
     const user = JSON.parse(localStorage.getItem('user'))
     const userId = user.user.id;

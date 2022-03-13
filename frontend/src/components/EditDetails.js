@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import RadioButtons from './RadioButtons';
-import SkillButtons from './Skills';
 import { Card, CardBody, Button, Alert, Form, CustomInput } from 'reactstrap';
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas"
 import axios from "axios";
@@ -11,10 +10,8 @@ const EditDetails = props => {
 
     const [businessAreaData, setBusinessAreaData] = useState([]);
     const [topicData, setTopicData] = useState([]);
-    // Temp until get user data works
     const [isMentee, setIsMentee] = useState(user.is_mentee);
     const [isMentor, setIsMentor] = useState(user.is_mentor);
-    //const [selectedTopicsInterest, setSelectedTopicsInterest] = useState([]);
 
     const selectedTopicsInterest = [];
     const selectedTopicsExpertise = [];
@@ -59,7 +56,7 @@ const EditDetails = props => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/mentee_signup/",
+                url: "http://localhost:8000/menteesignup/",
                 data: {
                     "user_id": userId,
                     "topics": selectedTopicsInterest
@@ -79,7 +76,7 @@ const EditDetails = props => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/mentor_signup/",
+                url: "http://localhost:8000/mentorsignup/",
                 data: {
                     "user_id": userId,
                     "topics": selectedTopicsExpertise
@@ -131,8 +128,8 @@ const EditDetails = props => {
                         <div>
                             <h3>Become a Mentee</h3>
                             Select your topics of interest:
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             <Form onSubmit={becomeMentee}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
@@ -152,7 +149,7 @@ const EditDetails = props => {
                         <div>
                             <h3>Become a Mentor</h3>
                             Select your topics of expertise:
-                            <br/><br/>
+                            <br /><br />
                             <Form onSubmit={becomeMentor}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
@@ -188,18 +185,6 @@ const EditDetails = props => {
                     </Alert>
                 </CardBody>
             </Card>
-
-            <br></br>
-
-            <h3>Add or remove your topics of interest:</h3>
-            <SkillButtons array={["x", "y", "z", "w", "r"]} />
-
-            <br></br>
-
-            <h3>Add or remove your topics of expertise:</h3>
-            <SkillButtons array={["x", "y", "z", "w", "r"]} />
-            { /*<DropDown array={["x","y","z","w","r"]}  /> */}
-
         </div>
     )
 }

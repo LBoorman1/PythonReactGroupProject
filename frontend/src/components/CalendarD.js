@@ -1,21 +1,14 @@
-import React from 'react'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!n
-
-//import { Calendar } from '@fullcalendar/core';
-//import timeGridPlugin from '@fullcalendar/timegrid';
-//import listPlugin from '@fullcalendar/list';
+import React from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import './Calendar.css';
-import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
-//import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
 
     constructor(props) {
         super(props);
         const user = JSON.parse(localStorage.getItem('user'));
-        //const userId = user.user.id;
         this.state = { meetings: [], user: user }
     }
 
@@ -33,7 +26,6 @@ export default class CalendarD extends React.Component {
                 <FullCalendar
                     plugins={[dayGridPlugin]}
                     initialView="dayGridMonth"
-                    //weekends = {false}
                     firstDay='1'
                     events={
                         this.state.meetings
@@ -69,15 +61,3 @@ function renderEventContent(eventInfo) {
         </>
     )
 }
-
-//export default CalendarD;
-
-//let calendar = new Calendar(calendarEl, {
-//    plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
-//    initialView: 'dayGridMonth',
-//    headerToolbar: {
-//      left: 'prev,next today',
-//      center: 'title',
-//      right: 'dayGridMonth,timeGridWeek,listWeek'
-//    }
-//});

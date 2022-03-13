@@ -148,7 +148,7 @@ const UserCard = props => {
           {props.type == "mentoringRelationship" &&
             <Button
               color="danger"
-              onClick={() => props.onEndRel(props.relationshipId)}
+              onClick={() => props.onEndRel(props.menteeId, props.relationshipId)}
             >
               End Mentoring Relationship
             </Button>

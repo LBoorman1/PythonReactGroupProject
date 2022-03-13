@@ -3,15 +3,15 @@ import MyApplicationFeedback from './MyApplicationFeedback';
 import MyMeetingFeedback from './MyMeetingFeedback';
 
 function MyFeedbackSelector(props) {
-  if(props.feedbackType == "Meeting") {
-      return(
-        <MyMeetingFeedback/>
-      );
+  if (props.feedbackType == "Meeting") {
+    return (
+      <MyMeetingFeedback />
+    );
   }
   else if (props.feedbackType == "Application") {
-      return(
-        <MyApplicationFeedback/>
-      );
+    return (
+      <MyApplicationFeedback />
+    );
   }
 }
 

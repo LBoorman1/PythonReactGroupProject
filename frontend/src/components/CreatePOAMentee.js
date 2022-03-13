@@ -3,7 +3,6 @@ import BulletPoints from "./BulletPoints";
 import { Button, Card, CardBody } from 'reactstrap';
 import Calendar from "react-select-date";
 import axios from 'axios';
-import { format } from "date-fns";
 
 const CreatePOAMentee = () => {
   const [fname, setFname] = useState("");
@@ -99,4 +98,4 @@ const CreatePOAMentee = () => {
   )
 }
 
-export default CreatePOAMentee
+export default CreatePOAMentee;

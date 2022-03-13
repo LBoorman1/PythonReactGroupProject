@@ -13,14 +13,14 @@ const MyPOAMentee = () => {
     }, []);
 
     const get_poas = () => {
-        var url = "http://localhost:8000/POA/?profile_id=" + profileId + "&m_value=m1";
+        var url = `http://localhost:8000/POA/?profile_id=${profileId}&m_value=m1`;
         axios
             .get(url)
             .then(response => {
                 const data = response.data;
 
                 const poas_data = data.map(d => ({
-                    "poa_title": d.poa.title, /*index 2 is the title*/
+                    "poa_title": d.poa.title,
                     "mentor_first": d.mentor.first_name,
                     "mentor_last": d.mentor.last_name,
                     "completed_targets": d.poatarget_completed_list.map(c => (
@@ -38,7 +38,7 @@ const MyPOAMentee = () => {
 
     return (
         <div className="my_poa_mentee sec__one">
-            <h1> My POA Mentee </h1>
+            <h1>My POAs</h1>
 
             {poas.map(poa => (
                 <Checkboxes
@@ -53,4 +53,4 @@ const MyPOAMentee = () => {
     )
 }
 
-export default MyPOAMentee
+export default MyPOAMentee;

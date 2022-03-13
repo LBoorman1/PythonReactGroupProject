@@ -29,14 +29,12 @@ const BusinessAreaChangeRequest = () => {
         changeBusinessArea(userId, newBusinessAreaId);
         checkOffRequest(requestId);
         setFetch(fetch => !fetch);
-        //fetchBusinessAreaChangeRequests();
     }
 
     const handleDeny = requestId => {
         // Simply check off the request and do nothing else
         checkOffRequest(requestId);
         setFetch(fetch => !fetch);
-        //fetchBusinessAreaChangeRequests();
     }
 
     const changeBusinessArea = async (userId, newBusinessAreaId) => {

@@ -35,7 +35,6 @@ const DisplayMyMentees = () => {
   const handleEndRelationship = relationshipId => {
     endRelationship(relationshipId)
       .then(res => {
-        //setMenteeDetails([]);
         fetchMenteeDetails();
       });
   }
@@ -63,6 +62,7 @@ const DisplayMyMentees = () => {
             topicsOfInterest={mentee.topics_of_interest.map(topic => topic.skill.name)}
             topicsOfExpertise={mentee.topics_of_expertise.map(topic => topic.skill.name)}
             type="mentoringRelationship"
+            menteeId={mentee.user.id}
             relationshipId={mentee.relationship}
             onEndRel={handleEndRelationship}
           />

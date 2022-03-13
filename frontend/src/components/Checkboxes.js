@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
+import React, { useState } from "react";
+import { Card, CardBody, CardText } from 'reactstrap';
 import axios from 'axios';
-
 
 const Checkboxes = poa => {
   const [checked, setChecked] = useState(poa.completed);
@@ -64,4 +63,5 @@ const Checkboxes = poa => {
     </Card>
   );
 }
-export default Checkboxes
+
+export default Checkboxes;

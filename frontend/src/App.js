@@ -1,6 +1,5 @@
 import React from 'react';
 import {Redirect, BrowserRouter as Router,Switch,Route} from "react-router-dom";
-import { useLocation } from 'react-router-dom'
 import './App.css';
 import {PrivateRoute} from './components/Auth/PrivateRoute';
 import {Role} from './components/Auth/roles';
@@ -30,8 +29,6 @@ import Signin from './components/Signin';
 import CreateAccount from './components/CreateAccount';
 import CalendarD from './components/CalendarD';
 import MentorRequestRespond from './components/MentorRequestRespond';
-import Home from './components/Home';
-import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
 
 let state = {currentPath:window.location.pathname};
 

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import UserCard from './UserCard';
 import BulletPoints from "./BulletPoints";
 import { Button, Card, CardBody } from 'reactstrap';
 import Calendar from "react-select-date";
 import axios from 'axios';
-import { format } from "date-fns";
 import Select from "react-select";
-
 
 const CreatePOAMentor = () => {
     const [userData, setUserData] = useState([]);
@@ -89,10 +86,10 @@ const CreatePOAMentor = () => {
                 add_targets(poa_id);
             });
     }
-    
+
     return (
         <div className="create_poa_mentor sec__one">
-            <h1>Create POA Mentor </h1>
+            <h1>Create POA for a Mentee</h1>
             <Card>
                 <CardBody>
                     <form>

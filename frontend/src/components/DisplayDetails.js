@@ -36,7 +36,7 @@ const MyDetails = props => {
                 lastName={userDetails.last_name}
                 email={userDetails.email}
                 businessArea={userDetails.profile ? userDetails.profile.business_area.name : ""}
-                active={userDetails ? boolToStr(userDetails.is_active): ""}
+                active={userDetails ? boolToStr(userDetails.is_active) : ""}
                 admin={userDetails.profile ? boolToStr(userDetails.profile.is_admin) : ""}
                 mentee={userDetails.profile ? boolToStr(userDetails.profile.is_mentee) : ""}
                 mentor={userDetails.profile ? boolToStr(userDetails.profile.is_mentor) : ""}

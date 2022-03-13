@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
 
 function MeetingMaker() {
@@ -21,7 +21,7 @@ function MeetingMaker() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: `http://localhost:8000/meetings/?userID=${userId}`, 
+          url: `http://localhost:8000/meetings/?userID=${userId}`,
         });
         setMeetingData(response);
       } catch (error) {

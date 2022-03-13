@@ -5,9 +5,9 @@ import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from 'axios';
 
 function MyMeetingFeedback() {
-  
+
   const [meetingFeedback, setMeetingFeedback] = useState([]);
-  
+
   const user = JSON.parse(localStorage.getItem('user'))
   const userId = user.user.id;
 
@@ -16,7 +16,7 @@ function MyMeetingFeedback() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: `http://localhost:8000/meetingFeedbackView/?userID=${userId}`, 
+          url: `http://localhost:8000/meetingFeedbackView/?userID=${userId}`,
         });
         setMeetingFeedback(response);
       } catch (error) {
@@ -25,7 +25,7 @@ function MyMeetingFeedback() {
     };
     fetchMeetingFeedback();
   }, []);
-  
+
   const renderCard = (card, index) => {
     return (
       <Col md={6} key={index}>

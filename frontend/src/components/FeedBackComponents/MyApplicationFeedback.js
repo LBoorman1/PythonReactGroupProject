@@ -3,30 +3,28 @@ import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from 'axios';
 
-
-
 function MyApplicationFeedback() {
-    const [applicationFeedback, setApplicationFeedback] = useState([]);
+  const [applicationFeedback, setApplicationFeedback] = useState([]);
 
-    const user = JSON.parse(localStorage.getItem('user'))
-    const userId = user.user.id;
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
 
-    useEffect(() => {
-        const fetchApplicationFeedback = async () => {
-            try {
-              const { data: response } = await axios({
-                method: "GET",
-                url: `http://localhost:8000/applicationFeedbackView/?userID=${userId}`, 
-              });
-              setApplicationFeedback(response);
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          fetchApplicationFeedback();
-    }, []);
-  
-    //function to make the cards from the meeting data
+  useEffect(() => {
+    const fetchApplicationFeedback = async () => {
+      try {
+        const { data: response } = await axios({
+          method: "GET",
+          url: `http://localhost:8000/applicationFeedbackView/?userID=${userId}`,
+        });
+        setApplicationFeedback(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchApplicationFeedback();
+  }, []);
+
+  //function to make the cards from the meeting data
   const renderCard = (card, index) => {
     return (
       <Col md={6} key={index}>
@@ -38,14 +36,14 @@ function MyApplicationFeedback() {
       </Col>
     );
   };
-  
-    return (
+
+  return (
     <Container>
-        <Row>
+      <Row>
         {applicationFeedback.map(renderCard)}
-        </Row>
+      </Row>
     </Container>
   )
 }
 
-export default MyApplicationFeedback
+export default MyApplicationFeedback;

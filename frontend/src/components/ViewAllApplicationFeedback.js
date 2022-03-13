@@ -4,7 +4,7 @@ import FeedbackCard from './FeedbackCard';
 
 const ViewAllApplicationFeedback = () => {
   const [feedbackData, setFeedbackData] = useState([]);
-  
+
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
@@ -16,13 +16,13 @@ const ViewAllApplicationFeedback = () => {
           }
         });
         setFeedbackData(response.data);
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
     };
     fetchFeedback();
   }, []);
-  
+
   return (
     <div className="view_feedback sec__one">
       <h1>Feedback Submitted on the Application</h1>

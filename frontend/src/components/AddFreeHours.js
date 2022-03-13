@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Card, CardBody, Button } from 'reactstrap';
 import DateTimePicker from 'react-datetime-picker';
 import DisplayFreeHours from "./DisplayFreeHours";
-//import DateTimePicker from '@mui/lab/DateTimePicker';
 import fetchFreeHours from "./GetFreeHours";
 
 const AddFreeHours = () => {

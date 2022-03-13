@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import UserCard from './UserCard';
-import Requests from './Request';
-import { Card, Button } from 'reactstrap';
 import boolToStr from "./BoolToStringNice";
 import axios from "axios";
 

@@ -14,4 +14,4 @@ const BulletPoints = props => {
     )
 }
 
-export default BulletPoints
+export default BulletPoints;

@@ -26,14 +26,9 @@ const ToggleAdmin = () => {
                     mentee={boolToStr(user.profile.is_mentee)}
                     mentor={boolToStr(user.profile.is_mentor)}
                     admin={boolToStr(user.profile.is_admin)}
-                    // This is a bit clunky - each topic is returned wrapped in a 'skill' object
                     topicsOfInterest={user.profile.topics_of_interest.map(topic => topic.skill.name)}
                     topicsOfExpertise={user.profile.topics_of_expertise.map(topic => topic.skill.name)}
                     type="toggleAdmin"
-                    //onClick={(e) => {
-                        //e.preventDefault();
-                        //handleSubmit();
-                //}}
                 />
             ))}
         </div>

@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import Checkboxes from './Checkboxes';
 
-
 const MyPOAMentor = () => {
     const [poas, setPoas] = useState([]);
 
@@ -14,14 +13,14 @@ const MyPOAMentor = () => {
     }, []);
 
     const get_poas = () => {
-        var url = "http://localhost:8000/POA/?profile_id=" + profileId + "&m_value=m2";
+        var url = `http://localhost:8000/POA/?profile_id=${profileId}&m_value=m2`;
         axios
             .get(url)
             .then(response => {
                 const data = response.data;
 
                 const poas_data = data.map(d => ({
-                    "poa_title": d.poa.title, /*index 2 is the title*/
+                    "poa_title": d.poa.title,
                     "mentee_first": d.mentee.first_name,
                     "mentee_last": d.mentee.last_name,
                     "completed_targets": d.poatarget_completed_list.map(c => (
@@ -39,7 +38,7 @@ const MyPOAMentor = () => {
 
     return (
         <div className="my_poa_mentor sec__one">
-            <h1> My POA Mentor </h1>
+            <h1>My Mentee's POAs</h1>
 
             {poas.map(poa => (
                 <Checkboxes
@@ -54,4 +53,4 @@ const MyPOAMentor = () => {
     )
 }
 
-export default MyPOAMentor
+export default MyPOAMentor;
