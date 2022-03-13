@@ -94,14 +94,3 @@ class POATarget(models.Model):
     plan_of_action = models.ForeignKey('PlanOfAction', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     completed_status = models.CharField(max_length=10, choices=COMPLETED_STATUS_CHOICES)
-
-class MeetingRequest(models.Model):
-    ATTENDANCE_STATUS_CHOICES = [
-        ('GA', 'going_ahead'),
-        ('C', 'cancelled')
-    ]
-    relationship = models.ForeignKey('Relationship', on_delete=models.CASCADE)
-    date_time = models.DateTimeField()
-    attendance_status = models.CharField(max_length=10, choices=ATTENDANCE_STATUS_CHOICES)
-    title = models.CharField(max_length=20)
-    notes = models.TextField()
