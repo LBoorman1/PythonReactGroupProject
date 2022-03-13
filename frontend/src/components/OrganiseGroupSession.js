@@ -76,7 +76,6 @@ const OrganiseGroupSession = () => {
               onChange={handleNotesChange}
             />
           </FormGroup>
-          {/* <h3>Select start time:</h3> */}
           <Label>Select start time</Label>
           <br></br>
           <DateTimePicker
