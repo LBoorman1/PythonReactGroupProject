@@ -77,12 +77,8 @@ const CreateAccount = props => {
       .then(response => {
         const { user } = response.data;
         props.history.push('/Signin');
-        //setAxiosAuthToken(token);
-        //setToken(token);
-        //setCurrentUser(user);
       })
       .catch(error => {
-        //unsetCurrentUser();
         err = true;
       });
     if (!err) {

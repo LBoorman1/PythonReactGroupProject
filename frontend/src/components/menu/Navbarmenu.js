@@ -67,10 +67,6 @@ const Navbarmenu = props => {
                 console.log(response);
                 props.history.push('/Signin');
                 window.location.reload();
-                //unsetCurrentUser();
-                //if (localStorage.getItem('token') == null) {
-                    //return <Redirect to='/Signin' push />
-                //}
             });
     };
 
