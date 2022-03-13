@@ -116,11 +116,6 @@ class MeetingSerializer(serializers.ModelSerializer):
         model = Meeting 
         fields = '__all__'
 
-#class MeetingRequestSerializer(serializers.ModelSerializer):
-    #class Meta:
-        #model = MeetingRequest 
-        #fields = '__all__'
-
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingFeedback
