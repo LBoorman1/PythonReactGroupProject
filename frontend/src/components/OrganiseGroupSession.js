@@ -53,7 +53,7 @@ const OrganiseGroupSession = () => {
 
       <br></br>
       <Card>
-        <h1>Set up group session:</h1>
+        <h1>Set up Group Session:</h1>
 
         <form>
           <FormGroup>

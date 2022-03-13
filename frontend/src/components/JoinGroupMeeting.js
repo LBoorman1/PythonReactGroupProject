@@ -79,7 +79,7 @@ function JoinGroupMeeting() {
   return (
     <div className="join_group_session sec__one">
       <Card>
-        <h1>Join Sessions</h1>
+        <h1>Join Group Sessions</h1>
         <Row>
           {/* Render Cards containing the meeting details */}
           {groupMeetingData.map(renderCard)}
