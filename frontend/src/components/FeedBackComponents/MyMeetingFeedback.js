@@ -1,11 +1,9 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import axios from 'axios';
 
 function MyMeetingFeedback() {
-
   const [meetingFeedback, setMeetingFeedback] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'))

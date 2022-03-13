@@ -30,6 +30,8 @@ import CreateAccount from './components/CreateAccount';
 import CalendarD from './components/CalendarD';
 import MentorRequestRespond from './components/MentorRequestRespond';
 import PageNotFound from './components/PageNotFound';
+import FeedbackForm from './components/FeedBackComponents/FeedbackForm'
+import JoinGroupMeeting from './components/JoinGroupMeeting';
 
 let state = {currentPath:window.location.pathname};
 
@@ -54,7 +56,7 @@ function App() {
       || state.currentPath=="/ViewAllApplicationFeedback"
       || state.currentPath=="/MyDetails"
       || state.currentPath=="/GiveFeedback" || (state.currentPath=="/")
-      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/Calendar") && <Navbarmenu />}
+      || state.currentPath=="/MyFeedback" || state.currentPath=="/EditDetails" || state.currentPath=="/Calendar" || state.currentPath=="/JoinGroupMeeting") && <Navbarmenu />}
       </div>
         
         <Switch>
@@ -62,6 +64,7 @@ function App() {
           <PrivateRoute roles={[Role.Mentee]} path="/CreatePOAMentee" component={CreatePOAMentee}/>
           <PrivateRoute roles={[Role.Mentee]} path="/DisplayMyMentor" component={DisplayMyMentor}/>
           <PrivateRoute roles={[Role.Mentee]} path="/MyPOAMentee" component={MyPOAMentee}/>
+          <PrivateRoute roles={[Role.Mentee]} path="/JoinGroupMeeting" component={JoinGroupMeeting}/>
           <PrivateRoute roles={[Role.Mentor]} path="/MyPOAMentor" component={MyPOAMentor}/>
           <PrivateRoute roles={[Role.Mentor]} path="/DisplayMyMentees" component={DisplayMyMentees}/>
           <PrivateRoute roles={[Role.Mentor]} path="/AddFreeHours" component={AddFreeHours}/>

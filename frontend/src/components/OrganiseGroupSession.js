@@ -1,54 +1,117 @@
-import { React, useState } from 'react';
-import { Card, Button } from 'reactstrap';
-import Requests from './Request';
-import DropDown from './DropDown';
-import DateTimePicker from 'react-datetime-picker';
+import DateTimePicker from "react-datetime-picker";
+import React, { useState } from "react";
+import { Button, Card, Modal, ModalBody, ModalFooter } from "react-bootstrap";
+import { FormGroup, Label, Input } from "reactstrap";
+import axios from "axios";
 
 const OrganiseGroupSession = () => {
-    const [dateStart, setDateStart] = useState(new Date());
-    const [dateEnd, setDateEnd] = useState(new Date());
+  const [dateStart, setDateStart] = useState(new Date());
+  const [meetingTitle, setMeetingTitle] = useState("");
+  const [meetingNotes, setMeetingNotes] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+ 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.user.id;
 
-    const handleSubmit = (e) => { }
+  const handleSubmit = async () => {
+    if (meetingTitle == "") {
+      setOpenModal(true);
+    } else {
+      try {
+        // make axios post request
+        const response = await axios({
+          method: "POST",
+          url: "http://localhost:8000/groupMeetingsView/",
+          data: {
+            meetingTitle: meetingTitle,
+            meetingNotes: meetingNotes,
+            dateStart: dateStart,
+            userID: userId, 
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      setMeetingNotes("");
+      setMeetingTitle("");
+    }
+  };
 
-    return (
-        <div className="organise_group_session sec__one">
-            <h1>Organise Group Session </h1>
-            <br></br>
-            <Card>
-                <h1>My Requests for group sessions:</h1>
-                <Requests type="Set up group session" request="Skill y" />
-                <Requests type="Set up group session" request="Skill z" />
-            </Card>
+  const handleTitleChange = (event) => {
+    setMeetingTitle(event.target.value);
+  };
+  const handleNotesChange = (event) => {
+    setMeetingNotes(event.target.value);
+  };
 
-            <br></br>
-            <Card>
-                <h1>Set up group session:</h1>
-                <DropDown title="Select Skill" array={["item 1", "item 2", "item 3"]} />
-                <h3>Select start time:</h3>
+  return (
+    <div className="organise_group_session sec__one">
+      <br></br>
 
-                <DateTimePicker onChange={(d) => setDateStart(d)}
-                    value={dateStart}
-                    showTimeSelect
-                    timeFormat="HH"
-                    timeIntervals={60}
-                    dateFormat="MMMM Do YYYY, h a"
-                />
+      <br></br>
+      <Card>
+        <h1>Set up group session:</h1>
 
-                <h3>Select end time:</h3>
+        <form>
+          <FormGroup>
+            <Label for="meetingTitle">Group Meeting Title</Label>
+            <Input
+              type="text"
+              name="meetingTitle"
+              id="meetingTitle"
+              value={meetingTitle}
+              onChange={handleTitleChange}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="meetingNotes">Group Meeting Notes</Label>
+            <Input
+              type="text"
+              name="meetingNotes"
+              value={meetingNotes}
+              id="meetingNotes"
+              onChange={handleNotesChange}
+            />
+          </FormGroup>
+          {/* <h3>Select start time:</h3> */}
+          <Label>Select start time</Label>
+          <br></br>
+          <DateTimePicker
+            onChange={(d) => setDateStart(d)}
+            value={dateStart}
+            showTimeSelect
+            timeFormat="HH"
+            timeIntervals={60}
+            dateFormat="MMMM Do YYYY, h a"
+          />
 
-                <DateTimePicker onChange={(d) => setDateEnd(d)}
-                    value={dateEnd}
-                    showTimeSelect
-                    timeFormat="HH"
-                    timeIntervals={1}
-                    dateFormat="MMMM Do YYYY, h a"
-                />
-                <br></br>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            Submit
+          </Button>
+        </form>
+      </Card>
 
-                <Button onClick={handleSubmit}>Submit</Button>
-            </Card>
-
-        </div>
-    )
-}
+      <Modal show={openModal}>
+        <ModalBody>Please Enter a meeting title!</ModalBody>
+        <ModalFooter>
+          <Button
+            onClick={(e) => {
+              setOpenModal(false);
+            }}
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
 export default OrganiseGroupSession;

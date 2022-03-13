@@ -8,7 +8,7 @@ const Signin = props => {
     //const history = useHistory();
     //window.location.reload();
     //useEffect(() => {
-        //window.location.reload();
+    //window.location.reload();
     //}, []);
 
     const [redirect, setRedirect] = useState(false);
@@ -24,9 +24,9 @@ const Signin = props => {
     }
 
     //if (redirect) {
-        //console.log('test');
-        //props.history.push('/MyDetails');
-        //return <Redirect to='/MyDetails' />;
+    //console.log('test');
+    //props.history.push('/MyDetails');
+    //return <Redirect to='/MyDetails' />;
     //}
 
     const handle_submit = e => {
@@ -35,6 +35,7 @@ const Signin = props => {
             username: username,
             password: password
         };
+        console.log(userData);
         axios
             .post("http://localhost:8000/login/", userData)
             .then(response => {

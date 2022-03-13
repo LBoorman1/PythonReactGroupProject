@@ -14,13 +14,16 @@ router.register(r'POA', views.POAView, 'POA')
 router.register(r'POATargetCreate', views.POATargetCreateView, 'POATargetCreate')
 router.register(r'POATargetUpdate', views.POATargetUpdateView, 'POATargetUpdate')
 router.register(r'menteeOptions', views.menteeOptionsView, 'menteeOptions')
+router.register(r'groupMeetingsView', views.groupMeetingsView, 'groupMeetingsView')
 router.register(r'businessareachangerequests', views.BusinessAreaChangeRequestUserView, 'businessareachangerequests')
 router.register(r'becomementors', views.BecomeMentorUserView, 'becomementors')
 router.register(r'mentorrequests', views.MentorRequestUserView, 'mentorrequests') 
 router.register(r'skills', views.SkillView, 'skills')
 router.register(r'businessareas', views.BusinessAreaView, 'businessareas')
+router.register(r'showBusinessArea', views.showBusinessAreaView, 'showBusinessArea')
 router.register(r'allapplicationfeedback', views.AllApplicationFeedbackView, 'allapplicationfeedback')
-router.register(r'meetings', views.MeetingView, 'meetings') 
+router.register(r'meetings', views.MeetingView, 'meetings')
+router.register(r'menteeAttendingView', views.menteeAttendingView, 'menteeAttendingView') 
 
 # Here we must also add the non-class based views
 urlpatterns = [
