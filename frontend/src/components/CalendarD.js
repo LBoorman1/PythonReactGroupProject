@@ -1,23 +1,19 @@
-import React from 'react'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!n
-
-//import { Calendar } from '@fullcalendar/core';
-//import timeGridPlugin from '@fullcalendar/timegrid';
-//import listPlugin from '@fullcalendar/list';
+import React from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import './Calendar.css';
-import { useEffect } from 'react/cjs/react.production.min';
 import axios from 'axios';
-//import MeetingMaker from "./FeedBackComponents/MeetingMaker";
 
 export default class CalendarD extends React.Component {
+
     constructor(props) {
         super(props);
-        this.state = { meetings: [] }
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.state = { meetings: [], user: user }
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8000/meetings/?userID=4')
+        axios.get(`http://localhost:8000/meetings/?userID=${this.state.user.user.id}`)
             .then(res => {
                 this.setState({ meetings: res.data });
             })
@@ -30,16 +26,15 @@ export default class CalendarD extends React.Component {
                 <FullCalendar
                     plugins={[dayGridPlugin]}
                     initialView="dayGridMonth"
-                    //weekends = {false}
                     firstDay='1'
                     events={
                         this.state.meetings
-                            .map(meeting =>(
+                            .map(meeting => (
                                 {
                                     title: meeting.title,
-                                    start: meeting.date_time 
+                                    start: meeting.date_time
                                 })
-                                )
+                            )
                     }
                     height='100%'
                     contentHeight='auto'
@@ -66,15 +61,3 @@ function renderEventContent(eventInfo) {
         </>
     )
 }
-
-//export default CalendarD;
-
-//let calendar = new Calendar(calendarEl, {
-//    plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
-//    initialView: 'dayGridMonth',
-//    headerToolbar: {
-//      left: 'prev,next today',
-//      center: 'title',
-//      right: 'dayGridMonth,timeGridWeek,listWeek'
-//    }
-//});

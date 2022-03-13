@@ -9,7 +9,6 @@ export const fetchBusinessAreas = async () => {
                 "Content-Type": "application/json"
             }
         })
-        //console.log(response);
         return response.data;
     } catch (error) {
         console.log(error);

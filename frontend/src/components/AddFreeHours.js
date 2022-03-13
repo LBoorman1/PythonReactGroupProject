@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Card, CardBody, Button } from 'reactstrap';
 import DateTimePicker from 'react-datetime-picker';
 import DisplayFreeHours from "./DisplayFreeHours";
-//import DateTimePicker from '@mui/lab/DateTimePicker';
 import fetchFreeHours from "./GetFreeHours";
 
 const AddFreeHours = () => {
@@ -11,7 +10,8 @@ const AddFreeHours = () => {
     date.setDate(date.getDate() + 1);
     date.setHours(0, 0, 0);
 
-    const userId = 4;
+    const user = JSON.parse(localStorage.getItem('user'))
+    const userId = user.user.id;
 
     const [dateStart, setDateStart] = useState(date);
     const [freeHourData, setFreeHourData] = useState([]);

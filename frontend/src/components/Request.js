@@ -1,13 +1,11 @@
 import React from 'react';
-import {Button} from 'reactstrap';
+import { Button } from 'reactstrap';
 
 const Requests = (props) => {
-    const accept   = () => {
-
-
-        {/*Request this business department*/}
+    const accept = () => {
 
     }
+
     return (
         <div className="request">
             <br></br>
@@ -15,12 +13,8 @@ const Requests = (props) => {
             <h4>Request type: {props.type}</h4>
             <Button onClick={accept} >Accept Request</Button>
             <br></br>
-
-
-            
-
         </div>
     )
 }
 
-export default Requests
+export default Requests;

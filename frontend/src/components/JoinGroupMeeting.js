@@ -16,7 +16,9 @@ import { Redirect } from 'react-router-dom';
 function JoinGroupMeeting() {
   const [groupMeetingData, setGroupMeetingData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const user_data = JSON.parse(localStorage.getItem("user"));
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.user.id;
 
   useEffect(() => {
     const fetchGroupMeetings = async () => {
@@ -41,7 +43,7 @@ function JoinGroupMeeting() {
         method: "POST",
         url: "http://localhost:8000/menteeAttendingView/",
         data: {
-          userID: user_data.user.id,
+          userID: userId,
           relationship: relationship,
         },
         headers: {

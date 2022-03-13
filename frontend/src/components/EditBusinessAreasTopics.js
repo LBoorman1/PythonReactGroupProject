@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Card, CardBody, CardText, CardTitle, Form, FormGroup, Input, Label } from "reactstrap";
+import { Button, Card, CardBody, CardTitle, Form, FormGroup, Input, Label } from "reactstrap";
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas";
 
 const EditBusinessAreasTopics = () => {
@@ -10,41 +10,11 @@ const EditBusinessAreasTopics = () => {
   useEffect(() => {
     fetchBusinessAreas()
       .then(data => setBusinessAreaData(data));
-    /*const fetchBusinessAreas = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: "http://localhost:8000/businessareas",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        setBusinessAreaData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchBusinessAreas();*/
   }, []);
 
   useEffect(() => {
     fetchTopics()
       .then(data => setTopicData(data));
-    /*const fetchTopics = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: "http://localhost:8000/skills",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-        setTopicData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTopics();*/
   }, []);
 
   const addBusinessArea = async (e) => {
@@ -66,13 +36,12 @@ const EditBusinessAreasTopics = () => {
     }
   }
   
-  // Could maybe add something that checks if a user has the business area/topic being deleted
   const removeBusinessArea = async (e) => {
     e.preventDefault();
     try {
       const response = await axios({
         method: "DELETE",
-        url: "http://localhost:8000/businessareas/" + e.target.businessArea.value + "/",
+        url: `http://localhost:8000/businessareas/${e.target.businessArea.value}/`,
         headers: {
           "Content-Type": "application/json"
         }
@@ -109,7 +78,7 @@ const EditBusinessAreasTopics = () => {
     try {
       const response = await axios({
         method: "DELETE",
-        url: "http://localhost:8000/skills/" + e.target.topic.value + "/",
+        url: `http://localhost:8000/skills/${e.target.topic.value}/`,
         headers: {
           "Content-Type": "application/json"
         }

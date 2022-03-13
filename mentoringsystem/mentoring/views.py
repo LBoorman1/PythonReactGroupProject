@@ -55,7 +55,6 @@ from mentoring.serializers import BusinessAreaSerializer
 from mentoring.serializers import BusinessAreaChangeRequestSerializer
 from mentoring.serializers import CalendarUserSerializer
 from mentoring.serializers import MeetingSerializer
-#from mentoring.serializers import MeetingRequestSerializer
 from mentoring.serializers import MeetingFeedbackSerializer
 from mentoring.serializers import PlanOfActionSerializer
 from mentoring.serializers import POATargetSerializer
@@ -65,21 +64,20 @@ from mentoring.serializers import MentorRequestProfileSerializer
 from mentoring.serializers import UserProfileSerializer
 from mentoring.serializers import ProfileUserSerializer
 
+
 # TEMP - REPLACE WITH ACTUAL MATCHING ALGORITHM
 class PotentialMentorsView(viewsets.GenericViewSet):
     queryset = Profile.objects.all()
-    serializer_class = ProfileUserSerializer 
+    serializer_class = ProfileUserSerializer
 
     def list(self, request):
         potential_mentors = Profile.objects.filter(is_mentor=True)
         serializer = ProfileUserSerializer(potential_mentors, many=True)
         return Response(serializer.data)
-    #queryset = Profile.objects.select_related(User).filter(is_mentor=True)
-    #serializer_class = UserSerializer(queryset, many=True)
 
 
 class BusinessAreaChangeRequestView(viewsets.GenericViewSet,
-                                  mixins.CreateModelMixin):
+                                    mixins.CreateModelMixin):
     queryset = BusinessAreaChangeRequest.objects.all()
     serializer_class = BusinessAreaChangeRequestSerializer
 
@@ -93,10 +91,8 @@ class RegisterView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_profile = serializer.save()
-        #return Response({})
         return Response({
             "user": ProfileSerializer(user_profile).data,
-            #"token": Token.objects.create(user=user_profile.user).key
         })
 
 
@@ -113,8 +109,20 @@ class LoginView(generics.GenericAPIView):
             "token": Token.objects.create(user=user).key
         })
 
-class LogoutView(APIView):
 
+# Returns the current user logged in
+@api_view(['GET'])
+def get_current_user(request):
+    try:
+        token = Token.objects.get(key=request.query_params.get('token'))
+    except:
+        return Response({})
+    profile = token.user.profile
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data)
+
+
+class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         Token.objects.filter(user=request.data["user"]["id"]).delete()
         logout(request)
@@ -131,7 +139,7 @@ class showProfileView(viewsets.ModelViewSet):
 def mentee_signup(request):
     user = User.objects.get(pk=request.data.get('user_id'))
     profile = user.profile
-    data = {"is_mentee" : True}
+    data = {"is_mentee": True}
     serializer = ProfileSerializer(profile, data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -141,7 +149,7 @@ def mentee_signup(request):
     for id in request.data.get('topics'):
         skill = Skill.objects.get(pk=id)
         MenteeInterest.objects.create(mentee=profile, skill=skill)
-    
+
     return Response(request.data)
 
 
@@ -155,11 +163,11 @@ def mentor_signup(request):
     for id in request.data.get('topics'):
         skill = Skill.objects.get(pk=id)
         MentorSkill.objects.create(mentor=profile, skill=skill)
-    
+
     return Response(request.data)
 
+
 # Create both relationship and a mentee attending it
-# WILL NEED FIXING 
 @api_view(['POST'])
 def add_mentoring_relationship(request):
     mentor = User.objects.get(pk=request.data.get('mentor_id')).profile
@@ -175,8 +183,10 @@ def add_mentoring_relationship(request):
 # If a mentor or mentee ends a mentoring relationship
 @api_view(['PATCH'])
 def end_mentoring_relationship(request):
-    print("test")
-    relationship = Relationship.objects.get(pk=request.data.get('id'))
+    relationship = Relationship.objects.get(pk=request.data.get('relationship_id'))
+    mentee = User.objects.get(pk=request.data.get('mentee_id'))
+    # Remove from MenteeAttending table 
+    MenteeAttending.objects.filter(relationship=relationship, mentee=mentee).delete()
     # Set to inactive
     data = {'active_status': 'I'}
     serializer = RelationshipSerializer(relationship, data, partial=True)
@@ -186,8 +196,6 @@ def end_mentoring_relationship(request):
         return Response(serializer.data)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# might not need function for create, remove and show
 
 
 class FreeHoursView(viewsets.GenericViewSet):
@@ -245,31 +253,14 @@ class meetingView(viewsets.ModelViewSet):
 
 #end mentoring relationship skipped
 
-# might not need function for create, remove and show
-class interestsView(viewsets.ModelViewSet):
-    # return view
-    queryset = Meeting.objects.all()
-    serializer_class = SkillSerializer(queryset, many=True)
-
-# might not need function for create, remove and show
-
-
-class expertiseView(viewsets.ModelViewSet):
-    # return view
-    queryset = Meeting.objects.all()
-    serializer_class = SkillSerializer(queryset, many=True)
-
-
-class addExpertiseView(viewsets.ModelViewSet):
-    # edit db view
-    ""
-
-
-class removeExpertiseView(viewsets.ModelViewSet):
-    # edit db view
-    ""
-
-# make function for create and show
+@api_view(['GET'])
+def get_free_hours_by_mentor(request):
+    profile = Profile.objects.get(pk=request.query_params.get('profile_id'))
+    #profile = user.profile
+    free_hours = CalendarUser.objects.filter(
+        user=profile).order_by('-available_hour')
+    serializer = CalendarUserSerializer(free_hours, many=True)
+    return Response(serializer.data)
 
 
 class applicationFeedbackView(viewsets.ModelViewSet):
@@ -277,7 +268,7 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     serializer_class = ApplicationFeedbackSerializer
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user = request.data.get('userID'))
+        profile = User.objects.get(pk=request.data.get('userID')).profile
         feedback = request.data.get('feedback')
         if profile:
             # add the new object to the database
@@ -291,8 +282,8 @@ class applicationFeedbackView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            #need to write the query here
-            profile = Profile.objects.get(user = userID)
+            # need to write the query here
+            profile = User.objects.get(pk=userID).profile
             appFeedback = ApplicationFeedback.objects.filter(user=profile)
 
             serializedData = ApplicationFeedbackSerializer(
@@ -322,8 +313,6 @@ class businessAreaChangeRequestsView(viewsets.ModelViewSet):
     
 #remove user skipped
 
-# make function for create and show
-
 
 class meetingFeedbackView(viewsets.ModelViewSet):
     # return view
@@ -331,10 +320,11 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     queryset = MeetingFeedback.objects.all()
 
     def create(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user = request.data.get('userID'))
-        
-        meeting = Meeting.objects.get(pk = request.data.get('meetingID'))
-        meetingTitle = Meeting.objects.get(pk = request.data.get('meetingID')).title
+        profile = User.objects.get(pk=request.data.get('userID')).profile
+
+        meeting = Meeting.objects.get(pk=request.data.get('meetingID'))
+        meetingTitle = Meeting.objects.get(
+            pk=request.data.get('meetingID')).title
         feedback = request.data.get('feedback')
         rating = request.data.get('rating')
 
@@ -351,16 +341,16 @@ class meetingFeedbackView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            #need to write the query here
-            profile = Profile.objects.get(user = userID)
-            meetingFeedback = MeetingFeedback.objects.filter(user=profile)
+            # Get all meetings that user is involved in as a mentee or mentor
+            user_meetings = get_user_meetings(userID)
+            meetingFeedback = MeetingFeedback.objects.filter(meeting__in=user_meetings)
+            #profile = User.objects.get(pk=userID).profile
+            #meetingFeedback = MeetingFeedback.objects.filter(user=profile)
             serializedData = MeetingFeedbackSerializer(
                 meetingFeedback, many=True)
             return Response(serializedData.data)
         else:
             return Response("no check")
-
-# make function for create and show
 
 
 class POAView(viewsets.ModelViewSet):
@@ -381,7 +371,7 @@ class POAView(viewsets.ModelViewSet):
             relationship_query = list(MenteeAttending.objects.filter(
                 mentee_id=profile_id).values_list('relationship', flat=True))
             mentor_query = [Relationship.objects.get(
-                id=x, group=False) for x in relationship_query]
+                id=x, active_status='A', group=False) for x in relationship_query]
             # there should be only one mentor
             mentor_relationship = mentor_query[0]
 
@@ -395,7 +385,7 @@ class POAView(viewsets.ModelViewSet):
             relationship_query = list(MenteeAttending.objects.filter(mentee=Profile.objects.get(
                 id=target_profile_id)).values_list('relationship', flat=True))
             mentor_query = [Relationship.objects.get(
-                id=x, group=False) for x in relationship_query]
+                id=x, active_status='A', group=False) for x in relationship_query]
             mentor_relationship = mentor_query[0]
 
             poa = PlanOfAction.objects.create(relationship=mentor_relationship, title=title, set_by_user=Profile.objects.get(
@@ -417,15 +407,17 @@ class POAView(viewsets.ModelViewSet):
                 mentee_id=profile_id).values_list('relationship', flat=True))
 
             # getting mentor data
-            mentor_query = [Relationship.objects.values_list('id', 'mentor').get(
-                id=x, group=False) for x in relationship_query]
+            mentor_query = [Relationship.objects.values_list('id', 'mentor').filter(
+                id=x, active_status='A', group=False) for x in relationship_query]
+            if not list(mentor_query):
+                return Response(response_list)
             mentor_profile = Profile.objects.get(
-                id=mentor_query[0][1])  # there should be only one mentor
+                id=mentor_query[0][0][1])  # there should be only one mentor
             mentor_name = User.objects.get(id=mentor_profile.user_id)
             mentor_data = UserSerializer(mentor_name).data
 
             poa_query = list(PlanOfAction.objects.filter(
-                relationship=mentor_query[0][0]).values_list())
+                relationship=mentor_query[0][0][0]).values_list())
             for poa_tuple in poa_query:
                 poa_data = PlanOfActionSerializer(
                     PlanOfAction.objects.get(id=poa_tuple[0])).data
@@ -442,7 +434,7 @@ class POAView(viewsets.ModelViewSet):
                                      poatarget_completed_data, "poatarget_incomplete_list": poatarget_incomplete_data})
         elif m_value == "m2":
             relationship_query = list(Relationship.objects.filter(
-                mentor_id=profile_id, group=False))
+                mentor_id=profile_id, active_status='A', group=False))
 
             # getting mentee data and plans of action for every relationship
             for r in relationship_query:
@@ -454,7 +446,6 @@ class POAView(viewsets.ModelViewSet):
 
                 # getting plan of action
                 poa_query = PlanOfAction.objects.filter(relationship=r)
-                # response_list.append(str(poa_query))
                 for poa_tuple in poa_query:
                     poa_data = PlanOfActionSerializer(
                         PlanOfAction.objects.get(id=poa_tuple.id)).data
@@ -471,8 +462,6 @@ class POAView(viewsets.ModelViewSet):
                                          poatarget_completed_data, "poatarget_incomplete_list": poatarget_incomplete_data})
 
         return Response(response_list)
-
-# make function for create and show
 
 
 class POATargetCreateView(viewsets.ModelViewSet):
@@ -517,7 +506,7 @@ class menteeOptionsView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         mentor_id = request.query_params.get('mentor_id', None)
         relationship_query = list(Relationship.objects.filter(
-            mentor_id=mentor_id, group=False))
+            mentor_id=mentor_id, active_status='A', group=False))
         mentee_query = [MenteeAttending.objects.get(
             relationship=x) for x in relationship_query]
         mentee_profile = [Profile.objects.get(
@@ -525,22 +514,11 @@ class menteeOptionsView(viewsets.ModelViewSet):
         mentee_data = [ProfileSerializer(x).data for x in mentee_profile]
         return Response(mentee_data)
 
-# show interest for some skill
-
-
-class showSkillInterestView(viewsets.ModelViewSet):
-    # return view
-    queryset = ApplicationFeedback.objects.all()
-    serializer_class = ApplicationFeedbackSerializer(queryset, many=True)
-
-# make function for create and show
-
 
 class groupMeetingsView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
-        mentor = Profile.objects.get(user = request.data.get('userID'))
+        mentor = User.objects.get(pk=request.data.get('userID')).profile
         if mentor:
-            #could check if the user is a mentor
             newRelationship = Relationship.objects.create(mentor=mentor, group=True, active_status='A', advertising_for_group=True)
             newRelationship.save()
             newMeeting = Meeting(relationship=newRelationship, date_time=request.data.get('dateStart'), attendance_status='GA', title=request.data.get('meetingTitle'), notes=request.data.get('meetingNotes'))
@@ -548,18 +526,13 @@ class groupMeetingsView(viewsets.ModelViewSet):
             return Response("check")
     
     def list(self, request, *args, **kwargs):
-        
-            #need to write the query here
             #relationships = list(Relationship.objects.filter(group=True).values_list('pk', flat=True))
-            relationships = Relationship.objects.filter(group=True)
+            relationships = Relationship.objects.filter(advertising_for_group=True)
             query = reduce(operator.or_, (Q(relationship=x) for x in relationships))
             result = Meeting.objects.filter(query).order_by('relationship')
 
             serializedData = MeetingSerializer(result, many=True)
             return Response(serializedData.data)
-
-
-# cancel attendance skipped
 
 
 class menteeAttendingView(viewsets.ModelViewSet):
@@ -616,18 +589,16 @@ class BusinessAreaView(mixins.CreateModelMixin,
         business_area.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # Ability to create and view application feedback
-
-
 class AllApplicationFeedbackView(mixins.CreateModelMixin,
                                  mixins.ListModelMixin,
                                  viewsets.GenericViewSet):
     queryset = ApplicationFeedback.objects.all()
     serializer_class = ApplicationFeedbackSerializer
 
+
 # Get mentoring relationship that a user is part of as a mentee for a given user ID
-
-
 @api_view(['GET'])
 def get_mentee_relationship(request):
     user = User.objects.get(pk=request.query_params.get('user_id'))
@@ -650,9 +621,8 @@ def get_user_details(request):
     serializer = UserProfileSerializer(user_details)
     return Response(serializer.data)
 
+
 # Get a mentor's mentees as well as each relationship ID
-
-
 @api_view(['GET'])
 def get_mentor_mentees(request):
     mentee_details = []
@@ -668,9 +638,8 @@ def get_mentor_mentees(request):
             mentee_details.append(mentee_data)
     return Response(mentee_details)
 
+
 # Get a mentee's mentor as well as the relationship ID
-
-
 @api_view(['GET'])
 def get_mentee_mentor(request):
     user = User.objects.get(pk=request.query_params.get('user_id'))
@@ -739,11 +708,6 @@ def set_mentor(request, pk):
     profile = user.profile
     serializer = ProfileSerializer(
         profile, data={"is_mentor": True}, partial=True)
-
-    # Add topics of expertise
-    # for topic in request.data.topics:
-    #mentor_skill = MentorSkill(mentor=profile.id, skill=topic)
-    # mentor_skill.save()
 
     if serializer.is_valid():
         serializer.save()
@@ -821,6 +785,7 @@ def check_off_business_area_change_request(request, pk):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Get user objects along with business area change requests
 class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
     queryset = BusinessAreaChangeRequest.objects.filter(checked=False)
@@ -832,16 +797,18 @@ class BusinessAreaChangeRequestUserView(viewsets.GenericViewSet):
         serializer = BusinessAreaChangeRequestProfileSerializer(
             business_area_requests, many=True)
         return Response(serializer.data)
-    
+
     def create(self, request):
         profile = User.objects.get(pk=request.data.get('user_id')).profile
-        new_business_area = BusinessArea.objects.get(pk=request.data.get('new_business_area_id'))
+        new_business_area = BusinessArea.objects.get(
+            pk=request.data.get('new_business_area_id'))
         business_area_change_request = BusinessAreaChangeRequest.objects.create(
             profile=profile,
             checked=request.data.get('checked'),
             new_business_area=new_business_area
         )
         return Response(request.data)
+
 
 # Get user objects along with become mentor requests
 class BecomeMentorUserView(viewsets.GenericViewSet):
@@ -853,12 +820,13 @@ class BecomeMentorUserView(viewsets.GenericViewSet):
             become_mentor_requests, many=True)
         return Response(serializer.data)
 
-# Get user objects along with mentor requests for a specific mentor 
+
+# Get user objects along with mentor requests for a specific mentor
 class MentorRequestUserView(viewsets.GenericViewSet,
                             mixins.CreateModelMixin,
                             mixins.DestroyModelMixin):
     queryset = MentorRequest.objects.all()
-    serializer_class = MentorRequestSerializer 
+    serializer_class = MentorRequestSerializer
 
     def list(self, request):
         user = User.objects.get(pk=request.query_params.get('user_id'))
@@ -881,6 +849,7 @@ class MentorRequestUserView(viewsets.GenericViewSet,
         mentor_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # Get mentor requests for a specific mentee
 @api_view(['GET'])
 def get_mentee_mentor_requests(request):
@@ -888,6 +857,15 @@ def get_mentee_mentor_requests(request):
     profile_id = user.profile.id
     mentor_requests = MentorRequest.objects.filter(mentee=profile_id)
     serializer = MentorRequestSerializer(mentor_requests, many=True)
+    return Response(serializer.data)
+
+# Get become mentor requests for a specific mentee
+@api_view(['GET'])
+def get_mentee_become_mentor(request):
+    user = User.objects.get(pk=request.query_params.get('user_id'))
+    profile_id = user.profile.id
+    mentor_requests = BecomeMentor.objects.filter(profile=profile_id)
+    serializer = BecomeMentorSerializer(mentor_requests, many=True)
     return Response(serializer.data)
 
 
@@ -898,27 +876,47 @@ class MeetingView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         userID = request.query_params.get('userID', None)
         if userID is not None:
-            # need to write the query here
-            profile = Profile.objects.get(pk=userID)
-            menteeAttending = MenteeAttending.objects.filter(mentee=profile)
-            relationships = list(
-                menteeAttending.values_list('relationship', flat=True))
-
-            query = reduce(operator.or_, (Q(relationship=x)
-                           for x in relationships))
-            result = Meeting.objects.filter(query)
-
-            serializedData = MeetingSerializer(result, many=True)
-
+            meetings = get_user_meetings(userID)
+            serializedData = MeetingSerializer(meetings, many=True)
             return Response(serializedData.data)
         else:
             return Response("no check")
 
-    # class meetingView2(viewsets.ModelViewSet):
-        #template_name = 'calendarView.html'
-        #serializer_class = MeetingSerializer
+    def create(self, request):
+        #mentor = User.objects.get(pk=request.data.get('mentor')).profile
+        mentor = Profile.objects.get(pk=request.data.get('mentor_id'))
+        del request.data['mentor_id']
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            meeting = serializer.save()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # def get_context_data(self,**kwargs):
-            #context = super(meetingViewTemp,self).get_context_data(**kwargs)
-            #context['eventList'] = Event.objects.all()
-            # return context
+        # Remove hour meeting is scheduled at from mentor's free hours
+        CalendarUser.objects.filter(available_hour=request.data.get(
+            'date_time'), user=mentor).delete()
+        return Response(request.data)
+
+
+def get_user_meetings(userID):
+    profile = User.objects.get(pk=userID).profile
+    menteeAttending = MenteeAttending.objects.filter(mentee=profile)
+    mentee_relationships = list(
+    menteeAttending.values_list('relationship', flat=True))
+
+    try:
+        query = reduce(operator.or_, (Q(relationship=x)
+                                        for x in mentee_relationships))
+        mentee_meetings = Meeting.objects.filter(query)
+    except:
+        # No meetings found that a user is a mentee for
+        mentee_meetings = Meeting.objects.none()
+
+    # Get meetings that user is a part of as a mentor and combine results
+    mentor_relationships = Relationship.objects.filter(
+        mentor=profile, active_status='A')
+    mentor_meetings = Meeting.objects.filter(
+        relationship__in=mentor_relationships)
+    meetings = mentee_meetings | mentor_meetings
+
+    return meetings

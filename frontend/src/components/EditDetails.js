@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import DisplayDetails from './DisplayDetails';
 import RadioButtons from './RadioButtons';
-import SkillButtons from './Skills';
 import { Card, CardBody, Button, Alert, Form, CustomInput } from 'reactstrap';
 import { fetchBusinessAreas, fetchTopics } from "./GetTopicsBusinessAreas"
 import axios from "axios";
-//import DropDown from './DropDown';
 
 const EditDetails = props => {
-    const [item, setItem] = useState(null);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.user.id;
 
     const [businessAreaData, setBusinessAreaData] = useState([]);
     const [topicData, setTopicData] = useState([]);
-    const [isMentee, setIsMentee] = useState(false);
-    const [isMentor, setIsMentor] = useState(false);
-    //const [selectedTopicsInterest, setSelectedTopicsInterest] = useState([]);
+    const [isMentee, setIsMentee] = useState(user.is_mentee);
+    const [isMentor, setIsMentor] = useState(user.is_mentor);
+    const [userHasRequest, setUserHasRequest] = useState(false);
 
     const selectedTopicsInterest = [];
     const selectedTopicsExpertise = [];
 
     const [BAAlertVisible, setBAAlertVisible] = useState(false);
-
-    const userId = 46;
 
     // Map each topic to a checkbox for topics of interest and a checkbox for topics of expertise
     useEffect(() => {
@@ -35,6 +31,13 @@ const EditDetails = props => {
         fetchBusinessAreas()
             .then(data => setBusinessAreaData(data));
     }, []);
+
+    useEffect(() => {
+        if (!isMentor) {
+            // Check whether user already has an active become mentor request
+            fetchUserBecomeMentorRequests();
+        }
+    }, [])
 
     const topicsInterestSelectedChange = async (e) => {
         console.log(e.target.value);
@@ -61,7 +64,7 @@ const EditDetails = props => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/mentee_signup/",
+                url: "http://localhost:8000/menteesignup/",
                 data: {
                     "user_id": userId,
                     "topics": selectedTopicsInterest
@@ -81,7 +84,7 @@ const EditDetails = props => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/mentor_signup/",
+                url: "http://localhost:8000/mentorsignup/",
                 data: {
                     "user_id": userId,
                     "topics": selectedTopicsExpertise
@@ -121,24 +124,41 @@ const EditDetails = props => {
         }
     }
 
+    const fetchUserBecomeMentorRequests = async () => {
+        try {
+            const response = await axios({
+                method: "GET",
+                url: `http://localhost:8000/becomementorbymentee/?user_id=${userId}`,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (Object.keys(response.data).length !== 0) {
+                setUserHasRequest(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="edit_details sec__one">
             <br></br>
             <h1> Edit Details </h1>
             <br />
 
+            {!isMentee &&
             <Card>
                 <CardBody>
-                    {!isMentee &&
                         <div>
                             <h3>Become a Mentee</h3>
                             Select your topics of interest:
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             <Form onSubmit={becomeMentee}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
-                                    id={topic.name}
+                                    id={topic.name + "mentee"}
                                     label={topic.name}
                                     name={topic.name}
                                     value={topic.id}
@@ -148,17 +168,20 @@ const EditDetails = props => {
                                 <Button color="primary" onClick={becomeMentee}>Become a Mentee</Button>
                             </Form>
                         </div>
-                    }
+                </CardBody>
+            </Card>}
+            {!isMentor && !userHasRequest &&
+            <Card>
+                <CardBody>
                     <br />
-                    {!isMentor &&
                         <div>
                             <h3>Become a Mentor</h3>
                             Select your topics of expertise:
-                            <br/><br/>
+                            <br /><br />
                             <Form onSubmit={becomeMentor}>
                                 {topicData.map(topic => <CustomInput
                                     type="checkbox"
-                                    id={topic.name}
+                                    id={topic.name + "mentor"}
                                     label={topic.name}
                                     name={topic.name}
                                     value={topic.id}
@@ -167,10 +190,9 @@ const EditDetails = props => {
                                 <Button color="primary" onClick={becomeMentor}>Send Mentor Request</Button>
                             </Form>
                         </div>
-                    }
                     <br />
                 </CardBody>
-            </Card>
+            </Card>}
 
             <br />
 
@@ -190,18 +212,6 @@ const EditDetails = props => {
                     </Alert>
                 </CardBody>
             </Card>
-
-            <br></br>
-
-            <h3>Add or remove your topics of interest:</h3>
-            <SkillButtons array={["x", "y", "z", "w", "r"]} />
-
-            <br></br>
-
-            <h3>Add or remove your topics of expertise:</h3>
-            <SkillButtons array={["x", "y", "z", "w", "r"]} />
-            { /*<DropDown array={["x","y","z","w","r"]}  /> */}
-
         </div>
     )
 }

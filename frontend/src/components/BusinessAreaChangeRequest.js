@@ -29,21 +29,19 @@ const BusinessAreaChangeRequest = () => {
         changeBusinessArea(userId, newBusinessAreaId);
         checkOffRequest(requestId);
         setFetch(fetch => !fetch);
-        //fetchBusinessAreaChangeRequests();
     }
 
     const handleDeny = requestId => {
         // Simply check off the request and do nothing else
         checkOffRequest(requestId);
         setFetch(fetch => !fetch);
-        //fetchBusinessAreaChangeRequests();
     }
 
     const changeBusinessArea = async (userId, newBusinessAreaId) => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/setbusinessarea/" + userId + "/",
+                url: `http://localhost:8000/setbusinessarea/${userId}/`,
                 data: {
                     business_area: newBusinessAreaId
                 },
@@ -60,7 +58,7 @@ const BusinessAreaChangeRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/checkoffbusinessareachangerequest/" + requestId + "/",
+                url: `http://localhost:8000/checkoffbusinessareachangerequest/${requestId}/`,
                 headers: {
                     "Content-Type": "application/json"
                 }

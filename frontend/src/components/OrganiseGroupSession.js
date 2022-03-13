@@ -9,7 +9,9 @@ const OrganiseGroupSession = () => {
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingNotes, setMeetingNotes] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const user_data = JSON.parse(localStorage.getItem("user"));
+ 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.user.id;
 
   const handleSubmit = async () => {
     if (meetingTitle == "") {
@@ -24,7 +26,7 @@ const OrganiseGroupSession = () => {
             meetingTitle: meetingTitle,
             meetingNotes: meetingNotes,
             dateStart: dateStart,
-            userID: 2, //user_data.user.id
+            userID: userId, 
           },
           headers: {
             "Content-Type": "application/json",

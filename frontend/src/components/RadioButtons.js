@@ -1,6 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Button, Form } from 'reactstrap';
-
+import { Button, Form } from 'reactstrap';
 
 const RadioButtons = props => {
     return (

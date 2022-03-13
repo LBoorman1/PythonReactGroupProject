@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
-import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
+
 function MeetingMaker() {
   const [openModal, setOpenModal] = useState(false);
   const [meetingData, setMeetingData] = useState([]);
-  const user_data = JSON.parse(localStorage.getItem("user"));
-  const userID = user_data.user.id;
 
   //state for sending post request to backend
   const [meetingID, setMeetingID] = useState([]);
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(1);
+
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user.user.id;
 
   //get the meetings every time the url changes
   useEffect(() => {
@@ -19,7 +21,7 @@ function MeetingMaker() {
       try {
         const { data: response } = await axios({
           method: "GET",
-          url: "http://localhost:8000/meetingView/?userID=" + userID, //replace userID = 4 with userID=${userID} whenever we get the login sorted
+          url: `http://localhost:8000/meetings/?userID=${userId}`,
         });
         setMeetingData(response);
       } catch (error) {
@@ -69,7 +71,7 @@ function MeetingMaker() {
         url: "http://localhost:8000/meetingFeedbackView/",
         data: {
           feedback: feedback,
-          userID: user_data.user.id,
+          userID: userId,
           meetingID: meetingID,
           rating: rating, //will be replaced with ${userID}
         },
@@ -129,7 +131,6 @@ function MeetingMaker() {
             onClick={(e) => {
               e.preventDefault();
               meetingFeedback();
-              setFeedback("");
               setOpenModal(false);
             }}
           >

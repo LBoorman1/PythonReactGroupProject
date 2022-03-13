@@ -5,7 +5,7 @@ import boolToStr from './BoolToStringNice';
 
 const BecomeMentorRequest = () => {
     const [becomeMentorRequestData, setBecomeMentorRequestData] = useState([]);
-    
+
     const fetchBecomeMentorRequests = async () => {
         try {
             const response = await axios({
@@ -41,7 +41,7 @@ const BecomeMentorRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/setmentor/" + userId + "/",
+                url: `http://localhost:8000/setmentor/${userId}/`,
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -55,7 +55,7 @@ const BecomeMentorRequest = () => {
         try {
             await axios({
                 method: "DELETE",
-                url: "http://localhost:8000/removetopicsofexpertise/" + userId + "/",
+                url: `http://localhost:8000/removetopicsofexpertise/${userId}/`,
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -69,7 +69,7 @@ const BecomeMentorRequest = () => {
         try {
             await axios({
                 method: "PATCH",
-                url: "http://localhost:8000/checkoffbecomementor/" + requestId + "/",
+                url: `http://localhost:8000/checkoffbecomementor/${requestId}/`,
                 headers: {
                     "Content-Type": "application/json"
                 }

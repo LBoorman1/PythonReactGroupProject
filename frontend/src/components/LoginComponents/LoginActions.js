@@ -2,11 +2,11 @@ import axios from "axios";
 
 export const setAxiosAuthToken = token => {
   if (typeof token !== "undefined" && token) {
-      // Apply for every request
-      axios.defaults.headers.common["Authorization"] = "Token " + token;
+    // Apply for every request
+    axios.defaults.headers.common["Authorization"] = "Token " + token;
   } else {
-      // Delete auth header
-      delete axios.defaults.headers.common["Authorization"];
+    // Delete auth header
+    delete axios.defaults.headers.common["Authorization"];
   }
 };
 
@@ -18,8 +18,7 @@ export const setCurrentUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const unsetCurrentUser = () =>  {
-  alert('test');
+export const unsetCurrentUser = () => {
   setAxiosAuthToken("");
   window.localStorage.clear();
 };

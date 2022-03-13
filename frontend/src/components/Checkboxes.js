@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Button, Card, CardBody, CardText, Input, Label } from 'reactstrap';
+import React, { useState } from "react";
+import { Card, CardBody, CardText } from 'reactstrap';
 import axios from 'axios';
-
 
 const Checkboxes = poa => {
   const [checked, setChecked] = useState(poa.completed);
@@ -21,19 +20,19 @@ const Checkboxes = poa => {
     setChecked(updatedList);
     const poatarget_data = {
       "poatarget_id": event.target.id,
-      "completed_status" : completed_status
+      "completed_status": completed_status
     }
     axios
-    .post("http://127.0.0.1:8000/POATargetUpdate/", poatarget_data)
-    .then(response => {
-      console.log(response);
-    });
+      .post("http://localhost:8000/POATargetUpdate/", poatarget_data)
+      .then(response => {
+        console.log(response);
+      });
   };
 
   const checkedItems = checked.length
     ? checked.reduce((total, item) => {
-        return total + ", " + item;
-      })
+      return total + ", " + item;
+    })
     : "";
 
   // Return classes based on whether item is checked
@@ -43,25 +42,26 @@ const Checkboxes = poa => {
   return (
     <Card>
       <CardBody>
-      <CardText>
-      <div className="milestoneList">
-        <strong>{poa.title}</strong>
-        <p>Created with: {poa.firstName} {poa.lastName}</p>
-        <div className="list-container">
-          {poa.checkList.map(target => (
-            <div>
-              <input value={target.target_title} id={target.target_id} type="checkbox" onChange={handleCheck} />
-              {target.target_title}
+        <CardText>
+          <div className="milestoneList">
+            <strong>{poa.title}</strong>
+            <p>Created with: {poa.firstName} {poa.lastName}</p>
+            <div className="list-container">
+              {poa.checkList.map(target => (
+                <div>
+                  <input value={target.target_title} id={target.target_id} type="checkbox" onChange={handleCheck} />
+                  {target.target_title}
+                </div>
+              ))}
+
             </div>
-          ))}
-          
-        </div>
-      <p> Completed milestones: {checkedItems.length > 0? checkedItems : "None"} </p>
-      
-    </div>
-    </CardText>
-    </CardBody>
+            <p> Completed milestones: {checkedItems.length > 0 ? checkedItems : "None"} </p>
+
+          </div>
+        </CardText>
+      </CardBody>
     </Card>
   );
 }
-export default Checkboxes
+
+export default Checkboxes;

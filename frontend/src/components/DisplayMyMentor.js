@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import UserCard from './UserCard';
-import Card from 'reactstrap';
-import RequestMentor from './RequestMentor';
 import boolToStr from "./BoolToStringNice";
 import axios from "axios";
 import endRelationship from "./EndRelationship";
@@ -12,9 +10,9 @@ const DisplayMyMentor = () => {
     const [userHasRequest, setUserHasRequest] = useState(false);
     const [potentialMentorsData, setPotentialMentorsData] = useState([]);
 
-    // user ID 4 user with mentor example
-    // user ID 11 user without mentor example
-    const userId = 4;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.user.id;
+
     let content;
 
     const requestMentor = async (menteeId, mentorId) => {
@@ -148,6 +146,7 @@ const DisplayMyMentor = () => {
                         topicsOfInterest={mentor.topics_of_interest.map(topic => topic.skill.name)}
                         topicsOfExpertise={mentor.topics_of_expertise.map(topic => topic.skill.name)}
                         type="mentoringRelationship"
+                        menteeId={userId}
                         relationshipId={mentor.relationship}
                         onEndRel={handleEndRelationship}
                     />

@@ -9,9 +9,9 @@ const BulletPoints = props => {
     );
     return (
         <div>
-        {listItems}
+            {listItems}
         </div>
     )
 }
 
-export default BulletPoints
+export default BulletPoints;

@@ -6,12 +6,15 @@ import UserCard from "./UserCard";
 const MyDetails = props => {
     const [userDetails, setUserDetails] = useState([]);
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user.user.id;
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 const response = await axios({
                     method: "GET",
-                    url: `http://localhost:8000/userdetails/?user_id=${props.userId}`,
+                    url: `http://localhost:8000/userdetails/?user_id=${userId}`,
                     headers: {
                         "Content-Type": "application/json"
                     }
@@ -33,7 +36,7 @@ const MyDetails = props => {
                 lastName={userDetails.last_name}
                 email={userDetails.email}
                 businessArea={userDetails.profile ? userDetails.profile.business_area.name : ""}
-                active={userDetails ? boolToStr(userDetails.is_active): ""}
+                active={userDetails ? boolToStr(userDetails.is_active) : ""}
                 admin={userDetails.profile ? boolToStr(userDetails.profile.is_admin) : ""}
                 mentee={userDetails.profile ? boolToStr(userDetails.profile.is_mentee) : ""}
                 mentor={userDetails.profile ? boolToStr(userDetails.profile.is_mentor) : ""}

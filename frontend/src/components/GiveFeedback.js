@@ -5,9 +5,9 @@ const GiveFeedback = () => {
     return (
         <div className="give_feedback sec__one">
             <h1> Give Feedback </h1>
-            <FeedbackForm/>
+            <FeedbackForm />
         </div>
     )
 }
 
-export default GiveFeedback
+export default GiveFeedback;
