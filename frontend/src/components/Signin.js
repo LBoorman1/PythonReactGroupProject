@@ -50,11 +50,6 @@ const Signin = props => {
             .catch(error => {
                 unsetCurrentUser();
             });
-        if (localStorage.getItem('token') !== null) {
-            console.log('test');
-            //history.push('/MyDetails');
-            //return <Redirect to='/MyDetails' push />
-        }
     };
 
     return (

@@ -14,7 +14,6 @@ from mentoring.models import BusinessArea
 from mentoring.models import BusinessAreaChangeRequest
 from mentoring.models import CalendarUser
 from mentoring.models import Meeting
-#from mentoring.models import MeetingRequest
 from mentoring.models import MeetingFeedback
 from mentoring.models import PlanOfAction
 from mentoring.models import POATarget
@@ -116,11 +115,6 @@ class MeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting 
         fields = '__all__'
-
-#class MeetingRequestSerializer(serializers.ModelSerializer):
-    #class Meta:
-        #model = MeetingRequest 
-        #fields = '__all__'
 
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:

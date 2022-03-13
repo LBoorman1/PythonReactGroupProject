@@ -1,11 +1,10 @@
-from django.contrib import admin, auth
-from django.urls import re_path, path, include
+from django.contrib import admin
+from django.urls import path, include
 from rest_framework import routers
 from mentoring import views
 
 router = routers.DefaultRouter()
 router.register(r'register', views.RegisterView, 'register')
-router.register(r'showProfile', views.showProfileView, 'showProfile')
 router.register(r'possiblementors', views.PotentialMentorsView, 'possiblementors')
 router.register(r'freehours', views.FreeHoursView, 'freehours')
 router.register(r'applicationFeedbackView', views.applicationFeedbackView, 'applicationFeedback')
