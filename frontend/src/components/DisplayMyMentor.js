@@ -92,8 +92,8 @@ const DisplayMyMentor = () => {
         fetchMentorDetails();
     }, []);
 
-    const handleEndRelationship = relationshipId => {
-        endRelationship(relationshipId)
+    const handleEndRelationship = (menteeId, relationshipId) => {
+        endRelationship(menteeId, relationshipId)
             .then(res => {
                 setMentorDetails([]);
                 fetchMentorDetails();
@@ -126,6 +126,7 @@ const DisplayMyMentor = () => {
                             topicsOfExpertise={mentor.topics_of_expertise.map(topic => topic.skill.name)}
                             type="potentialMentor"
                             menteeId={userId}
+                            relationshipId={mentor.relationship}
                             onRequest={requestMentor}
                         />
                     ))}

@@ -188,7 +188,7 @@ def add_mentoring_relationship(request):
 @api_view(['PATCH'])
 def end_mentoring_relationship(request):
     relationship = Relationship.objects.get(pk=request.data.get('relationship_id'))
-    mentee = User.objects.get(pk=request.data.get('mentee_id'))
+    mentee = User.objects.get(pk=request.data.get('mentee_id')).profile
     # Remove from MenteeAttending table 
     MenteeAttending.objects.filter(relationship=relationship, mentee=mentee).delete()
     # Set to inactive

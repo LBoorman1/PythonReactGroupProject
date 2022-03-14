@@ -32,8 +32,8 @@ const DisplayMyMentees = () => {
     fetchMenteeDetails();
   }, []);
 
-  const handleEndRelationship = relationshipId => {
-    endRelationship(relationshipId)
+  const handleEndRelationship = (menteeId, relationshipId) => {
+    endRelationship(menteeId, relationshipId)
       .then(res => {
         fetchMenteeDetails();
       });
