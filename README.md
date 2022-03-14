@@ -12,3 +12,4 @@
 * To start the frontend site, run `npm run start`
 * The backend should run on `localhost:8000` and the frontend on `localhost:3000` by default
 * We have provided an account with username admin and password admin which has access to all of the functionalities (mentee, mentor and admin) of the system
+* Note that the system uses a Google Cloud hosted database, which will be kept up at least until marking is over

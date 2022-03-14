@@ -68,7 +68,7 @@ const CreateAccount = props => {
         password: password
       },
       business_area: business_area,
-      is_mentee: is_mentee,
+      is_mentee: false,
       is_mentor: false,
       is_admin: false
     };
@@ -128,9 +128,6 @@ const CreateAccount = props => {
         </p>
         <label> Business Area </label>
         <Select style="max-width:40%;" options={business_area_options} onChange={handle_business_area} />
-        <br></br>
-        <label> Would you like to sign up as a mentee? </label>
-        <input type="checkbox" name="is_mentee" onChange={handle_is_mentee} />
         <br></br>
         <input type="submit" value="Submit" />
       </form>

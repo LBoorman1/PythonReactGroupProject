@@ -63,7 +63,24 @@ class PotentialMentorsView(viewsets.GenericViewSet):
     serializer_class = ProfileUserSerializer
 
     def list(self, request):
-        potential_mentors = Profile.objects.filter(is_mentor=True)
+        mentee_profile = User.objects.get(pk=request.query_params.get('user_id')).profile
+        mentee_profile_id = mentee_profile.id
+        mentee_profile_business_area = mentee_profile.business_area.id
+        print(mentee_profile_business_area)
+        
+        # Determine mentee-mentor matchings based on criteria laid out
+        # Only consider mentors in a different business area, and with overlap of
+        # at least one topic with the mentee
+        # SQL functions used can be found in matching.sql (for reference purposes)
+        potential_mentors = Profile.objects.raw('''
+            SELECT id FROM (
+                SELECT id, get_overlap(id, %s) AS overlap, get_average_feedback(id) AS avgFeedback,
+                get_no_mentees(id) AS noMentees FROM mentoring_profile WHERE business_area_id != %s
+                AND is_mentor = true) values WHERE overlap > 0
+                ORDER BY overlap DESC, avgFeedback, noMentees;
+        '''
+        , [mentee_profile_id, mentee_profile_business_area])
+
         serializer = ProfileUserSerializer(potential_mentors, many=True)
         return Response(serializer.data)
 
