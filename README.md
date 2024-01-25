@@ -1,3 +1,22 @@
+# Mentoring Software for Deutsche Bank
+
+This project was a group sponsored project from Deutsche Bank, to create am mentoring service for their internal use.
+
+The project has features such as meeting booking and organisation, areas of expertise and feedback. Experts in a certain business area can create
+meetings that other users can join.
+
+Users can leave feedback on meertings and create plans of action for improvement.
+
+The project was built with a React frontend using bootstrap and a Django backend as this already included a lot of functionality we desired.
+
+# Screenshots
+
+- ![Calendar-screen](photos/calendar-view.png)
+- ![expertise](photos/area-of-expertise.png)
+- ![feedback](photos/feedback-screen.png)
+- ![plan-of-action](photos/plan-of-action.png)
+- ![session threshold](photos/session-threshold.png)
+
 ### Installation and Running Instructions
 
 * Install Node.js, NPM and pipenv
